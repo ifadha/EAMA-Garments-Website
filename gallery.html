@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EAMA Garments | 3D Sample Gallery</title>
+    
+    <!-- Premium Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* CSS stays exactly as you had it */
+        :root {
+            --gold: #c5a059;
+            --bg-black: #0a0a0a;
+            --card-width: 320px;
+            --card-height: 460px;
+            --transition-speed: 0.7s;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: var(--bg-black);
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding-bottom: 50px;
+        }
+
+        .header { text-align: center; padding: 60px 20px 20px; }
+        .brand-tag { font-size: 10px; letter-spacing: 5px; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; display: block; }
+        .title { font-family: 'Playfair Display', serif; font-size: 3rem; font-weight: 400; margin-bottom: 30px; }
+
+        .filter-nav { display: flex; gap: 25px; justify-content: center; margin-bottom: 40px; }
+        .filter-btn {
+            background: none; border: none; color: #666; text-transform: uppercase;
+            font-size: 11px; letter-spacing: 2px; cursor: pointer; padding-bottom: 5px;
+            border-bottom: 1px solid transparent; transition: 0.3s;
+        }
+        .filter-btn.active { color: #fff; border-bottom: 1px solid var(--gold); }
+
+        .stage { position: relative; width: 100%; height: 520px; perspective: 1200px; display: flex; align-items: center; justify-content: center; }
+        .track { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; display: flex; align-items: center; justify-content: center; }
+
+        .card {
+            position: absolute; width: var(--card-width); height: var(--card-height);
+            border-radius: 15px; overflow: hidden; background: #111; cursor: pointer;
+            transition: transform var(--transition-speed) cubic-bezier(0.25, 1, 0.5, 1), filter var(--transition-speed), opacity var(--transition-speed);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .card img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+        .card::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.9) 100%); pointer-events: none; }
+
+        .card-content { position: absolute; left: 0; right: 0; bottom: 0; padding: 24px 20px 20px; z-index: 2; }
+        .card-title { font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 6px; }
+        .card-meta { color: #d6c49a; font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; }
+        .card-action-btn { width: 100%; padding: 12px 16px; border: none; border-radius: 999px; background: rgba(255,255,255,0.95); color: #121212; font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; transition: 0.3s; }
+        .card-action-btn:hover { background: var(--gold); color: #fff; }
+        .card.selected { border-color: rgba(197, 160, 89, 0.9); box-shadow: 0 0 0 1px rgba(197, 160, 89, 0.35), 0 20px 40px rgba(0,0,0,0.7); }
+        .card.selected .card-action-btn { background: var(--gold); color: #fff; }
+
+        .details-panel { text-align: center; max-width: 620px; margin-top: 40px; padding: 0 20px; }
+        .details-panel h2 { font-family: 'Playfair Display', serif; font-size: 2.2rem; margin-bottom: 10px; }
+        .details-panel p { color: #999; font-size: 14px; line-height: 1.6; margin-bottom: 25px; }
+        .meta-info { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--gold); margin-bottom: 30px; }
+
+        .controls { position: absolute; width: 100%; max-width: 900px; display: flex; justify-content: space-between; z-index: 100; }
+        .arrow { width: 50px; height: 50px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.03); color: #fff; font-size: 20px; cursor: pointer; transition: 0.3s; }
+        .arrow:hover { background: #fff; color: #000; }
+
+        .fab { position: fixed; top: 24px; right: 24px; z-index: 300; padding: 14px 18px; border: none; border-radius: 999px; background: rgba(197, 160, 89, 0.95); color: #fff; font-size: 12px; font-weight: 600; letter-spacing: 1.4px; text-transform: uppercase; cursor: pointer; box-shadow: 0 16px 35px rgba(0,0,0,0.35); }
+        .request-modal { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.75); display: none; align-items: center; justify-content: center; padding: 20px; z-index: 400; }
+        .request-modal.open { display: flex; }
+        .request-panel { width: min(560px, 100%); max-height: 80vh; overflow: auto; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; background: #111; padding: 24px; box-shadow: 0 24px 60px rgba(0,0,0,0.45); }
+        .request-panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+        .request-panel-header h3 { font-family: 'Playfair Display', serif; font-size: 1.3rem; }
+        .close-btn { border: none; background: transparent; color: #fff; font-size: 24px; cursor: pointer; }
+        .request-list { display: flex; flex-direction: column; gap: 12px; }
+        .request-item { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px; border-radius: 12px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); }
+        .request-item img { width: 64px; height: 64px; border-radius: 10px; object-fit: cover; flex-shrink: 0; }
+        .request-item strong { display: block; margin-bottom: 4px; }
+        .request-item span { color: #b8b8b8; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
+        .request-item button { border: none; background: transparent; color: var(--gold); cursor: pointer; text-transform: uppercase; font-size: 10px; letter-spacing: 1.2px; }
+        .empty-state { padding: 24px 0 8px; color: #aaa; text-align: center; line-height: 1.6; }
+        .btn { padding: 14px 28px; text-transform: uppercase; font-size: 11px; font-weight: 600; letter-spacing: 1px; cursor: pointer; transition: 0.3s; }
+        .btn-primary { background: #fff; color: #000; border: none; }
+        .btn-primary:disabled { opacity: 0.55; cursor: not-allowed; }
+        .btn:hover:not(:disabled) { background: var(--gold); color: #fff; border-color: var(--gold); }
+        .request-actions { margin-top: 18px; display: flex; justify-content: flex-end; }
+        .confidential-note { margin-top: 60px; font-size: 10px; color: #444; text-transform: uppercase; letter-spacing: 1px; max-width: 450px; text-align: center; line-height: 1.5; }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <span class="brand-tag">EAMA Garments B2B</span>
+        <h1 class="title">Sample Catalog</h1>
+        <nav class="filter-nav">
+            <button class="filter-btn active" data-cat="All">All</button>
+            <button class="filter-btn" data-cat="Bottoms">Bottoms</button>
+            <button class="filter-btn" data-cat="Sleepwear">Sleepwear</button>
+            <button class="filter-btn" data-cat="Dresses">Dresses</button>
+        </nav>
+    </header>
+
+    <button class="fab" id="requestFab" type="button">Request List <span id="requestCount">0</span></button>
+
+    <main class="stage">
+        <div class="controls">
+            <button class="arrow" id="prev">←</button>
+            <button class="arrow" id="next">→</button>
+        </div>
+        <div class="track" id="track"></div>
+    </main>
+
+    <section class="details-panel" id="details">
+        <h2 id="active-name">Loading Samples...</h2>
+        <div class="meta-info">
+            <span id="active-fabric">-</span> • <span id="active-cat">-</span>
+        </div>
+        <p id="active-desc">Connecting to gallery...</p>
+    </section>
+
+    <div class="request-modal" id="requestModal" aria-hidden="true">
+        <div class="request-panel">
+            <div class="request-panel-header">
+                <h3>Selected Requests</h3>
+                <button class="close-btn" id="closeModal" type="button">×</button>
+            </div>
+            <div class="request-list" id="requestListContent"></div>
+            <div class="request-actions">
+                <button class="btn btn-primary" id="continueRequest" type="button">Continue Request</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="confidential-note">
+        Only selected non-confidential manufacturing samples are displayed. Client-exclusive designs are protected under confidentiality agreements.
+    </footer>
+
+    <!-- Supabase Library Load -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <script>
+        /* --- CONFIGURATION & INIT --- */
+        const SUPABASE_URL = "https://mxbzlscxsonbwiqjmnzx.supabase.co";
+        const SUPABASE_KEY = "sb_publishable_H3k7_8EsXTns6v0YVOdGww_9xd6iBYE";
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        const storageKey = 'eamaRequestShortlist';
+        let samples = [];
+        let filteredData = [];
+        let activeIndex = 0;
+        let selectedProducts = loadSelections();
+
+        const track = document.getElementById('track');
+        const requestFab = document.getElementById('requestFab');
+        const requestCount = document.getElementById('requestCount');
+        const requestModal = document.getElementById('requestModal');
+        const requestListContent = document.getElementById('requestListContent');
+        const continueRequestBtn = document.getElementById('continueRequest');
+
+        // Fetch from Supabase
+        async function loadSamples() {
+            const { data, error } = await supabaseClient
+                .from('samples')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            if (error) {
+                console.error("Sample loading error:", error);
+                document.getElementById('active-name').innerText = "Error Loading Gallery";
+                return;
+            }
+
+            samples = data.map(item => ({
+                id: item.id,
+                cat: item.category,
+                name: item.name,
+                fabric: item.fabric,
+                desc: item.description,
+                img: item.image_url
+            }));
+
+            filteredData = [...samples];
+            activeIndex = Math.max(0, Math.floor(samples.length / 2));
+
+            init(); // Initialize gallery after data is ready
+        }
+
+        function loadSelections() {
+            try {
+                const saved = localStorage.getItem(storageKey);
+                return saved ? JSON.parse(saved) : [];
+            } catch (e) { return []; }
+        }
+
+        function saveSelections() {
+            localStorage.setItem(storageKey, JSON.stringify(selectedProducts));
+            renderSelectionUI();
+        }
+
+        function isSelected(item) {
+            return selectedProducts.some(selection => selection.id === item.id);
+        }
+
+        function toggleSelection(item) {
+            if (isSelected(item)) {
+                selectedProducts = selectedProducts.filter(selection => selection.id !== item.id);
+            } else {
+                selectedProducts.push({ ...item });
+            }
+            saveSelections();
+            renderCards();
+            updateGallery();
+        }
+
+        function removeSelection(id) {
+            selectedProducts = selectedProducts.filter(selection => selection.id !== id);
+            saveSelections();
+            renderCards();
+            updateGallery();
+        }
+
+        function init() {
+            renderCards();
+            updateGallery();
+            renderSelectionUI();
+            bindEvents();
+        }
+
+        function bindEvents() {
+            document.getElementById('next').onclick = () => {
+                if (activeIndex < filteredData.length - 1) { activeIndex++; updateGallery(); }
+            };
+            document.getElementById('prev').onclick = () => {
+                if (activeIndex > 0) { activeIndex--; updateGallery(); }
+            };
+
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.onclick = (e) => {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    e.target.classList.add('active');
+                    const cat = e.target.dataset.cat;
+                    filteredData = cat === 'All' ? [...samples] : samples.filter(s => s.cat === cat);
+                    activeIndex = Math.max(0, Math.floor(filteredData.length / 2));
+                    renderCards();
+                    updateGallery();
+                };
+            });
+
+            requestFab.onclick = () => {
+                requestModal.classList.add('open');
+                renderRequestList();
+            };
+
+            document.getElementById('closeModal').onclick = () => requestModal.classList.remove('open');
+            continueRequestBtn.onclick = () => {
+                if (selectedProducts.length > 0) window.location.href = 'request-quote.html';
+            };
+        }
+
+        function renderCards() {
+            track.innerHTML = '';
+            if (filteredData.length === 0) {
+                document.getElementById('active-name').innerText = "No samples found";
+                return;
+            }
+            filteredData.forEach((item, index) => {
+                const card = document.createElement('div');
+                const selected = isSelected(item);
+                card.className = `card ${selected ? 'selected' : ''}`;
+                card.innerHTML = `
+                    <img src="${item.img}" alt="${item.name}">
+                    <div class="card-content">
+                        <div class="card-title">${item.name}</div>
+                        <div class="card-meta">${item.cat} • ${item.fabric}</div>
+                        <button class="card-action-btn" type="button">${selected ? 'Added to Request' : 'Add to Request'}</button>
+                    </div>
+                `;
+                card.onclick = () => { activeIndex = index; updateGallery(); };
+                card.querySelector('.card-action-btn').onclick = (e) => {
+                    e.stopPropagation();
+                    toggleSelection(item);
+                };
+                track.appendChild(card);
+            });
+        }
+
+        function renderSelectionUI() {
+            requestCount.textContent = selectedProducts.length;
+        }
+
+        function renderRequestList() {
+            if (!selectedProducts.length) {
+                requestListContent.innerHTML = '<div class="empty-state">No garments selected.</div>';
+                continueRequestBtn.disabled = true;
+                return;
+            }
+            continueRequestBtn.disabled = false;
+            requestListContent.innerHTML = selectedProducts.map(item => `
+                <div class="request-item">
+                    <div style="display:flex; align-items:center; gap:12px;">
+                        <img src="${item.img}" alt="${item.name}">
+                        <div>
+                            <strong>${item.name}</strong>
+                            <span>${item.cat}</span>
+                        </div>
+                    </div>
+                    <button type="button" onclick="removeSelection(${item.id})">Remove</button>
+                </div>
+            `).join('');
+        }
+
+        function updateGallery() {
+            const cards = document.querySelectorAll('.card');
+            if (cards.length === 0) return;
+
+            cards.forEach((card, i) => {
+                const offset = i - activeIndex;
+                const absOffset = Math.abs(offset);
+                const x = offset * 180; 
+                const z = absOffset === 0 ? 0 : -250;
+                const rotateY = offset === 0 ? 0 : (offset > 0 ? -45 : 45);
+                const scale = absOffset === 0 ? 1 : 0.8;
+
+                card.style.transform = `translateX(${x}px) translateZ(${z}px) rotateY(${rotateY}deg) scale(${scale})`;
+                card.style.zIndex = 100 - absOffset;
+                card.style.filter = absOffset === 0 ? 'brightness(100%)' : 'brightness(35%)';
+                card.style.opacity = absOffset > 2 ? 0 : 1;
+
+                if (offset === 0) {
+                    document.getElementById('active-name').innerText = filteredData[i].name;
+                    document.getElementById('active-fabric').innerText = filteredData[i].fabric;
+                    document.getElementById('active-cat').innerText = filteredData[i].cat;
+                    document.getElementById('active-desc').innerText = filteredData[i].desc;
+                }
+            });
+        }
+
+        // Start Loading
+        loadSamples();
+    </script>
+</body>
+</html>

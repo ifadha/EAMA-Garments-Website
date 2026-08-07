@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inquiry Specifications | EAMA Garments</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #FF6B4A; --bg: #0A0A0A; --surface: #121212; --outline: rgba(255, 255, 255, 0.1);
+            --text-muted: #A1A1A1;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background-color: var(--bg); color: #e3e2e2; font-family: 'Inter', sans-serif; padding: 40px 20px; }
+        .container { max-width: 900px; margin: 0 auto; }
+        h1, h2, h3 { font-family: 'Playfair Display', serif; color: #fff; font-weight: 400; }
+        header { border-bottom: 1px solid var(--outline); padding-bottom: 20px; margin-bottom: 40px; }
+        
+        /* Product Cards */
+        .product-card { 
+            background: var(--surface); border: 1px solid var(--outline); 
+            padding: 25px; margin-bottom: 25px; display: grid; 
+            grid-template-columns: 150px 1fr; gap: 25px; border-radius: 4px; 
+        }
+        .product-image { width: 100%; height: 200px; object-fit: cover; border: 1px solid var(--outline); }
+        
+        .form-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; }
+        label { font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.1em; }
+        
+        select, input, textarea { 
+            background: transparent; border: none; border-bottom: 1px solid var(--outline); 
+            color: #fff; padding: 10px 0; font-size: 15px; width: 100%; outline: none; transition: 0.3s;
+        }
+        select option { background: #1a1a1a; color: #fff; }
+        select:focus, input:focus, textarea:focus { border-bottom-color: var(--primary); }
+
+        .field-block { margin-top: 20px; padding: 20px; background: rgba(255,255,255,0.02); border-left: 2px solid var(--primary); }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .is-hidden { display: none !important; }
+
+        .btn-submit { 
+            background: var(--primary); color: #fff; padding: 20px; border: none; 
+            width: 100%; text-transform: uppercase; font-weight: 700; cursor: pointer; 
+            letter-spacing: 0.2em; margin-top: 40px; transition: 0.4s;
+        }
+        .btn-submit:hover { background: #fff; color: #000; }
+        #success-state { display: none; text-align: center; padding: 80px 20px; }
+        
+        @media (max-width: 768px) { .product-card, .grid-2 { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+<div class="container" id="form-container">
+    <header>
+        <span style="color: var(--primary); font-size: 11px; letter-spacing: 3px; text-transform: uppercase;">EAMA Manufacturing</span>
+        <h1 style="font-size: 2.5rem; margin-top: 5px;">Configure Inquiry</h1>
+    </header>
+
+    <div id="loading-overlay" style="text-align: center; padding: 40px; color: var(--primary);">Synchronizing with Sample Inventory...</div>
+
+    <form id="eama-inquiry-form" class="is-hidden">
+        <div id="productList"></div>
+
+        <section style="margin-top: 50px; border-top: 1px solid var(--outline); padding-top: 40px;">
+            <h2 style="margin-bottom: 25px; font-size: 1.8rem;">Client Information</h2>
+            <div class="grid-2">
+                <div class="form-group"><label>Company Name</label><input type="text" id="biz_company" required></div>
+                <div class="form-group"><label>Contact Person</label><input type="text" id="biz_name" required></div>
+                <div class="form-group"><label>Email Address</label><input type="email" id="biz_email" required readonly></div>
+                <div class="form-group"><label>WhatsApp / Phone</label><input type="tel" id="biz_phone" required></div>
+                <div class="form-group" style="grid-column: span 2;"><label>Target Country</label><input type="text" id="biz_country" required></div>
+            </div>
+        </section>
+
+        <button type="submit" class="btn-submit" id="submitBtn">Submit Formal Inquiry</button>
+    </form>
+</div>
+
+<div id="success-state" class="container">
+    <h1 style="color: var(--primary); font-size: 3rem;">Inquiry Logged.</h1>
+    <p>Your request is now visible in your Client Dashboard and our production queue.</p>
+    <button onclick="window.location.href='dashboard/app.html'" style="margin-top:30px; background:var(--primary); color:#fff; padding:15px 30px; border:none; cursor:pointer; text-transform:uppercase; font-size:11px; font-weight:700;">View Dashboard</button>
+</div>
+
+<!-- ... [Keep all existing HTML and CSS above] ... -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+    // 1. SUPABASE SETUP
+    const SUPABASE_URL = "MY_SUPABASE_URL";
+    const SUPABASE_KEY = "MY_SUPABASE_KEY";
+    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    // BREVO_KEY REMOVED FOR SECURITY
+    const storageKey = 'eamaRequestShortlist';
+    
+    let dbSamples = []; 
+    let currentUser = null;
+
+    async function initPage() {
+        const { data: { user } } = await _supabase.auth.getUser();
+        if (!user) {
+            alert("Please log in to submit an inquiry.");
+            window.location.href = "../login.html";
+            return;
+        }
+        currentUser = user;
+        document.getElementById('biz_email').value = user.email;
+
+        let shortlist = JSON.parse(localStorage.getItem(storageKey)) || [];
+        if (shortlist.length === 0) {
+            document.getElementById('loading-overlay').innerText = "No items selected from gallery.";
+            return;
+        }
+        const ids = shortlist.map(item => item.id);
+
+        const { data, error } = await _supabase.from('samples').select('*').in('id', ids);
+        if (error) { console.error(error); return; }
+        dbSamples = data;
+
+        renderForm();
+        document.getElementById('loading-overlay').classList.add('is-hidden');
+        document.getElementById('eama-inquiry-form').classList.remove('is-hidden');
+    }
+
+    function renderForm() {
+        const list = document.getElementById('productList');
+        list.innerHTML = dbSamples.map((sample, idx) => {
+            const fabrics = sample.fabric ? sample.fabric.split(',').map(s => s.trim()) : ["Standard"];
+            const colors = sample.color ? sample.color.split(',').map(s => s.trim()) : ["As per Sample"];
+            const sizes = ["XS", "S", "M", "L", "XL", "XXL"];
+
+            return `
+            <div class="product-card">
+                <img src="${sample.image_url}" class="product-image">
+                <div>
+                    <h3 style="margin-bottom: 5px;">${sample.sample_name}</h3>
+                    <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 15px;">Category: ${sample.category}</p>
+                    
+                    <div class="form-group">
+                        <label>Request Type</label>
+                        <select class="field-type" onchange="toggleUI(${idx})">
+                            <option value="sample">Request Sample</option>
+                            <option value="quote">Request Manufacturing Quote</option>
+                            <option value="both" selected>Request Sample & Quote</option>
+                        </select>
+                    </div>
+
+                    <div class="field-block">
+                        <div class="grid-2">
+                            <div class="form-group"><label>Available Fabrics</label>
+                                <select class="f-fabric">${fabrics.map(f => `<option value="${f}">${f}</option>`).join('')}</select>
+                            </div>
+                            <div class="form-group"><label>Available Colors</label>
+                                <select class="f-color">${colors.map(c => `<option value="${c}">${c}</option>`).join('')}</select>
+                            </div>
+                            <div class="form-group"><label>Size</label>
+                                <select class="f-size">${sizes.map(s => `<option value="${s}" ${s === 'M' ? 'selected' : ''}>${s}</option>`).join('')}</select>
+                            </div>
+                            <div class="form-group"><label>Target Quantity</label>
+                                <input type="number" class="f-qty" value="100" min="1">
+                            </div>
+                            <div class="form-group f-custom-wrap full-width" style="grid-column: span 2;">
+                                <label>Customization / Branding</label>
+                                <input type="text" class="f-custom" placeholder="e.g. Branded woven labels and chest print">
+                            </div>
+                        </div>
+                        <div class="form-group" style="margin-top:10px;"><label>Additional Notes</label>
+                            <textarea class="f-notes" rows="2" placeholder="Any specific requirements..."></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+        }).join('');
+    }
+
+    window.toggleUI = (idx) => {
+        const card = document.querySelectorAll('.product-card')[idx];
+        const type = card.querySelector('.field-type').value;
+        card.querySelector('.f-custom-wrap').classList.toggle('is-hidden', type === 'sample');
+    };
+
+    document.getElementById('eama-inquiry-form').onsubmit = async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('submitBtn');
+        btn.disabled = true;
+        btn.innerText = "Processing Inquiry...";
+
+        const biz = {
+            client_id: currentUser.id,
+            company_name: document.getElementById('biz_company').value,
+            contact_person: document.getElementById('biz_name').value,
+            email: document.getElementById('biz_email').value,
+            phone: document.getElementById('biz_phone').value,
+            country: document.getElementById('biz_country').value
+        };
+
+        try {
+            let emailLog = "";
+            const cards = document.querySelectorAll('.product-card');
+
+            for (let i = 0; i < cards.length; i++) {
+                const card = cards[i];
+                const dbSample = dbSamples[i];
+                
+                const type = card.querySelector('.field-type').value;
+                const spec = {
+                    fabric: card.querySelector('.f-fabric').value,
+                    color: card.querySelector('.f-color').value,
+                    size: card.querySelector('.f-size').value,
+                    qty: parseInt(card.querySelector('.f-qty').value),
+                    custom: card.querySelector('.f-custom').value,
+                    notes: card.querySelector('.f-notes').value
+                };
+
+                // Keep database logic unchanged
+                const { error } = await _supabase.from('manufacturing_requests').insert([{
+                    ...biz,
+                    garment_category: dbSample.category,
+                    product_type: dbSample.sample_name,
+                    request_type: type,
+                    fabric_preference: spec.fabric,
+                    sample_color: spec.color,
+                    sample_size: spec.size,
+                    target_quantity: spec.qty,
+                    customization_requirements: spec.custom,
+                    additional_notes: spec.notes,
+                    status: 'New',
+                    priority: 'Medium'
+                }]);
+                if (error) throw error;
+                emailLog += `${dbSample.sample_name} (${type}): ${spec.qty}pcs in ${spec.fabric}. \n`;
+            }
+
+            // CALL SUPABASE EDGE FUNCTION (Replaces Brevo Direct Call)
+            const { data: funcData, error: funcError } = await _supabase.functions.invoke('send-inquiry-email', {
+                body: {
+                    customer_name: biz.contact_person,
+                    company_name: biz.company_name,
+                    customer_email: biz.email,
+                    admin_email: "admin@eamagarments.com",
+                    message: `New unified request received for: \n${emailLog}`
+                }
+            });
+
+            if (funcError) throw new Error("Email notification failed, but request saved.");
+
+            document.getElementById('form-container').style.display = 'none';
+            document.getElementById('success-state').style.display = 'block';
+            localStorage.removeItem(storageKey);
+
+        } catch (err) {
+            alert("Error: " + err.message);
+            btn.disabled = false;
+            btn.innerText = "Submit Formal Inquiry";
+        }
+    };
+
+    initPage();
+</script>
+</script>
+</body>
+</html>

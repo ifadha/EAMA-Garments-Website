@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>EAMA Garments | Start Your Manufacturing Project</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;family=Playfair+Display:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-background": "#e3e2e2",
+                        "on-surface-variant": "#e1bfb8",
+                        "background": "#121414",
+                        "on-tertiary-fixed-variant": "#474646",
+                        "inverse-primary": "#ae3115",
+                        "on-primary-fixed": "#3d0600",
+                        "surface-container": "#1e2020",
+                        "inverse-surface": "#e3e2e2",
+                        "on-primary": "#630f00",
+                        "on-error-container": "#ffdad6",
+                        "on-secondary-fixed-variant": "#474646",
+                        "surface-container-lowest": "#0d0e0f",
+                        "tertiary-container": "#9c9a99",
+                        "surface-container-highest": "#343535",
+                        "outline-variant": "#59413c",
+                        "surface-variant": "#343535",
+                        "surface-tint": "#ffb4a3",
+                        "secondary-container": "#4a4949",
+                        "inverse-on-surface": "#2f3131",
+                        "secondary-fixed": "#e5e2e1",
+                        "primary-container": "#ff6b4a",
+                        "on-tertiary-container": "#323232",
+                        "on-error": "#690005",
+                        "primary": "#ffb4a3",
+                        "secondary": "#c9c6c5",
+                        "surface": "#121414",
+                        "on-tertiary": "#313030",
+                        "error": "#ffb4ab",
+                        "tertiary": "#c8c6c5",
+                        "surface-container-low": "#1a1c1c",
+                        "outline": "#a88a83",
+                        "error-container": "#93000a",
+                        "tertiary-fixed": "#e5e2e1",
+                        "on-secondary-fixed": "#1c1b1b",
+                        "on-secondary": "#313030",
+                        "on-tertiary-fixed": "#1c1b1b",
+                        "tertiary-fixed-dim": "#c8c6c5",
+                        "primary-fixed": "#ffdad2",
+                        "on-surface": "#e3e2e2",
+                        "primary-fixed-dim": "#ffb4a3",
+                        "on-secondary-container": "#bab8b7",
+                        "on-primary-container": "#661000",
+                        "surface-bright": "#383939",
+                        "secondary-fixed-dim": "#c9c6c5",
+                        "on-primary-fixed-variant": "#8c1900",
+                        "surface-dim": "#121414",
+                        "surface-container-high": "#292a2a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "section-gap": "160px",
+                        "margin-mobile": "20px",
+                        "base": "8px",
+                        "margin-desktop": "80px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "label-caps": ["Inter"],
+                        "display-lg": ["Playfair Display"],
+                        "body-md": ["Inter"],
+                        "headline-lg-mobile": ["Playfair Display"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Playfair Display"],
+                        "headline-sm": ["Playfair Display"],
+                        "headline-lg": ["Playfair Display"]
+                    },
+                    "fontSize": {
+                        "label-caps": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                        "display-lg": ["72px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "400"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["36px", {"lineHeight": "1.2", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "headline-md": ["32px", {"lineHeight": "1.3", "fontWeight": "400"}],
+                        "headline-sm": ["24px", {"lineHeight": "1.4", "fontWeight": "400"}],
+                        "headline-lg": ["48px", {"lineHeight": "1.2", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #0A0A0A;
+            color: #e3e2e2;
+            overflow-x: hidden;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .step-transition {
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .ghost-border {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .active-dot {
+            box-shadow: 0 0 12px rgba(255, 107, 74, 0.6);
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none !important;
+            border-color: #ffb4a3 !important;
+            box-shadow: none !important;
+        }
+        /* Custom scrollbar for technical look */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: #121414; }
+        ::-webkit-scrollbar-thumb { background: #343535; }
+        ::-webkit-scrollbar-thumb:hover { background: #ffb4a3; }
+    </style>
+</head>
+<body class="font-body-md selection:bg-primary-container selection:text-on-primary-container">
+<!-- Top Navigation (Shared Component) -->
+<nav class="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-md border-b border-white/10 flex justify-between items-center px-margin-desktop py-base">
+<div class="font-headline-sm text-headline-sm tracking-tighter text-on-surface uppercase font-bold">EAMA GARMENTS</div>
+<div class="hidden md:flex space-x-8">
+<a class="text-on-surface/70 hover:text-on-surface transition-colors font-label-caps text-label-caps" href="#">Manufacturing</a>
+<a class="text-on-surface/70 hover:text-on-surface transition-colors font-label-caps text-label-caps" href="#">Sustainability</a>
+<a class="text-on-surface/70 hover:text-on-surface transition-colors font-label-caps text-label-caps" href="#">Global Network</a>
+<a class="text-primary border-b border-primary pb-1 font-label-caps text-label-caps" href="#">Quote</a>
+</div>
+<button class="bg-primary-container text-on-primary-container font-label-caps text-label-caps px-6 py-2 hover:opacity-80 transition-opacity">
+            Client Portal
+        </button>
+</nav>
+<main class="pt-24">
+<!-- Hero Section -->
+<section class="relative min-h-[716px] flex items-center px-margin-desktop overflow-hidden">
+<div class="absolute inset-0 z-0 opacity-40">
+<div class="w-full h-full bg-cover bg-center" data-alt="A cinematic, low-angle photograph of a high-end industrial textile manufacturing floor in Milan. Soft focus on silver looms and rich charcoal-colored fabrics. The lighting is dramatic and moody, with dust motes dancing in shafts of atmospheric amber light, emphasizing a dark editorial, premium atmosphere." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA8Fh7LPErnVLgHsKxk8OBrwjK76lb4MkDadBErJB6h5FOMBsPPsNSyJMo2-66VUyVfUQiVQd-vLmxF0LcuJe1HEur6fFg4HMTHuEiGU6R507UBbJECsDJ97VmpL-3Npbmr9E8bjRefB0wFUpR884gSgpjxN8lFZq1GiL58YfdH2GB6tjPfx8gJwkmr6bXFZQZJEPFcv0MAJ4bBZv0v0unHrRi_dBHS2jN-4WJ_o_8n5YL9kxVMGbS6UfcaKCrt5p1Cld560h_Hd4c')"></div>
+</div>
+<div class="relative z-10 max-w-4xl">
+<span class="font-label-caps text-label-caps text-primary mb-6 block uppercase tracking-[0.3em]">Institutional Manufacturing</span>
+<h1 class="font-display-lg text-display-lg mb-8 leading-tight">Start Your <br/>Manufacturing Project</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant/80 max-w-2xl mb-12">
+                    Share your garment requirements with our team. Whether you have a complete design or need support developing your concept, we will guide you through the manufacturing process.
+                </p>
+<a class="inline-flex items-center gap-4 bg-primary-container text-on-primary-container px-10 py-5 font-label-caps text-label-caps group hover:bg-primary transition-all" href="#form-anchor">
+                    Submit Manufacturing Request
+                    <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</a>
+</div>
+<div class="absolute bottom-12 right-margin-desktop flex flex-col items-end gap-2 text-on-surface/40">
+<span class="font-label-caps text-[10px] uppercase">Scroll to begin</span>
+<div class="w-px h-16 bg-white/20 relative">
+<div class="absolute top-0 w-full h-1/2 bg-primary animate-bounce"></div>
+</div>
+</div>
+</section>
+<!-- Form Section -->
+<section class="py-section-gap px-margin-desktop bg-surface-container-lowest relative" id="form-anchor">
+<div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Left Sidebar: Progress -->
+<div class="lg:col-span-3 lg:sticky lg:top-32 h-fit">
+<div class="space-y-12">
+<div class="flex flex-col gap-4">
+<h3 class="font-label-caps text-label-caps text-primary">Inquiry Progress</h3>
+<div class="h-1 w-full bg-white/10 overflow-hidden">
+<div class="h-full bg-primary transition-all duration-700" id="progress-bar" style="width: 16.66%;"></div>
+</div>
+</div>
+<div class="flex flex-col gap-8">
+<div class="step-indicator flex items-center gap-4 opacity-100" data-step="1">
+<span class="w-8 h-8 flex items-center justify-center border border-primary text-primary font-label-caps text-[10px] active-dot">01</span>
+<span class="font-label-caps text-label-caps">Company Info</span>
+</div>
+<div class="step-indicator flex items-center gap-4 opacity-40" data-step="2">
+<span class="w-8 h-8 flex items-center justify-center border border-white/20 text-on-surface-variant font-label-caps text-[10px]">02</span>
+<span class="font-label-caps text-label-caps">Requirements</span>
+</div>
+<div class="step-indicator flex items-center gap-4 opacity-40" data-step="3">
+<span class="w-8 h-8 flex items-center justify-center border border-white/20 text-on-surface-variant font-label-caps text-[10px]">03</span>
+<span class="font-label-caps text-label-caps">Garment Data</span>
+</div>
+<div class="step-indicator flex items-center gap-4 opacity-40" data-step="4">
+<span class="w-8 h-8 flex items-center justify-center border border-white/20 text-on-surface-variant font-label-caps text-[10px]">04</span>
+<span class="font-label-caps text-label-caps">Customization</span>
+</div>
+<div class="step-indicator flex items-center gap-4 opacity-40" data-step="5">
+<span class="w-8 h-8 flex items-center justify-center border border-white/20 text-on-surface-variant font-label-caps text-[10px]">05</span>
+<span class="font-label-caps text-label-caps">Technical Assets</span>
+</div>
+<div class="step-indicator flex items-center gap-4 opacity-40" data-step="6">
+<span class="w-8 h-8 flex items-center justify-center border border-white/20 text-on-surface-variant font-label-caps text-[10px]">06</span>
+<span class="font-label-caps text-label-caps">Validation</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Canvas: Form Steps -->
+<div class="lg:col-span-9">
+<form class="space-y-12" id="manufacturing-form">
+<!-- Step 1: Company Information -->
+<div class="form-step space-y-12" id="step-1">
+<h2 class="font-headline-md text-headline-md">Entity Details</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-y-12 gap-x-8">
+<div class="relative group">
+<label class="font-label-caps text-label-caps text-on-surface/40 uppercase block mb-2">Company Name</label>
+<input class="w-full bg-transparent border-b border-white/10 py-4 focus:border-primary transition-all text-on-surface" placeholder="Enter legal business name" type="text"/>
+</div>
+<div class="relative group">
+<label class="font-label-caps text-label-caps text-on-surface/40 uppercase block mb-2">Contact Person</label>
+<input class="w-full bg-transparent border-b border-white/10 py-4 focus:border-primary transition-all text-on-surface" placeholder="Full name of representative" type="text"/>
+</div>
+<div class="relative group">
+<label class="font-label-caps text-label-caps text-on-surface/40 uppercase block mb-2">Corporate Email</label>
+<input class="w-full bg-transparent border-b border-white/10 py-4 focus:border-primary transition-all text-on-surface" placeholder="email@company.com" type="email"/>
+</div>
+<div class="relative group">
+<label class="font-label-caps text-label-caps text-on-surface/40 uppercase block mb-2">Phone Number</label>
+<input class="w-full bg-transparent border-b border-white/10 py-4 focus:border-primary transition-all text-on-surface" placeholder="+00 000 000 000" type="tel"/>
+</div>
+<div class="relative group">
+<label class="font-label-caps text-label-caps text-on-surface/40 uppercase block mb-2">Country of Operation</label>
+<input class="w-full bg-transparent border-b border-white/10 py-4 focus:border-primary transition-all text-on-surface" placeholder="Manufacturing destination" type="text"/>
+</div>
+<div class="relative group">
+<label class="font-label-caps text-label-caps text-on-surface/40 uppercase block mb-2">Website (Optional)</label>
+<input class="w-full bg-transparent border-b border-white/10 py-4 focus:border-primary transition-all text-on-surface" placeholder="www.brand.com" type="url"/>
+</div>
+</div>
+</div>
+<!-- Step 2: Project Requirements -->
+<div class="form-step hidden space-y-12" id="step-2">
+<h2 class="font-headline-md text-headline-md">Service Selection</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<label class="ghost-border p-8 hover:bg-white/5 cursor-pointer flex items-start gap-4 transition-all group has-[:checked]:bg-primary-container/10 has-[:checked]:border-primary/50">
+<input class="hidden" name="support_type" type="checkbox"/>
+<span class="material-symbols-outlined text-primary">architecture</span>
+<div>
+<div class="font-label-caps text-label-caps uppercase mb-2">Complete Design/Tech Pack</div>
+<p class="text-sm text-on-surface-variant/60">Full technical development from concept to construction files.</p>
+</div>
+</label>
+<label class="ghost-border p-8 hover:bg-white/5 cursor-pointer flex items-start gap-4 transition-all group has-[:checked]:bg-primary-container/10 has-[:checked]:border-primary/50">
+<input class="hidden" name="support_type" type="checkbox"/>
+<span class="material-symbols-outlined text-primary">precision_manufacturing</span>
+<div>
+<div class="font-label-caps text-label-caps uppercase mb-2">Sample Development</div>
+<p class="text-sm text-on-surface-variant/60">Prototyping and material testing prior to bulk production.</p>
+</div>
+</label>
+<label class="ghost-border p-8 hover:bg-white/5 cursor-pointer flex items-start gap-4 transition-all group has-[:checked]:bg-primary-container/10 has-[:checked]:border-primary/50">
+<input class="hidden" name="support_type" type="checkbox"/>
+<span class="material-symbols-outlined text-primary">request_quote</span>
+<div>
+<div class="font-label-caps text-label-caps uppercase mb-2">Quotation</div>
+<p class="text-sm text-on-surface-variant/60">Pricing evaluation based on existing tech packs and volume.</p>
+</div>
+</label>
+<label class="ghost-border p-8 hover:bg-white/5 cursor-pointer flex items-start gap-4 transition-all group has-[:checked]:bg-primary-container/10 has-[:checked]:border-primary/50">
+<input class="hidden" name="support_type" type="checkbox"/>
+<span class="material-symbols-outlined text-primary">lightbulb</span>
+<div>
+<div class="font-label-caps text-label-caps uppercase mb-2">Concept Development</div>
+<p class="text-sm text-on-surface-variant/60">Creative consultation and market-ready aesthetic planning.</p>
+</div>
+</label>
+</div>
+</div>
+<!-- Step 3: Garment Requirements -->
+<div class="form-step hidden space-y-12" id="step-3">
+<h2 class="font-headline-md text-headline-md">Garment Specification</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-12">
+<div class="relative group">
+<label class="font-label-caps text-label-caps text-on-surface/40 uppercase block mb-2">Category</label>
+<select class="w-full bg-transparent border-b border-white/10 py-4 focus:border-primary transition-all text-on-surface appearance-none">
+<option class="bg-surface-container">Select Category</option>
+<option class="bg-surface-container">Sleepwear</option>
+<option class="bg-surface-container">Loungewear</option>
+<option class="bg-surface-container">Activewear</option>
+<option class="bg-surface-container">T-Shirts / Hoodies</option>
+<option class="bg-surface-container">Corporate Apparel</option>
+</select>
+</div>
+<div class="relative group">
+<label class="font-label-caps text-label-caps text-on-surface/40 uppercase block mb-2">Total Quantity</label>
+<input class="w-full bg-transparent border-b border-white/10 py-4 focus:border-primary transition-all text-on-surface" placeholder="e.g., 500 units" type="text"/>
+</div>
+<div class="relative group">
+<label class="font-label-caps text-label-caps text-on-surface/40 uppercase block mb-2">Fabric Preference</label>
+<input class="w-full bg-transparent border-b border-white/10 py-4 focus:border-primary transition-all text-on-surface" placeholder="e.g., 100% Organic Cotton" type="text"/>
+</div>
+<div class="relative group">
+<label class="font-label-caps text-label-caps text-on-surface/40 uppercase block mb-2">Target Timeline</label>
+<input class="w-full bg-transparent border-b border-white/10 py-4 focus:border-primary transition-all text-on-surface" placeholder="Expected delivery date" type="text"/>
+</div>
+<div class="md:col-span-2 relative group">
+<label class="font-label-caps text-label-caps text-on-surface/40 uppercase block mb-2">Size Breakdown &amp; Colors</label>
+<textarea class="w-full bg-transparent border-b border-white/10 py-4 focus:border-primary transition-all text-on-surface h-32" placeholder="Detail your required sizing distribution and colorways..."></textarea>
+</div>
+</div>
+</div>
+<!-- Step 4: Customization -->
+<div class="form-step hidden space-y-12" id="step-4">
+<h2 class="font-headline-md text-headline-md">Finishing &amp; Branding</h2>
+<div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+<label class="ghost-border p-6 flex flex-col items-center gap-3 text-center cursor-pointer hover:bg-white/5 has-[:checked]:bg-primary-container/10 has-[:checked]:border-primary/50">
+<input class="hidden" type="checkbox"/>
+<span class="material-symbols-outlined text-3xl">label</span>
+<span class="font-label-caps text-[10px] uppercase">Custom Labels</span>
+</label>
+<label class="ghost-border p-6 flex flex-col items-center gap-3 text-center cursor-pointer hover:bg-white/5 has-[:checked]:bg-primary-container/10 has-[:checked]:border-primary/50">
+<input class="hidden" type="checkbox"/>
+<span class="material-symbols-outlined text-3xl">inventory_2</span>
+<span class="font-label-caps text-[10px] uppercase">Packaging</span>
+</label>
+<label class="ghost-border p-6 flex flex-col items-center gap-3 text-center cursor-pointer hover:bg-white/5 has-[:checked]:bg-primary-container/10 has-[:checked]:border-primary/50">
+<input class="hidden" type="checkbox"/>
+<span class="material-symbols-outlined text-3xl">gesture</span>
+<span class="font-label-caps text-[10px] uppercase">Embroidery</span>
+</label>
+<label class="ghost-border p-6 flex flex-col items-center gap-3 text-center cursor-pointer hover:bg-white/5 has-[:checked]:bg-primary-container/10 has-[:checked]:border-primary/50">
+<input class="hidden" type="checkbox"/>
+<span class="material-symbols-outlined text-3xl">print</span>
+<span class="font-label-caps text-[10px] uppercase">Screen Printing</span>
+</label>
+<label class="ghost-border p-6 flex flex-col items-center gap-3 text-center cursor-pointer hover:bg-white/5 has-[:checked]:bg-primary-container/10 has-[:checked]:border-primary/50">
+<input class="hidden" type="checkbox"/>
+<span class="material-symbols-outlined text-3xl">thermostat</span>
+<span class="font-label-caps text-[10px] uppercase">Heat Transfer</span>
+</label>
+<label class="ghost-border p-6 flex flex-col items-center gap-3 text-center cursor-pointer hover:bg-white/5 has-[:checked]:bg-primary-container/10 has-[:checked]:border-primary/50">
+<input class="hidden" type="checkbox"/>
+<span class="material-symbols-outlined text-3xl">sell</span>
+<span class="font-label-caps text-[10px] uppercase">Hang Tags</span>
+</label>
+</div>
+<div class="relative group mt-8">
+<label class="font-label-caps text-label-caps text-on-surface/40 uppercase block mb-2">Additional Notes</label>
+<textarea class="w-full bg-transparent border-b border-white/10 py-4 focus:border-primary transition-all text-on-surface h-24" placeholder="Mention any specific embellishment details..."></textarea>
+</div>
+</div>
+<!-- Step 5: Document Upload -->
+<div class="form-step hidden space-y-12" id="step-5">
+<h2 class="font-headline-md text-headline-md">Technical Zone</h2>
+<div class="p-12 border-2 border-dashed border-white/10 flex flex-col items-center gap-6 group hover:border-primary/40 transition-all cursor-pointer">
+<span class="material-symbols-outlined text-5xl text-primary/40 group-hover:text-primary transition-colors">cloud_upload</span>
+<div class="text-center">
+<div class="font-label-caps text-label-caps mb-2">Upload Tech Packs &amp; Assets</div>
+<p class="text-sm text-on-surface-variant/40">Drop PDFs, AI files, or images here or click to browse</p>
+</div>
+<input class="hidden" multiple="" type="file"/>
+</div>
+<div class="flex items-start gap-4 p-6 bg-surface-container rounded-lg border border-white/5">
+<span class="material-symbols-outlined text-primary">lock</span>
+<p class="text-sm text-on-surface-variant/70 leading-relaxed italic">
+                                    Confidentiality Notice: Uploaded documents are treated as confidential project information and are only used for manufacturing evaluation purposes.
+                                </p>
+</div>
+</div>
+<!-- Step 6: Review -->
+<div class="form-step hidden space-y-12" id="step-6">
+<h2 class="font-headline-md text-headline-md">Verification</h2>
+<div class="space-y-6">
+<div class="p-8 ghost-border space-y-4">
+<div class="flex justify-between items-center border-b border-white/5 pb-4">
+<span class="font-label-caps text-[10px] uppercase text-on-surface/40">Request Priority</span>
+<span class="font-label-caps text-label-caps text-primary">Standard B2B Queue</span>
+</div>
+<p class="text-on-surface-variant/80">Please ensure all details provided are accurate to your technical specifications. Upon submission, our technical directors will review the feasibility of the project.</p>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="p-6 bg-surface-container/50 border border-white/5">
+<div class="font-label-caps text-[10px] uppercase text-on-surface/40 mb-2">Company</div>
+<div class="font-body-md" id="summary-company">Vanguard Fashion Ltd</div>
+</div>
+<div class="p-6 bg-surface-container/50 border border-white/5">
+<div class="font-label-caps text-[10px] uppercase text-on-surface/40 mb-2">Contact</div>
+<div class="font-body-md" id="summary-contact">Marcus Aurelius</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Success State -->
+<div class="hidden py-12 text-center space-y-8" id="success-state">
+<div class="w-24 h-24 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-8">
+<span class="material-symbols-outlined text-5xl text-primary" data-weight="fill">verified</span>
+</div>
+<h2 class="font-display-lg text-headline-lg">Inquiry Transmitted</h2>
+<p class="font-body-lg text-on-surface-variant max-w-lg mx-auto">
+                                Thank you for your inquiry. Our team will review your requirements and contact you regarding the next steps within 24-48 business hours.
+                            </p>
+<button class="font-label-caps text-label-caps text-primary border border-primary px-8 py-3 hover:bg-primary hover:text-on-primary transition-all" onclick="window.location.reload()" type="button">
+                                Return to Portal
+                            </button>
+</div>
+<!-- Navigation Buttons -->
+<div class="flex justify-between items-center pt-12 border-t border-white/10" id="form-controls">
+<button class="hidden font-label-caps text-label-caps text-on-surface/40 hover:text-on-surface transition-colors flex items-center gap-2" id="prev-btn" type="button">
+<span class="material-symbols-outlined">chevron_left</span>
+                                Previous Step
+                            </button>
+<div class="flex-grow"></div>
+<button class="bg-primary-container text-on-primary-container px-10 py-4 font-label-caps text-label-caps hover:bg-primary transition-all flex items-center gap-2" id="next-btn" type="button">
+                                Continue to Requirements
+                                <span class="material-symbols-outlined">chevron_right</span>
+</button>
+<button class="hidden bg-primary-container text-on-primary-container px-10 py-4 font-label-caps text-label-caps hover:bg-primary transition-all" id="submit-btn" type="button">
+                                Submit Manufacturing Request
+                            </button>
+</div>
+</form>
+</div>
+</div>
+</section>
+<!-- Technical Assurance Section -->
+<section class="py-section-gap px-margin-desktop bg-background border-t border-white/5">
+<div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<div class="space-y-4 p-8 bg-surface-container-low border border-white/5">
+<span class="material-symbols-outlined text-primary text-3xl">verified_user</span>
+<h4 class="font-label-caps text-label-caps uppercase">Global Compliance</h4>
+<p class="text-sm text-on-surface-variant/60">Every project adheres to ISO 9001:2015 standards and strict ethical auditing protocols.</p>
+</div>
+<div class="space-y-4 p-8 bg-surface-container-low border border-white/5">
+<span class="material-symbols-outlined text-primary text-3xl">science</span>
+<h4 class="font-label-caps text-label-caps uppercase">Material Testing</h4>
+<p class="text-sm text-on-surface-variant/60">Comprehensive lab reports for color fastness, shrinkage, and textile strength included.</p>
+</div>
+<div class="space-y-4 p-8 bg-surface-container-low border border-white/5">
+<span class="material-symbols-outlined text-primary text-3xl">history_edu</span>
+<h4 class="font-label-caps text-label-caps uppercase">Heritage Craft</h4>
+<p class="text-sm text-on-surface-variant/60">Merging modern automated precision with generational artisan tailoring expertise.</p>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer (Shared Component) -->
+<footer class="w-full bg-surface-container-lowest border-t border-white/10 grid grid-cols-1 md:grid-cols-12 gap-gutter px-margin-desktop py-section-gap">
+<div class="md:col-span-4 space-y-8">
+<div class="font-headline-md text-headline-md text-on-surface">EAMA Garments</div>
+<p class="text-on-surface-variant text-body-md max-w-xs">Precision Manufacturing for Global Brands. Ethical Excellence in Every Stitch.</p>
+</div>
+<div class="md:col-span-2 space-y-4">
+<h5 class="font-label-caps text-label-caps text-primary uppercase">Production</h5>
+<div class="flex flex-col gap-2">
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md text-body-md" href="#">Sourcing</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md text-body-md" href="#">Logistics</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md text-body-md" href="#">Case Studies</a>
+</div>
+</div>
+<div class="md:col-span-2 space-y-4">
+<h5 class="font-label-caps text-label-caps text-primary uppercase">Governance</h5>
+<div class="flex flex-col gap-2">
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md text-body-md" href="#">Legal</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md text-body-md" href="#">Privacy Policy</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md text-body-md" href="#">Compliance</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md text-body-md" href="#">Sustainability Report</a>
+</div>
+</div>
+<div class="md:col-span-4 space-y-4">
+<h5 class="font-label-caps text-label-caps text-primary uppercase">Contact</h5>
+<p class="text-on-surface-variant font-body-md text-body-md">Global HQ: Via della Moda, 24<br/>Milan, Italy 20121</p>
+<p class="text-on-surface-variant font-body-md text-body-md">production@eama-garments.com</p>
+</div>
+<div class="md:col-span-12 pt-16 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="text-on-surface-variant text-sm">© 2024 EAMA Garments. Precision Manufacturing for Global Brands.</p>
+<div class="flex gap-8">
+<span class="text-[10px] font-label-caps text-on-surface/20 uppercase tracking-widest">A Member of The Global Textile Union</span>
+</div>
+</div>
+</footer>
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            let currentStep = 1;
+            const totalSteps = 6;
+            const form = document.getElementById('manufacturing-form');
+            const nextBtn = document.getElementById('next-btn');
+            const prevBtn = document.getElementById('prev-btn');
+            const submitBtn = document.getElementById('submit-btn');
+            const progressBar = document.getElementById('progress-bar');
+            const indicators = document.querySelectorAll('.step-indicator');
+            const stepTitles = [
+                "Entity Details",
+                "Service Selection",
+                "Garment Specification",
+                "Finishing & Branding",
+                "Technical Assets",
+                "Validation"
+            ];
+            const btnTexts = [
+                "Continue to Requirements",
+                "Define Specifications",
+                "Review Branding",
+                "Access Technical Zone",
+                "Review Inquiry",
+                "Submit Final Request"
+            ];
+
+            const updateUI = () => {
+                // Hide all steps
+                document.querySelectorAll('.form-step').forEach(step => step.classList.add('hidden'));
+                
+                // Show current step
+                document.getElementById(`step-${currentStep}`).classList.remove('hidden');
+
+                // Progress Bar
+                progressBar.style.width = `${(currentStep / totalSteps) * 100}%`;
+
+                // Indicators
+                indicators.forEach((ind, index) => {
+                    if (index + 1 < currentStep) {
+                        ind.classList.replace('opacity-40', 'opacity-80');
+                        ind.querySelector('span').classList.add('bg-primary/20', 'border-primary');
+                    } else if (index + 1 === currentStep) {
+                        ind.classList.remove('opacity-40');
+                        ind.classList.add('opacity-100');
+                        ind.querySelector('span').classList.add('active-dot', 'border-primary');
+                    } else {
+                        ind.classList.add('opacity-40');
+                        ind.classList.remove('opacity-100', 'opacity-80');
+                        ind.querySelector('span').classList.remove('active-dot', 'border-primary', 'bg-primary/20');
+                        ind.querySelector('span').classList.add('border-white/20');
+                    }
+                });
+
+                // Buttons
+                prevBtn.classList.toggle('hidden', currentStep === 1);
+                
+                if (currentStep === totalSteps) {
+                    nextBtn.classList.add('hidden');
+                    submitBtn.classList.remove('hidden');
+                } else {
+                    nextBtn.classList.remove('hidden');
+                    submitBtn.classList.add('hidden');
+                    nextBtn.innerHTML = `${btnTexts[currentStep-1]} <span class="material-symbols-outlined">chevron_right</span>`;
+                }
+
+                // Smooth scroll to top of form section
+                document.getElementById('form-anchor').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            };
+
+            nextBtn.addEventListener('click', () => {
+                if (currentStep < totalSteps) {
+                    currentStep++;
+                    updateUI();
+                }
+            });
+
+            prevBtn.addEventListener('click', () => {
+                if (currentStep > 1) {
+                    currentStep--;
+                    updateUI();
+                }
+            });
+
+            submitBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                // Simulation of submission
+                document.querySelectorAll('.form-step').forEach(step => step.classList.add('hidden'));
+                document.getElementById('form-controls').classList.add('hidden');
+                document.getElementById('success-state').classList.remove('hidden');
+                document.querySelector('.lg\\:sticky').classList.add('hidden');
+                document.querySelector('.lg\\:col-span-9').classList.replace('lg:col-span-9', 'lg:col-span-12');
+                progressBar.style.width = '100%';
+            });
+        });
+    </script>
+</body></html>

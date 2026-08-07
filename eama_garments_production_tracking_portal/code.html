@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Production Tracking | EAMA Garments</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Playfair+Display:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .fill-icon {
+            font-variation-settings: 'FILL' 1, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Cinematic Fade In */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: #0A0A0A; }
+        ::-webkit-scrollbar-thumb { background: #343535; }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-dim": "#121414",
+                        "surface-bright": "#383939",
+                        "error": "#ffb4ab",
+                        "tertiary": "#c8c6c5",
+                        "inverse-surface": "#e3e2e2",
+                        "surface-variant": "#343535",
+                        "on-primary": "#630f00",
+                        "surface-tint": "#ffb4a3",
+                        "on-secondary-container": "#bab8b7",
+                        "surface-container-lowest": "#0d0e0f",
+                        "outline-variant": "#59413c",
+                        "on-primary-fixed-variant": "#8c1900",
+                        "surface-container-highest": "#343535",
+                        "background": "#121414",
+                        "on-error-container": "#ffdad6",
+                        "tertiary-container": "#9c9a99",
+                        "surface-container": "#1e2020",
+                        "inverse-primary": "#ae3115",
+                        "on-secondary-fixed": "#1c1b1b",
+                        "surface": "#121414",
+                        "outline": "#a88a83",
+                        "secondary-fixed": "#e5e2e1",
+                        "primary-fixed-dim": "#ffb4a3",
+                        "secondary-container": "#4a4949",
+                        "tertiary-fixed-dim": "#c8c6c5",
+                        "on-surface-variant": "#e1bfb8",
+                        "on-secondary": "#313030",
+                        "on-background": "#e3e2e2",
+                        "on-surface": "#e3e2e2",
+                        "on-primary-container": "#661000",
+                        "error-container": "#93000a",
+                        "on-tertiary-fixed-variant": "#474646",
+                        "on-secondary-fixed-variant": "#474646",
+                        "primary-fixed": "#ffdad2",
+                        "on-tertiary-fixed": "#1c1b1b",
+                        "on-primary-fixed": "#3d0600",
+                        "inverse-on-surface": "#2f3131",
+                        "primary-container": "#ff6b4a",
+                        "surface-container-high": "#292a2a",
+                        "surface-container-low": "#1a1c1c",
+                        "secondary-fixed-dim": "#c9c6c5",
+                        "primary": "#ffb4a3",
+                        "on-tertiary-container": "#323232",
+                        "on-error": "#690005",
+                        "secondary": "#c9c6c5",
+                        "tertiary-fixed": "#e5e2e1",
+                        "on-tertiary": "#313030"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "margin-desktop": "80px",
+                        "margin-mobile": "20px",
+                        "base": "8px",
+                        "section-gap": "160px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "label-caps": ["Inter"],
+                        "headline-lg-mobile": ["Playfair Display"],
+                        "headline-sm": ["Playfair Display"],
+                        "headline-md": ["Playfair Display"],
+                        "headline-lg": ["Playfair Display"],
+                        "display-lg": ["Playfair Display"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "label-caps": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                        "headline-lg-mobile": ["36px", {"lineHeight": "1.2", "fontWeight": "400"}],
+                        "headline-sm": ["24px", {"lineHeight": "1.4", "fontWeight": "400"}],
+                        "headline-md": ["32px", {"lineHeight": "1.3", "fontWeight": "400"}],
+                        "headline-lg": ["48px", {"lineHeight": "1.2", "fontWeight": "400"}],
+                        "display-lg": ["72px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopNavBar -->
+<header class="bg-background dock-full-width top-0 z-50 border-b border-white/10 flex justify-between items-center w-full h-20 px-margin-mobile md:px-margin-desktop max-w-full mx-auto">
+<div class="font-headline-sm text-headline-sm tracking-tighter text-on-background dark:text-on-background">
+            EAMA GARMENTS
+        </div>
+<nav class="hidden md:flex gap-8">
+<a class="text-on-surface-variant font-medium hover:text-on-surface transition-colors font-label-caps text-label-caps" href="#">Manufacturing</a>
+<a class="text-on-surface-variant font-medium hover:text-on-surface transition-colors font-label-caps text-label-caps" href="#">Sustainability</a>
+<a class="text-on-surface-variant font-medium hover:text-on-surface transition-colors font-label-caps text-label-caps" href="#">Global Network</a>
+<a class="text-primary font-semibold border-b-2 border-primary pb-1 font-label-caps text-label-caps" href="#">Partner Portal</a>
+</nav>
+<div class="flex items-center gap-6">
+<button class="hidden lg:block text-on-surface-variant font-label-caps text-label-caps hover:text-primary transition-colors">Request a Quote</button>
+<button class="bg-primary-container text-on-primary-container px-8 py-3 rounded-[4px] font-label-caps text-label-caps hover:bg-opacity-90 transition-all active:scale-95">
+                Consultation
+            </button>
+</div>
+</header>
+<main class="min-h-screen relative overflow-hidden">
+<!-- Hero Background Section -->
+<div class="absolute inset-0 z-0 pointer-events-none opacity-20">
+<div class="w-full h-full bg-cover bg-center" data-alt="A cinematic, high-angle wide shot of a modern, organized garment factory floor at night. The lighting is low and moody, with focused spotlights on high-end industrial sewing machines and organized fabric rolls. The color palette is deep charcoal and slate gray with subtle orange highlights from machine indicators. The atmosphere is quiet, technical, and architectural, emphasizing precision and scale." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBrO8jAaR5a5KS5VhtCBXYVqgU2NrDLIMjGjDsP7lMY-jABRXwW4o--plqu6E_ucrR8Crj3taXhYH1EO5W4QsFbrybj1K1VmuZ4nwlKOmJsSN4RRLNrIMPzatUR6_dYhVaCm24Nf8B_lyczUUjMEOIcs6PG7ub7rWxKqQlgHujOuYLaJ2w-a-P5UuMn69TqulFpaR8dOaVcNyOsKD9DTmiBzTNaQ5C4rSEFeVelTwTngZWMM4fi99vMwkrR0WFCekYRYEaAUtqrbhs')"></div>
+</div>
+<div class="relative z-10 px-margin-mobile md:px-margin-desktop py-12 md:py-20 max-w-[1440px] mx-auto">
+<!-- Header Title & Project ID -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 animate-fade-in" style="animation-delay: 0.1s;">
+<div>
+<span class="font-label-caps text-label-caps text-primary mb-2 block tracking-[0.2em]">OPERATIONAL STATUS</span>
+<h1 class="font-headline-lg text-headline-lg md:text-display-lg text-on-background">Production Tracking</h1>
+</div>
+<div class="bg-surface-container-high border border-white/10 px-6 py-4 rounded-lg flex items-center gap-4">
+<span class="material-symbols-outlined text-primary" data-icon="qr_code_2">qr_code_2</span>
+<div>
+<p class="font-label-caps text-[10px] text-on-surface-variant opacity-60">PROJECT REFERENCE</p>
+<p class="font-body-md text-body-md font-mono tracking-wider">#EAMA-2024-0892</p>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Project Overview Card (Bento Style) -->
+<section class="lg:col-span-4 space-y-8 animate-fade-in" style="animation-delay: 0.2s;">
+<div class="bg-surface-container-lowest border border-white/10 p-8 rounded-lg relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-30 transition-opacity">
+<span class="material-symbols-outlined text-[64px]" data-icon="factory">factory</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm mb-8 border-b border-white/10 pb-4">Project Overview</h3>
+<div class="space-y-6">
+<div class="flex justify-between items-center">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Category</span>
+<span class="font-body-md text-body-md font-medium">Premium Activewear</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Quantity</span>
+<span class="font-body-md text-body-md font-medium">5,000 Units</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Start Date</span>
+<span class="font-body-md text-body-md font-medium">Oct 12, 2024</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Est. Delivery</span>
+<span class="font-body-md text-body-md font-medium text-primary">Nov 25, 2024</span>
+</div>
+</div>
+<div class="mt-10 pt-8 border-t border-white/10">
+<div class="flex items-center justify-between mb-2">
+<span class="font-label-caps text-[10px] text-on-surface-variant uppercase">Current Output</span>
+<span class="font-body-md text-body-md text-primary">34%</span>
+</div>
+<div class="h-1 bg-surface-container-highest w-full overflow-hidden">
+<div class="h-full bg-primary-container w-[34%] transition-all duration-1000 ease-in-out"></div>
+</div>
+</div>
+</div>
+<!-- Technical Assets Section -->
+<div class="bg-surface-container-lowest border border-white/10 p-8 rounded-lg">
+<h3 class="font-headline-sm text-headline-sm mb-6">Technical Assets</h3>
+<div class="space-y-3">
+<button class="w-full flex items-center justify-between p-4 bg-white/5 border border-white/5 hover:border-primary/40 hover:bg-white/10 transition-all group">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors" data-icon="description">description</span>
+<span class="font-body-md text-body-md">Approved Tech Pack</span>
+</div>
+<span class="material-symbols-outlined text-sm opacity-40 group-hover:opacity-100" data-icon="download">download</span>
+</button>
+<button class="w-full flex items-center justify-between p-4 bg-white/5 border border-white/5 hover:border-primary/40 hover:bg-white/10 transition-all group">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors" data-icon="lab_research">lab_research</span>
+<span class="font-body-md text-body-md">Material Test Reports</span>
+</div>
+<span class="material-symbols-outlined text-sm opacity-40 group-hover:opacity-100" data-icon="download">download</span>
+</button>
+<button class="w-full flex items-center justify-between p-4 bg-white/5 border border-white/5 hover:border-primary/40 hover:bg-white/10 transition-all group">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors" data-icon="checklist_rtl">checklist_rtl</span>
+<span class="font-body-md text-body-md">QA Checklist</span>
+</div>
+<span class="material-symbols-outlined text-sm opacity-40 group-hover:opacity-100" data-icon="download">download</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Manufacturing Timeline -->
+<section class="lg:col-span-8 animate-fade-in" style="animation-delay: 0.3s;">
+<div class="bg-surface-container-lowest border border-white/10 p-8 md:p-12 rounded-lg h-full">
+<div class="flex justify-between items-center mb-12">
+<h3 class="font-headline-sm text-headline-sm">Manufacturing Workflow</h3>
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+<span class="font-label-caps text-label-caps text-on-surface-variant">LIVE UPDATES ACTIVE</span>
+</div>
+</div>
+<div class="relative space-y-0">
+<!-- Vertical Line -->
+<div class="absolute left-6 top-2 bottom-2 w-px bg-white/10"></div>
+<!-- Timeline Steps -->
+<!-- 1. Completed -->
+<div class="relative pl-16 pb-12 group">
+<div class="absolute left-[20px] top-1 w-[8px] h-[8px] rounded-full bg-primary ring-4 ring-primary/20 z-10"></div>
+<div class="flex flex-col md:flex-row md:items-start md:justify-between gap-2">
+<div>
+<div class="flex items-center gap-3 mb-1">
+<h4 class="font-body-lg text-body-lg font-semibold text-on-surface">Requirement Approved</h4>
+<span class="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-bold tracking-widest uppercase">Completed</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant opacity-80 mb-2">Documentation and technical specifications finalized for production run.</p>
+<div class="flex items-center gap-2 text-[12px] text-on-surface-variant/60 font-mono italic">
+<span class="material-symbols-outlined text-sm" data-icon="calendar_today">calendar_today</span>
+                                            Oct 14, 2024
+                                        </div>
+</div>
+<div class="md:text-right">
+<span class="font-label-caps text-[10px] opacity-40">STAMP ID</span>
+<p class="text-[10px] font-mono opacity-60">AUTH-X992</p>
+</div>
+</div>
+</div>
+<!-- 2. In Progress -->
+<div class="relative pl-16 pb-12 group">
+<div class="absolute left-[20px] top-1 w-[8px] h-[8px] rounded-full bg-primary animate-ping z-10"></div>
+<div class="absolute left-[20px] top-1 w-[8px] h-[8px] rounded-full bg-primary z-10"></div>
+<div class="flex flex-col md:flex-row md:items-start md:justify-between gap-2">
+<div class="bg-primary/5 p-6 border border-primary/20 rounded-lg -ml-4 pl-10 flex-1">
+<div class="flex items-center gap-3 mb-1">
+<h4 class="font-body-lg text-body-lg font-semibold text-on-surface">Production Started</h4>
+<span class="px-2 py-0.5 rounded-full bg-primary/20 text-primary text-[10px] font-bold tracking-widest uppercase">In Progress</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface mb-3">Fabric cutting completed. Sewing line 4 currently active for prototype sampling and initial assembly.</p>
+<div class="grid grid-cols-2 gap-4 mt-4">
+<div class="bg-black/20 p-3 rounded">
+<p class="text-[10px] font-label-caps text-on-surface-variant opacity-60">BATCH EFFICIENCY</p>
+<p class="text-body-md font-mono text-primary">98.2%</p>
+</div>
+<div class="bg-black/20 p-3 rounded">
+<p class="text-[10px] font-label-caps text-on-surface-variant opacity-60">ACTIVE UNITS</p>
+<p class="text-body-md font-mono text-primary">1,700</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- 3. Quality Inspection (Upcoming) -->
+<div class="relative pl-16 pb-12 group opacity-40 hover:opacity-100 transition-opacity">
+<div class="absolute left-[20px] top-1 w-[8px] h-[8px] rounded-full border-2 border-white/20 bg-background z-10"></div>
+<div class="flex flex-col md:flex-row md:items-start md:justify-between gap-2">
+<div>
+<div class="flex items-center gap-3 mb-1">
+<h4 class="font-body-lg text-body-lg font-semibold text-on-surface-variant">Quality Inspection</h4>
+<span class="text-[10px] font-bold tracking-widest uppercase text-on-surface-variant/60">Upcoming</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">Multi-stage QA check for structural integrity and stitching precision.</p>
+</div>
+</div>
+</div>
+<!-- 4. Packaging (Upcoming) -->
+<div class="relative pl-16 pb-12 group opacity-40 hover:opacity-100 transition-opacity">
+<div class="absolute left-[20px] top-1 w-[8px] h-[8px] rounded-full border-2 border-white/20 bg-background z-10"></div>
+<div class="flex flex-col md:flex-row md:items-start md:justify-between gap-2">
+<div>
+<div class="flex items-center gap-3 mb-1">
+<h4 class="font-body-lg text-body-lg font-semibold text-on-surface-variant">Packaging</h4>
+<span class="text-[10px] font-bold tracking-widest uppercase text-on-surface-variant/60">Upcoming</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">Premium B2B eco-conscious flat-pack preparation.</p>
+</div>
+</div>
+</div>
+<!-- 5. Dispatch (Upcoming) -->
+<div class="relative pl-16 pb-12 group opacity-40 hover:opacity-100 transition-opacity">
+<div class="absolute left-[20px] top-1 w-[8px] h-[8px] rounded-full border-2 border-white/20 bg-background z-10"></div>
+<div class="flex flex-col md:flex-row md:items-start md:justify-between gap-2">
+<div>
+<div class="flex items-center gap-3 mb-1">
+<h4 class="font-body-lg text-body-lg font-semibold text-on-surface-variant">Ready for Dispatch</h4>
+<span class="text-[10px] font-bold tracking-widest uppercase text-on-surface-variant/60">Upcoming</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">Logistics allocation for global hub distribution.</p>
+</div>
+</div>
+</div>
+<!-- 6. Completion -->
+<div class="relative pl-16 group opacity-40">
+<div class="absolute left-[20px] top-1 w-[8px] h-[8px] rounded-full border-2 border-white/20 bg-background z-10"></div>
+<div class="flex flex-col md:flex-row md:items-start md:justify-between gap-2">
+<div>
+<div class="flex items-center gap-3 mb-1">
+<h4 class="font-body-lg text-body-lg font-semibold text-on-surface-variant">Completed</h4>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-lowest border-t border-white/10 px-margin-mobile md:px-margin-desktop py-section-gap w-full max-w-full grid grid-cols-1 md:grid-cols-4 gap-gutter">
+<div class="col-span-1 md:col-span-1">
+<div class="font-headline-md text-headline-md text-on-background mb-6">EAMA</div>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-xs opacity-60">
+                Architecting the future of industrial garment manufacturing through ethical precision.
+            </p>
+</div>
+<div>
+<h4 class="font-label-caps text-label-caps text-primary mb-6">RESOURCES</h4>
+<ul class="space-y-4">
+<li><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface hover:translate-x-1 transition-all inline-block" href="#">Ethics &amp; Compliance</a></li>
+<li><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface hover:translate-x-1 transition-all inline-block" href="#">Supply Chain Transparency</a></li>
+<li><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface hover:translate-x-1 transition-all inline-block" href="#">Annual Report</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-label-caps text-label-caps text-primary mb-6">CORPORATE</h4>
+<ul class="space-y-4">
+<li><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface hover:translate-x-1 transition-all inline-block" href="#">Media Relations</a></li>
+<li><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface hover:translate-x-1 transition-all inline-block" href="#">Privacy Policy</a></li>
+<li><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface hover:translate-x-1 transition-all inline-block" href="#">Terms of Service</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-label-caps text-label-caps text-primary mb-6">CONNECT</h4>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6">Subscribe for manufacturing insights and global supply chain updates.</p>
+<div class="flex gap-2">
+<input class="bg-transparent border border-white/10 px-4 py-2 w-full focus:border-primary focus:ring-0 transition-colors rounded-[4px] font-body-md" placeholder="Corporate Email" type="email"/>
+<button class="bg-white/5 hover:bg-white/10 p-2 border border-white/10">
+<span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</div>
+<div class="col-span-full pt-16 border-t border-white/5 mt-16 text-center md:text-left">
+<p class="font-label-caps text-[10px] text-on-surface-variant/40 tracking-[0.2em] uppercase">
+                © 2024 EAMA Garments. Excellence in Industrial Craftsmanship.
+            </p>
+</div>
+</footer>
+<script>
+        // Simple intersection observer for reveal effects
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('opacity-100');
+                    entry.target.classList.remove('opacity-0', 'translate-y-4');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.animate-on-scroll').forEach(el => {
+            el.classList.add('transition-all', 'duration-700', 'opacity-0', 'translate-y-4');
+            observer.observe(el);
+        });
+    </script>
+</body></html>

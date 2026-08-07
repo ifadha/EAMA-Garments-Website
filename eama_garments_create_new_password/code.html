@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Create New Password | EAMA Garments</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../supabase-client.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1" rel="stylesheet"/>
+    <style>
+        body { background-color: #0A0A0A; color: #e3e2e2; }
+        .met { color: #ffb4a3; font-weight: 600; }
+        .met span { font-variation-settings: 'FILL' 1; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-6">
+    <div class="max-w-xl w-full">
+        <div class="text-center mb-10">
+            <span class="text-[#ffb4a3] font-serif text-2xl uppercase tracking-widest">EAMA Garments</span>
+        </div>
+
+        <div class="bg-[#121212] border border-white/10 p-12 shadow-2xl relative">
+            <div class="absolute top-0 left-0 w-1 h-full bg-[#ffb4a3]"></div>
+            <h2 class="text-3xl font-serif text-center mb-8">Set New Password</h2>
+            
+            <div id="errorMessage" class="hidden mb-6 p-4 bg-red-900/20 border border-red-500/50 text-red-200 text-xs text-center">Passwords do not match.</div>
+
+            <form class="space-y-8" onsubmit="handleFormSubmit(event)">
+                <div class="space-y-4">
+                    <input class="w-full bg-transparent border-b border-white/20 p-3 text-lg focus:border-[#ffb4a3] outline-none" id="new_password" type="password" placeholder="New Password" onkeyup="validateRequirements(this.value)" required>
+                    <input class="w-full bg-transparent border-b border-white/20 p-3 text-lg focus:border-[#ffb4a3] outline-none" id="confirm_password" type="password" placeholder="Confirm Password" required>
+                </div>
+
+                <div class="bg-black/40 p-6 space-y-3">
+                    <p class="text-[10px] uppercase text-gray-500 tracking-widest mb-2">Requirements</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-[11px] text-gray-400">
+                        <div id="req-length" class="flex items-center gap-2"><span class="material-symbols-outlined text-sm">circle</span> 8+ Characters</div>
+                        <div id="req-upper" class="flex items-center gap-2"><span class="material-symbols-outlined text-sm">circle</span> Uppercase Letter</div>
+                        <div id="req-number" class="flex items-center gap-2"><span class="material-symbols-outlined text-sm">circle</span> One Number</div>
+                    </div>
+                </div>
+
+                <button class="w-full bg-[#ffb4a3] text-[#3d0600] font-bold py-5 uppercase tracking-widest hover:bg-white transition-all">Update Password</button>
+            </form>
+        </div>
+    </div>
+  
+    <script>
+        function validateRequirements(v) {
+            document.getElementById('req-length').className = v.length >= 8 ? 'met flex items-center gap-2' : 'flex items-center gap-2';
+            document.getElementById('req-upper').className = /[A-Z]/.test(v) ? 'met flex items-center gap-2' : 'flex items-center gap-2';
+            document.getElementById('req-number').className = /[0-9]/.test(v) ? 'met flex items-center gap-2' : 'flex items-center gap-2';
+        }
+
+        async function initializeRecovery() {
+            const { data, error } = await eamaSupabase.auth.exchangeCodeForSession(window.location.href);
+
+            if (error) {
+                console.error("Recovery session error:", error.message);
+                return;
+            }
+
+            if (!data?.session) {
+                console.error("Recovery session exchange succeeded but no session was returned.");
+                return;
+            }
+
+            console.log("Recovery session created", data.session);
+        }
+
+        initializeRecovery();
+
+        let recoveryReady = false;
+
+        eamaSupabase.auth.onAuthStateChange((event, session) => {
+            if (event === 'PASSWORD_RECOVERY') {
+                recoveryReady = true;
+                console.log("Recovery session ready", event, session);
+            }
+        });
+
+        async function handleFormSubmit(e) {
+            e.preventDefault();
+            const pass = document.getElementById('new_password').value;
+            const confirm = document.getElementById('confirm_password').value;
+
+            if (pass !== confirm) {
+                document.getElementById('errorMessage').classList.remove('hidden');
+                return;
+            }
+
+            const { error } = await eamaSupabase.auth.updateUser({ password: pass });
+            if (error) {
+                alert(error.message);
+            } else {
+                alert("Password Updated Successfully!");
+                window.location.href = "../client_portal_sign_in/code.html";
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Your Design | EAMA Garments</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;500&display=swap');
+
+        :root {
+            --bg-main: #121414;
+            --bg-surface: #1E2020;
+            --bg-elevated: #292A2A;
+            --text-primary: #E3E2E2;
+            --text-secondary: #E1BFB8;
+            --text-muted: #A88A83;
+            --accent: #FF6B4A;
+            --font-heading: 'Playfair Display', serif;
+            --font-body: 'Inter', sans-serif;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            margin: 0;
+            padding: 80px 24px;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .form-container {
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        /* Typography */
+        h1 {
+            font-family: var(--font-heading);
+            font-size: 3rem;
+            font-weight: 400;
+            margin: 0 0 16px 0;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin-bottom: 64px;
+        }
+
+        section {
+            margin-bottom: 56px;
+        }
+
+        h2 {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--bg-elevated);
+            padding-bottom: 12px;
+            margin-bottom: 32px;
+            font-weight: 400;
+        }
+
+        /* Grid System */
+        .input-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .full-width { grid-column: span 2; }
+
+        /* Form Elements */
+        .field-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        input, select, textarea {
+            background: var(--bg-surface);
+            border: 1px solid var(--bg-elevated);
+            color: var(--text-primary);
+            padding: 14px 16px;
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: var(--bg-elevated);
+        }
+
+        ::placeholder { color: #555; }
+
+        /* File Upload Area */
+        .upload-zone {
+            border: 1px dashed var(--bg-elevated);
+            background: var(--bg-surface);
+            padding: 40px;
+            text-align: center;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: border-color 0.3s;
+        }
+
+        .upload-zone:hover { border-color: var(--text-muted); }
+
+        .upload-zone p { margin: 8px 0; font-size: 0.9rem; }
+        .file-types { color: var(--text-muted); font-size: 0.75rem; }
+
+        /* "What Happens Next" Panel */
+        .process-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--bg-elevated);
+            padding: 40px;
+            margin: 64px 0;
+        }
+
+        .process-card h3 {
+            font-family: var(--font-heading);
+            color: var(--text-secondary);
+            margin-top: 0;
+            font-size: 1.4rem;
+        }
+
+        .process-steps {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 32px;
+            margin-top: 24px;
+        }
+
+        .step {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .step span {
+            display: block;
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        /* Submit Button */
+        .submit-area {
+            text-align: center;
+            margin-top: 48px;
+        }
+
+        .btn-primary {
+            background-color: var(--accent);
+            color: #121414;
+            font-family: var(--font-body);
+            font-weight: 600;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding: 20px 60px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+
+        .btn-primary:hover { opacity: 0.9; }
+
+        .legal-note {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 16px;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.2rem; }
+            .input-grid, .process-steps { grid-template-columns: 1fr; }
+            .full-width { grid-column: span 1; }
+        }
+    </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script></head>
+<body>
+
+<div class="form-container">
+    <header>
+        <h1>Submit Your Design & Request a Quote</h1>
+        <p class="subtitle">Share your garment specifications with our manufacturing team. We will review your requirements, discuss production possibilities, and guide you through the next steps.</p>
+    </header>
+
+    <form id="design-inquiry-form">
+        
+        <!-- SECTION 1: DESIGN INFORMATION -->
+        <section>
+            <h2>Design Information</h2>
+            <div class="input-grid">
+                <div class="field-group">
+                    <label>Brand / Company Name</label>
+                    <input type="text" id="company_name" name="company_name" placeholder="Legal entity name" required>
+                </div>
+                <div class="field-group">
+                    <label>Contact Person</label>
+                    <input type="text" id="contact_person" name="contact_person" placeholder="Full name" required>
+                </div>
+                <div class="field-group">
+                    <label>Email Address</label>
+                    <input type="email" id="email" name="email" placeholder="corporate@email.com" required>
+                </div>
+                <div class="field-group">
+                    <label>WhatsApp / Phone</label>
+                    <input type="tel" id="phone" name="phone" placeholder="+00 000 000 000" required>
+                </div>
+                <div class="field-group full-width">
+                    <label>Country</label>
+                    <input type="text" id="country" name="country" placeholder="Operating country" required>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: GARMENT DETAILS -->
+        <section>
+            <h2>Garment Details</h2>
+            <div class="input-grid">
+                <div class="field-group">
+                    <label>Garment Category</label>
+                    <select id="garment_category" name="garment_category" required>
+                        <option value="" disabled selected>Select category</option>
+                        <option value="Bottoms">Bottoms</option>
+                        <option value="Sleepwear">Sleepwear</option>
+                        <option value="Dresses">Dresses</option>
+                        <option value="Tops">Tops</option>
+                        <option value="Outerwear">Outerwear</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="field-group">
+                    <label>Product Type</label>
+                    <input type="text" id="product_type" name="product_type" placeholder="e.g. Cargo pants, satin dress">
+                </div>
+                <div class="field-group">
+                    <label>Number of Styles</label>
+                    <input type="number" id="number_of_styles" name="number_of_styles" placeholder="Pieces to be manufactured">
+                </div>
+                <div class="field-group">
+                    <label>Target Quantity</label>
+                    <input type="number" id="target_quantity" name="target_quantity" placeholder="Estimated production required">
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: DESIGN FILE UPLOAD -->
+        <section>
+            <h2>Design File Upload</h2>
+            <div class="upload-zone" onclick="document.getElementById('design_files').click();">
+                <input type="file" id="design_files" name="design_files" multiple style="display:none">
+                <p style="color: var(--text-secondary); font-weight: 500;">Click to upload or drag files here</p>
+                <p class="file-types">Supported: PDF, AI, ZIP, JPG, PNG (Max 20MB)</p>
+                <p class="file-types" style="margin-top: 12px; font-style: italic;">Tech Packs, CAD Files, Reference Images, Measurement Charts</p>
+            </div>
+        </section>
+
+        <!-- SECTION 4: FABRIC & MATERIAL REQUIREMENTS -->
+        <section>
+            <h2>Fabric & Material Requirements</h2>
+            <div class="input-grid">
+                <div class="field-group">
+                    <label>Preferred Fabric</label>
+                    <input type="text" id="preferred_fabric" name="preferred_fabric" placeholder="e.g. Cotton, Linen, Satin">
+                </div>
+                <div class="field-group">
+                    <label>Fabric Weight / GSM (Optional)</label>
+                    <input type="text" id="fabric_gsm" name="fabric_gsm" placeholder="e.g. 180 GSM">
+                </div>
+                <div class="field-group full-width">
+                    <label>Color Requirements</label>
+                    <textarea id="color_requirements" name="color_requirements" rows="2" placeholder="Describe preferred colors, Pantone references, or color cards"></textarea>
+                </div>
+                <div class="field-group full-width">
+                    <label>Additional Material Requirements</label>
+                    <textarea id="additional_material_requirements" name="additional_material_requirements" rows="2" placeholder="Buttons, zippers, labels, trims, embroidery, printing"></textarea>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: PRODUCTION REQUIREMENTS -->
+        <section>
+            <h2>Production Requirements</h2>
+            <div class="input-grid">
+                <div class="field-group">
+                    <label>Customization Requirements</label>
+                    <textarea id="customization_requirements" name="customization_requirements" rows="2"></textarea>
+                </div>
+                <div class="field-group">
+                    <label>Packaging Requirements</label>
+                    <textarea id="packaging_requirements" name="packaging_requirements" rows="2"></textarea>
+                </div>
+                <div class="field-group">
+                    <label>Target Production Timeline</label>
+                    <input type="text" id="production_timeline" name="production_timeline" placeholder="e.g. Autumn 2024">
+                </div>
+                <div class="field-group">
+                    <label>Additional Notes</label>
+                    <textarea id="additional_notes" name="additional_notes" rows="1"></textarea>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 6: WHAT HAPPENS NEXT -->
+        <div class="process-card">
+            <h3>What Happens Next?</h3>
+            <div class="process-steps">
+                <div class="step">
+                    <span>01. Submission</span>
+                    Your design submission is received by the EAMA Garments technical team.
+                </div>
+                <div class="step">
+                    <span>02. Technical Review</span>
+                    Our team reviews specifications, files, and production feasibility.
+                </div>
+                <div class="step">
+                    <span>03. Consultation</span>
+                    We arrange a discussion to clarify details and recommend solutions.
+                </div>
+                <div class="step">
+                    <span>04. Quotation</span>
+                    We provide a formal quote and discuss sampling and production timelines.
+                </div>
+            </div>
+        </div>
+
+        <!-- FINAL ACTION -->
+        <div class="submit-area">
+            <button type="submit" class="btn-primary">Submit Design Request</button>
+            <p class="legal-note">By submitting this request, you agree that our team may contact you regarding your manufacturing requirements.</p>
+        </div>
+    </form>
+</div>
+
+<script src="./supabase-client.js"></script>
+<script>
+    const supabase = window.eamaSupabase;
+    const form = document.getElementById('design-inquiry-form');
+    if (!form) {
+        throw new Error('Design inquiry form not found.');
+    }
+
+    form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+
+        const button = form.querySelector('[type="submit"]');
+        const requiredFields = [
+            document.getElementById('company_name'),
+            document.getElementById('contact_person'),
+            document.getElementById('email'),
+            document.getElementById('phone'),
+            document.getElementById('country'),
+            document.getElementById('garment_category')
+        ];
+
+        const isValid = requiredFields.every(field => field && field.value.trim() !== '');
+        if (!isValid) {
+            alert('Please complete all required fields.');
+            return;
+        }
+
+        const fileInput = document.getElementById('design_files');
+        const companyName = document.getElementById('company_name').value.trim();
+        const contactPerson = document.getElementById('contact_person').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+        const country = document.getElementById('country').value.trim();
+        const garmentCategory = document.getElementById('garment_category').value;
+        const productType = document.getElementById('product_type').value.trim();
+        const numberOfStyles = document.getElementById('number_of_styles').value.trim();
+        const targetQuantity = document.getElementById('target_quantity').value.trim();
+        const preferredFabric = document.getElementById('preferred_fabric').value.trim();
+        const fabricGsm = document.getElementById('fabric_gsm').value.trim();
+        const colorRequirements = document.getElementById('color_requirements').value.trim();
+        const additionalMaterialRequirements = document.getElementById('additional_material_requirements').value.trim();
+        const customizationRequirements = document.getElementById('customization_requirements').value.trim();
+        const packagingRequirements = document.getElementById('packaging_requirements').value.trim();
+        const productionTimeline = document.getElementById('production_timeline').value.trim();
+        const additionalNotes = document.getElementById('additional_notes').value.trim();
+
+        button.disabled = true;
+        button.textContent = 'Submitting…';
+
+        try {
+            if (!supabase) {
+                throw new Error('Supabase client is not configured.');
+            }
+
+            let uploadedFiles = [];
+            if (fileInput && fileInput.files && fileInput.files.length > 0) {
+                for (const file of fileInput.files) {
+                    const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+                    const filePath = `designs/${Date.now()}-${crypto.randomUUID()}-${safeName}`;
+                    const { error: uploadError } = await supabase.storage.from('techpacks').upload(filePath, file);
+                    if (uploadError) {
+                        throw uploadError;
+                    }
+                    const { data: publicUrlData } = supabase.storage.from('techpacks').getPublicUrl(filePath);
+                    uploadedFiles.push(publicUrlData.publicUrl);
+                }
+            }
+
+            const submission = {
+                company_name: companyName,
+                contact_person: contactPerson,
+                email,
+                phone,
+                country,
+                garment_category: garmentCategory,
+                product_type: productType,
+                number_of_styles: numberOfStyles,
+                target_quantity: targetQuantity,
+                preferred_fabric: preferredFabric,
+                fabric_gsm: fabricGsm,
+                color_requirements: colorRequirements,
+                additional_material_requirements: additionalMaterialRequirements,
+                customization_requirements: customizationRequirements,
+                packaging_requirements: packagingRequirements,
+                production_timeline: productionTimeline,
+                additional_notes: additionalNotes,
+                uploaded_files: uploadedFiles,
+                status: 'New'
+            };
+
+            const { error } = await supabase
+                .from('design_submissions')
+                .insert([submission]);
+
+            if (error) {
+                throw error;
+            }
+
+            form.reset();
+            alert('Your design submission has been received. Our technical team will review your requirements and contact you shortly.');
+        } catch (error) {
+            console.error(error);
+            alert(error.message || 'Unable to submit your request.');
+        } finally {
+            button.disabled = false;
+            button.textContent = 'Submit Design Request';
+        }
+    });
+</script>
+
+</body>
+</html>

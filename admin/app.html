@@ -1,0 +1,1299 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>EAMA Garments | ERP Admin</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../supabase-client.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-deep: #080909;
+            --bg-card: #121414;
+            --accent: #ffb4a3;
+            --accent-muted: #2d1f1c;
+            --text-main: #e3e2e2;
+            --text-dim: #a8a8a8;
+            --border: #222424;
+            --success: #81c784;
+            --danger: #e57373;
+        }
+
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            background: var(--bg-deep);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        /* Layout */
+        .app-container {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: var(--bg-deep);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            padding: 24px;
+        }
+
+        .brand {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--accent);
+            letter-spacing: 2px;
+            margin-bottom: 40px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .nav-item {
+            background: none;
+            border: none;
+            color: var(--text-dim);
+            padding: 12px 16px;
+            text-align: left;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-item:hover {
+            background: var(--accent-muted);
+            color: var(--accent);
+        }
+
+        .nav-item.active {
+            background: var(--accent);
+            color: #3d0600;
+            font-weight: 600;
+        }
+
+        /* Content Area */
+        .main-stage {
+            overflow-y: auto;
+            padding: 40px;
+            background: linear-gradient(135deg, #0d0f0f 0%, #080909 100%);
+        }
+
+        /* Components */
+        .view-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+
+        /* Professional Tables */
+        .data-table-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th {
+            background: rgba(255,255,255,0.02);
+            padding: 16px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-dim);
+            border-bottom: 1px solid var(--border);
+        }
+
+        td {
+            padding: 16px;
+            border-bottom: 1px solid var(--border);
+            font-size: 14px;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .status-badge {
+            padding: 4px 10px;
+            border-radius: 99px;
+            font-size: 11px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        /* Modals */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.85);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(4px);
+            padding: 20px;
+        }
+
+        .modal-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            width: 600px;
+            max-width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+        }
+
+        .modal-card h2 { margin-top: 0; color: var(--accent); }
+
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; margin-bottom: 8px; font-size: 12px; color: var(--text-dim); }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            background: #1a1c1c;
+            border: 1px solid var(--border);
+            color: white;
+            padding: 12px;
+            border-radius: 6px;
+            font-family: inherit;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        /* Toast */
+        #toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            padding: 16px 24px;
+            border-radius: 8px;
+            background: var(--accent);
+            color: #000;
+            font-weight: 600;
+            transform: translateY(100px);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 2000;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        }
+
+        /* Grid */
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 24px;
+            border-radius: 12px;
+        }
+
+        .stat-val { font-size: 28px; font-weight: 600; color: var(--accent); margin-top: 8px; }
+        .stat-lbl { font-size: 12px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; }
+
+        /* Sample Specific */
+        .sample-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 20px;
+        }
+        .sample-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .sample-img { width: 100%; height: 220px; object-fit: cover; background: #080909; }
+        .sample-info { padding: 18px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+
+        @media(max-width: 850px) {
+            .app-container { grid-template-columns: 1fr; }
+            .sidebar { border-right: none; border-bottom: 1px solid var(--border); padding: 15px; flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: space-between; }
+            .brand { margin-bottom: 0; }
+            .nav-group { flex-direction: row; flex-wrap: wrap; gap: 8px; width: 100%; margin-top: 15px; }
+            .nav-item { padding: 8px 12px; font-size: 13px; }
+            .main-stage { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <aside class="sidebar">
+        <div class="brand">EAMA GARMENTS</div>
+        <nav class="nav-group">
+            <button class="nav-item active" onclick="Router.go('dashboard')">Dashboard</button>
+            <button class="nav-item" onclick="Router.go('requests')">Manufacturing Requests</button>
+            <button class="nav-item" onclick="Router.go('samples')">Sample Gallery</button>
+            <button class="nav-item" onclick="Router.go('visits')">Factory Visits</button>
+            <button class="nav-item" onclick="Router.go('clients')">Clients</button>
+            <button class="nav-item" onclick="Router.go('inquiries')">Inquiries</button>
+        </nav>
+        <div style="margin-top: 15px;">
+            <button class="nav-item" onclick="Auth.logout()" style="width:100%; color: var(--danger);">Sign Out</button>
+        </div>
+    </aside>
+
+    <main class="main-stage" id="router-view">
+        <!-- Views injected here -->
+    </main>
+</div>
+
+<!-- Global Modal -->
+<div class="modal-overlay" id="modalOverlay">
+    <div class="modal-card" id="modalContent"></div>
+</div>
+
+<!-- Global Toast -->
+<div id="toast">Message here</div>
+
+<script>
+    // --- CORE SYSTEM & UI CONTROLS ---
+    const UI = {
+        view: document.getElementById('router-view'),
+        overlay: document.getElementById('modalOverlay'),
+        modal: document.getElementById('modalContent'),
+        toast: (msg) => {
+            const t = document.getElementById('toast');
+            t.innerText = msg;
+            t.style.transform = 'translateY(0)';
+            setTimeout(() => t.style.transform = 'translateY(100px)', 3500);
+        },
+        showModal: (html) => {
+            UI.modal.innerHTML = html;
+            UI.overlay.style.display = 'flex';
+        },
+        closeModal: () => {
+            UI.overlay.style.display = 'none';
+        },
+        loading: () => {
+            UI.view.innerHTML = '<div style="padding: 80px 20px; text-align: center; color: var(--accent); font-size: 16px; letter-spacing: 1px;">Retrieving secure ERP data...</div>';
+        },
+        confirm: (title, text, onConfirmCallback) => {
+            UI.showModal(`
+                <h2 style="color: var(--danger);">${title}</h2>
+                <p style="color: var(--text-main); line-height: 1.5; margin-bottom: 24px;">${text}</p>
+                <div style="display: flex; justify-content: flex-end; gap: 12px;">
+                    <button onclick="UI.closeModal()" style="background:none; border:1px solid var(--border); color:white; padding: 10px 18px; border-radius: 6px; cursor:pointer;">Cancel</button>
+                    <button id="modalConfirmBtn" class="btn-primary" style="background: var(--danger); color: white;">Confirm</button>
+                </div>
+            `);
+            document.getElementById('modalConfirmBtn').onclick = () => {
+                onConfirmCallback();
+            };
+        }
+    };
+
+    const Auth = {
+        async check() {
+            if (!window.eamaSupabase) throw new Error("Supabase Client missing");
+            const { data: { session } } = await eamaSupabase.auth.getSession();
+            if (!session) window.location.href = "./admin-login.html";
+            return session;
+        },
+        async logout() {
+            await eamaSupabase.auth.signOut();
+            window.location.href = "./admin-login.html";
+        }
+    };
+
+    const Utils = {
+        getStatusStyle: (status) => {
+            const s = (status || '').toLowerCase();
+            if (s === 'active' || s === 'completed' || s === 'confirmed') return 'background: rgba(129, 199, 132, 0.15); color: #81c784; border: 1px solid rgba(129, 199, 132, 0.3);';
+            if (s === 'new' || s === 'pending') return 'background: rgba(255, 180, 163, 0.15); color: var(--accent); border: 1px solid rgba(255, 180, 163, 0.3);';
+            if (s === 'processing' || s === 'lead' || s === 'draft') return 'background: rgba(100, 181, 246, 0.15); color: #64b5f6; border: 1px solid rgba(100, 181, 246, 0.3);';
+            return 'background: rgba(255, 255, 255, 0.05); color: #aaa; border: 1px solid var(--border);';
+        },
+        getPriorityStyle: (priority) => {
+            const p = (priority || '').toLowerCase();
+            if (p === 'high') return 'background: rgba(229, 115, 115, 0.15); color: #e57373; border: 1px solid rgba(229, 115, 115, 0.4);';
+            if (p === 'medium') return 'background: rgba(253, 216, 53, 0.15); color: #fdd835; border: 1px solid rgba(253, 216, 53, 0.3);';
+            return 'background: rgba(255, 255, 255, 0.05); color: #888; border: 1px solid var(--border);';
+        },
+        formatDate: (dateString) => {
+            if (!dateString) return 'N/A';
+            return new Date(dateString).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+        }
+    };
+
+    // --- APPLICATION MODULES ---
+    const Modules = {
+
+        // ================= DASHBOARD MODULE =================
+        dashboard: async () => {
+            UI.loading();
+            try {
+                const [clients, requests, samples, visits] = await Promise.all([
+                    eamaSupabase.from('clients').select('*', { count: 'exact', head: true }),
+                    eamaSupabase.from('manufacturing_requests').select('*', { count: 'exact', head: true }),
+                    eamaSupabase.from('samples').select('*', { count: 'exact', head: true }),
+                    eamaSupabase.from('factory_visits').select('*', { count: 'exact', head: true })
+                ]);
+
+                const { data: recentRequests } = await eamaSupabase
+                    .from('manufacturing_requests')
+                    .select('id, contact_person, company_name, garment_category, status, priority, created_at')
+                    .order('created_at', { ascending: false })
+                    .limit(5);
+
+                UI.view.innerHTML = `
+                    <div class="view-header">
+                        <h1>Operations Overview</h1>
+                        <div style="color: var(--text-dim); font-size: 14px;">${new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</div>
+                    </div>
+
+                    <div class="stat-grid">
+                        <div class="stat-card">
+                            <div class="stat-lbl">Total Clients</div>
+                            <div class="stat-val">${clients.count || 0}</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-lbl">Manufacturing Requests</div>
+                            <div class="stat-val">${requests.count || 0}</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-lbl">Sample Catalog</div>
+                            <div class="stat-val">${samples.count || 0}</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-lbl">Factory Visits</div>
+                            <div class="stat-val">${visits.count || 0}</div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 40px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <h2 style="margin:0; font-size: 18px; font-weight: 500;">Recent Manufacturing Requests</h2>
+                            <button onclick="Router.go('requests')" style="background: none; border: none; color: var(--accent); cursor: pointer; font-size: 13px;">View All Requests →</button>
+                        </div>
+                        
+                        <div class="data-table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Company / Contact</th>
+                                        <th>Category</th>
+                                        <th>Priority</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${recentRequests && recentRequests.length > 0 ? recentRequests.map(r => `
+                                        <tr>
+                                            <td style="color: var(--text-dim); font-size: 13px;">${Utils.formatDate(r.created_at)}</td>
+                                            <td>
+                                                <strong>${r.company_name || 'Individual Inquiry'}</strong><br>
+                                                <span style="font-size: 12px; color: var(--text-dim);">${r.contact_person || 'N/A'}</span>
+                                            </td>
+                                            <td>${r.garment_category || 'General'}</td>
+                                            <td>
+                                                <span class="status-badge" style="${Utils.getPriorityStyle(r.priority || 'Medium')}">
+                                                    ${r.priority || 'Medium'}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span class="status-badge" style="${Utils.getStatusStyle(r.status || 'New')}">
+                                                    ${r.status || 'New'}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <button onclick="Modules.viewRequestDetails('${r.id}')" class="btn-primary" style="padding: 6px 12px; font-size: 11px;">Manage</button>
+                                            </td>
+                                        </tr>
+                                    `).join('') : `<tr><td colspan="6" style="text-align:center; padding: 40px; color: var(--text-dim);">No manufacturing requests recorded yet.</td></tr>`}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `;
+            } catch (error) {
+                console.error(error);
+                UI.toast("Failed to load dashboard statistics.");
+            }
+        },
+
+        // ================= MANUFACTURING REQUESTS MODULE =================
+        requests: async () => {
+            UI.loading();
+            try {
+                const { data, error } = await eamaSupabase
+                    .from('manufacturing_requests')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                UI.view.innerHTML = `
+                    <div class="view-header">
+                        <h1>Manufacturing Requests</h1>
+                        <span style="color: var(--text-dim); font-size: 14px;">${data ? data.length : 0} total requests</span>
+                    </div>
+                    <div class="data-table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Client / Company</th>
+                                    <th>Garment & Specs</th>
+                                    <th>Target Qty</th>
+                                    <th>Priority</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${data && data.length > 0 ? data.map(r => `
+                                    <tr>
+                                        <td style="color: var(--text-dim); font-size: 13px;">${Utils.formatDate(r.created_at)}</td>
+                                        <td>
+                                            <strong>${r.company_name || 'Individual'}</strong><br>
+                                            <small style="color: var(--text-dim);">${r.contact_person || ''} • ${r.country || 'N/A'}</small>
+                                        </td>
+                                        <td>
+                                            <strong>${r.garment_category || 'Unspecified'}</strong><br>
+                                            <small style="color: var(--text-dim);">${r.product_type || ''} • Fabric: ${r.fabric_preference || 'TBD'}</small>
+                                        </td>
+                                        <td>${r.target_quantity || 'N/A'} units</td>
+                                        <td><span class="status-badge" style="${Utils.getPriorityStyle(r.priority || 'Medium')}">${r.priority || 'Medium'}</span></td>
+                                        <td><span class="status-badge" style="${Utils.getStatusStyle(r.status || 'New')}">${r.status || 'New'}</span></td>
+                                        <td>
+                                            <button onclick="Modules.viewRequestDetails('${r.id}')" class="btn-primary" style="padding: 6px 12px; font-size: 11px;">Manage</button>
+                                        </td>
+                                    </tr>
+                                `).join('') : `<tr><td colspan="7" style="text-align:center; padding: 40px; color: var(--text-dim);">No requests available in database.</td></tr>`}
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            } catch (error) {
+                console.error(error);
+                UI.toast("Error reading manufacturing requests.");
+            }
+        },
+
+        viewRequestDetails: async (id) => {
+            try {
+                const { data, error } = await eamaSupabase.from('manufacturing_requests').select('*').eq('id', id).single();
+                if (error) throw error;
+
+                UI.showModal(`
+                    <div style="border-bottom: 1px solid var(--border); padding-bottom: 16px; margin-bottom: 20px; display:flex; justify-content:space-between; align-items:flex-start;">
+                        <div>
+                            <h2 style="margin:0; font-size:20px; color: var(--accent);">${data.company_name || data.contact_person || 'Manufacturing Request'}</h2>
+                            <small style="color: var(--text-dim);">Submitted: ${Utils.formatDate(data.created_at)} | Type: ${data.request_type || 'General'}</small>
+                        </div>
+                        <span class="status-badge" style="${Utils.getStatusStyle(data.status)}">${data.status || 'New'}</span>
+                    </div>
+
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 20px; font-size: 14px; margin-bottom: 20px;">
+                        <div style="background: rgba(255,255,255,0.02); padding: 15px; border-radius: 8px; border: 1px solid var(--border);">
+                            <div style="color: var(--text-dim); font-size: 11px; text-transform: uppercase; margin-bottom: 8px;">Contact Info</div>
+                            <div><strong>Person:</strong> ${data.contact_person || 'N/A'}</div>
+                            <div><strong>Email:</strong> ${data.email || 'N/A'}</div>
+                            <div><strong>Phone:</strong> ${data.phone || 'N/A'}</div>
+                            <div><strong>Country:</strong> ${data.country || 'N/A'}</div>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.02); padding: 15px; border-radius: 8px; border: 1px solid var(--border);">
+                            <div style="color: var(--text-dim); font-size: 11px; text-transform: uppercase; margin-bottom: 8px;">Production Specs</div>
+                            <div><strong>Category:</strong> ${data.garment_category || 'N/A'}</div>
+                            <div><strong>Target Qty:</strong> ${data.target_quantity || 0} pcs</div>
+                            <div><strong>Styles:</strong> ${data.number_of_styles || 1}</div>
+                            <div><strong>Timeline:</strong> ${data.production_timeline || 'Standard'}</div>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 20px;">
+                        <div style="color: var(--text-dim); font-size: 12px; margin-bottom: 6px;">Client Notes & Customization:</div>
+                        <div style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: 6px; font-size: 13px; color: #ccc; max-height: 100px; overflow-y: auto;">
+                            ${data.additional_notes || data.customization_requirements || 'No extra notes provided by client.'}
+                        </div>
+                    </div>
+
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+                        <div class="form-group" style="margin:0;">
+                            <label>Update Status</label>
+                            <select id="req_status">
+                                <option ${data.status === 'New' ? 'selected' : ''}>New</option>
+                                <option ${data.status === 'Pending' ? 'selected' : ''}>Pending</option>
+                                <option ${data.status === 'Processing' ? 'selected' : ''}>Processing</option>
+                                <option ${data.status === 'Completed' ? 'selected' : ''}>Completed</option>
+                                <option ${data.status === 'Archived' ? 'selected' : ''}>Archived</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="margin:0;">
+                            <label>Set Priority</label>
+                            <select id="req_priority">
+                                <option value="Low" ${data.priority === 'Low' ? 'selected' : ''}>Low</option>
+                                <option value="Medium" ${!data.priority || data.priority === 'Medium' ? 'selected' : ''}>Medium</option>
+                                <option value="High" ${data.priority === 'High' ? 'selected' : ''}>High</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Internal Admin Notes (Not visible to client)</label>
+                        <textarea id="req_admin_notes" rows="3" placeholder="Add manufacturing team notes, pricing estimates, etc...">${data.admin_notes || ''}</textarea>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 24px;">
+                        <button onclick="Modules.deleteRequest('${data.id}')" style="background: none; border: none; color: var(--danger); cursor: pointer; font-size: 13px;">Delete Record</button>
+                        <div style="display: flex; gap: 12px;">
+                            <button onclick="UI.closeModal()" style="background:none; border:none; color:white; cursor:pointer; padding: 10px 15px;">Close</button>
+                            <button class="btn-primary" onclick="Modules.saveRequestUpdates('${data.id}')">Save Changes</button>
+                        </div>
+                    </div>
+                `);
+            } catch (err) {
+                console.error(err);
+                UI.toast("Error opening request details.");
+            }
+        },
+
+        saveRequestUpdates: async (id) => {
+            try {
+                const payload = {
+                    status: document.getElementById('req_status').value,
+                    priority: document.getElementById('req_priority').value,
+                    admin_notes: document.getElementById('req_admin_notes').value,
+                    updated_at: new Date()
+                };
+
+                const { error } = await eamaSupabase.from('manufacturing_requests').update(payload).eq('id', id);
+                if (error) throw error;
+
+                UI.toast("Request successfully updated.");
+                UI.closeModal();
+                if (document.querySelector('.nav-item.active').innerText.includes('Dashboard')) {
+                    Modules.dashboard();
+                } else {
+                    Modules.requests();
+                }
+            } catch (err) {
+                console.error(err);
+                UI.toast("Failed to update request.");
+            }
+        },
+
+        deleteRequest: async (id) => {
+            UI.confirm("Confirm Record Deletion", "Are you sure you want to permanently remove this manufacturing request from the database?", async () => {
+                try {
+                    await eamaSupabase.from('manufacturing_requests').delete().eq('id', id);
+                    UI.closeModal();
+                    UI.toast("Request deleted.");
+                    Modules.requests();
+                } catch (err) {
+                    UI.toast("Deletion failed.");
+                }
+            });
+        },
+
+        // ================= SAMPLE GALLERY (CMS) MODULE =================
+        samples: async () => {
+            UI.loading();
+            try {
+                const { data, error } = await eamaSupabase.from('samples').select('*').order('created_at', { ascending: false });
+                if (error) throw error;
+
+                UI.view.innerHTML = `
+                    <div class="view-header">
+                        <div>
+                            <h1 style="margin:0;">Sample Gallery Management (CMS)</h1>
+                            <div style="color:var(--text-dim); font-size:13px; margin-top:4px;">Manage public catalog displayed on gallery.html</div>
+                        </div>
+                        <button class="btn-primary" onclick="Modules.sampleForm()">+ Add New Sample</button>
+                    </div>
+                    <div class="sample-grid">
+                        ${data && data.length > 0 ? data.map(s => `
+                            <div class="sample-card">
+                                <div style="position:relative;">
+                                    <img src="${s.image_url || 'https://via.placeholder.com/300x400/121414/ffb4a3?text=No+Image'}" class="sample-img" alt="${s.sample_name}">
+                                    <span class="status-badge" style="position:absolute; top:12px; right:12px; ${s.published ? 'background: #1b3821; color: #81c784; border: 1px solid #2e7031;' : 'background: rgba(0,0,0,0.8); color: #aaa;'}">
+                                        ${s.published ? 'Published' : 'Draft'}
+                                    </span>
+                                </div>
+                                <div class="sample-info">
+                                    <div>
+                                        <div style="font-weight:600; font-size:16px; margin-bottom: 4px;">${s.sample_name || 'Unnamed Sample'}</div>
+                                        <div style="color:var(--accent); font-size:12px; text-transform:uppercase; letter-spacing: 1px; margin-bottom: 8px;">${s.category || 'General'} • ${s.color || 'Various'}</div>
+                                        <div style="color:var(--text-dim); font-size:13px; line-height: 1.4; margin-bottom: 16px;">
+                                            Fabric: <strong style="color: #ccc;">${s.fabric || 'Unspecified'}</strong>
+                                        </div>
+                                    </div>
+                                    <div style="display:flex; justify-content: space-between; border-top: 1px solid var(--border); padding-top: 12px;">
+                                        <button onclick="Modules.sampleForm('${s.id}')" style="background:none; border:none; color:var(--accent); cursor:pointer; font-size: 13px; font-weight:500;">Edit Specs</button>
+                                        <button onclick="Modules.deleteSample('${s.id}')" style="background:none; border:none; color:var(--danger); cursor:pointer; font-size: 13px;">Delete</button>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('') : `<div style="grid-column: 1/-1; text-align:center; padding: 60px; background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border); color: var(--text-dim);">No samples in catalog yet. Click "+ Add New Sample" above to get started.</div>`}
+                    </div>
+                `;
+            } catch (error) {
+                console.error(error);
+                UI.toast("Failed to retrieve samples gallery.");
+            }
+        },
+
+        sampleForm: async (id = null) => {
+            try {
+                let item = { sample_name: '', category: 'Dresses', fabric: '', color: '', description: '', image_url: '', published: false, status: 'Draft' };
+                if (id) {
+                    const { data, error } = await eamaSupabase.from('samples').select('*').eq('id', id).single();
+                    if (error) throw error;
+                    item = data;
+                }
+
+                UI.showModal(`
+                    <h2>${id ? 'Edit Sample Details' : 'Add New Garment Sample'}</h2>
+                    <div class="form-group">
+                        <label>Sample Name</label>
+                        <input type="text" id="s_name" placeholder="e.g. Silk Evening Robe - Model X" value="${item.sample_name || ''}">
+                    </div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px;">
+                        <div class="form-group">
+                            <label>Category</label>
+                            <select id="s_cat">
+                                <option value="Dresses" ${item.category === 'Dresses' ? 'selected' : ''}>Dresses</option>
+                                <option value="Bottoms" ${item.category === 'Bottoms' ? 'selected' : ''}>Bottoms</option>
+                                <option value="Sleepwear" ${item.category === 'Sleepwear' ? 'selected' : ''}>Sleepwear</option>
+                                <option value="Outerwear" ${item.category === 'Outerwear' ? 'selected' : ''}>Outerwear</option>
+                                <option value="Activewear" ${item.category === 'Activewear' ? 'selected' : ''}>Activewear</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Color</label>
+                            <input type="text" id="s_col" placeholder="e.g. Midnight Blue / Gold" value="${item.color || ''}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Fabric & Material Details</label>
+                        <input type="text" id="s_fab" placeholder="e.g. 100% Organic Silk, 22mm GSM" value="${item.fabric || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>Description & Specs</label>
+                        <textarea id="s_desc" rows="3" placeholder="Manufacturing capabilities, finishing details, stitching options...">${item.description || ''}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Garment Image Upload (Supabase Storage)</label>
+                        <input type="file" id="s_file" accept="image/*" style="padding: 8px;">
+                        <input type="hidden" id="s_url" value="${item.image_url || ''}">
+                        ${item.image_url ? `<div style="margin-top: 8px; font-size: 12px; color: var(--text-dim);">Current file: <a href="${item.image_url}" target="_blank" style="color: var(--accent);">View existing photo</a></div>` : ''}
+                    </div>
+                    <div class="form-group">
+                        <label>Public Display Status</label>
+                        <select id="s_pub">
+                            <option value="true" ${item.published ? 'selected' : ''}>Published (Visible on public gallery.html)</option>
+                            <option value="false" ${!item.published ? 'selected' : ''}>Draft (Hidden from client catalog)</option>
+                        </select>
+                    </div>
+                    <div style="display:flex; justify-content:flex-end; gap:12px; margin-top:24px;">
+                        <button onclick="UI.closeModal()" style="background:none; border:1px solid var(--border); color:white; padding: 10px 18px; border-radius: 6px; cursor:pointer;">Cancel</button>
+                        <button id="s_btn_save" class="btn-primary" onclick="Modules.saveSample('${id || ''}')">Save Sample</button>
+                    </div>
+                `);
+            } catch (err) {
+                console.error(err);
+                UI.toast("Could not open sample form.");
+            }
+        },
+
+        saveSample: async (id) => {
+            const btn = document.getElementById('s_btn_save');
+            btn.disabled = true;
+            btn.innerText = "Processing...";
+
+            try {
+                const fileInput = document.getElementById('s_file');
+                let imageUrl = document.getElementById('s_url').value;
+
+                if (fileInput.files && fileInput.files[0]) {
+                    const file = fileInput.files[0];
+                    const cleanFileName = file.name.replace(/[^a-zA-Z0-9.]/g, '_');
+                    const fileName = `samples/${Date.now()}_${cleanFileName}`;
+                    
+                    const { data: uploadData, error: uploadError } = await eamaSupabase.storage
+                        .from('sample-images')
+                        .upload(fileName, file);
+
+                    if (uploadError) {
+                        if (uploadError.message.includes("Bucket not found")) {
+                            throw new Error("Supabase Bucket 'sample-images' does not exist! Create a public bucket named 'sample-images' in Supabase Storage.");
+                        }
+                        throw uploadError;
+                    }
+
+                    const { data: urlData } = eamaSupabase.storage.from('sample-images').getPublicUrl(fileName);
+                    imageUrl = urlData.publicUrl;
+                }
+
+                const isPublished = document.getElementById('s_pub').value === 'true';
+                const payload = {
+                    sample_name: document.getElementById('s_name').value || 'Unnamed Sample',
+                    category: document.getElementById('s_cat').value,
+                    color: document.getElementById('s_col').value,
+                    fabric: document.getElementById('s_fab').value,
+                    description: document.getElementById('s_desc').value,
+                    image_url: imageUrl,
+                    published: isPublished,
+                    status: isPublished ? 'Published' : 'Draft',
+                    updated_at: new Date()
+                };
+
+                const { error } = id 
+                    ? await eamaSupabase.from('samples').update(payload).eq('id', id)
+                    : await eamaSupabase.from('samples').insert([payload]);
+
+                if (error) throw error;
+
+                UI.toast(id ? "Sample updated successfully." : "New sample added to catalog.");
+                UI.closeModal();
+                Modules.samples();
+            } catch (error) {
+                console.error("Save Sample Error:", error);
+                UI.toast("Save failed: " + (error.message || "Unknown error"));
+                btn.disabled = false;
+                btn.innerText = "Save Sample";
+            }
+        },
+
+        deleteSample: async (id) => {
+            UI.confirm("Delete Sample From Catalog", "Are you completely sure you want to delete this sample? If published, it will vanish from the public gallery immediately.", async () => {
+                try {
+                    await eamaSupabase.from('samples').delete().eq('id', id);
+                    UI.closeModal();
+                    UI.toast("Sample removed from gallery.");
+                    Modules.samples();
+                } catch (err) {
+                    UI.toast("Failed to delete sample.");
+                }
+            });
+        },
+
+        // ================= FACTORY VISITS MODULE =================
+        visits: async () => {
+            UI.loading();
+            try {
+                const { data, error } = await eamaSupabase
+                    .from('factory_visits')
+                    .select('*')
+                    .order('preferred_visit_date', { ascending: true });
+
+                if (error) throw error;
+
+                UI.view.innerHTML = `
+                    <div class="view-header">
+                        <div>
+                            <h1 style="margin:0;">Factory Visit Schedule</h1>
+                            <div style="color:var(--text-dim); font-size:13px; margin-top:4px;">Manage client appointments and production tours</div>
+                        </div>
+                    </div>
+                    <div class="data-table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Visitor & Contact</th>
+                                    <th>Company & Origin</th>
+                                    <th>Preferred Date / Time</th>
+                                    <th>Visitors #</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${data && data.length > 0 ? data.map(v => `
+                                    <tr>
+                                        <td><strong>${v.full_name || 'N/A'}</strong><br><small style="color:var(--text-dim);">${v.email || ''}</small></td>
+                                        <td><strong>${v.company_name || 'Independent'}</strong><br><small style="color:var(--text-dim);">${v.country || 'N/A'}</small></td>
+                                        <td>
+                                            <strong>${Utils.formatDate(v.preferred_visit_date)}</strong><br>
+                                            <small style="color:var(--accent);">${v.preferred_time || 'No Time Set'}</small>
+                                        </td>
+                                        <td>${v.number_of_visitors || 1} people</td>
+                                        <td><span class="status-badge" style="${Utils.getStatusStyle(v.status || 'Pending')}">${v.status || 'Pending'}</span></td>
+                                        <td>
+                                            <button onclick="Modules.visitForm('${v.id}')" class="btn-primary" style="padding: 6px 12px; font-size: 11px;">Manage</button>
+                                        </td>
+                                    </tr>
+                                `).join('') : `<tr><td colspan="6" style="text-align:center; padding: 40px; color: var(--text-dim);">No factory visit requests scheduled.</td></tr>`}
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            } catch (error) {
+                console.error(error);
+                UI.toast("Failed to fetch factory visits.");
+            }
+        },
+
+        visitForm: async (id) => {
+            try {
+                const { data, error } = await eamaSupabase.from('factory_visits').select('*').eq('id', id).single();
+                if (error) throw error;
+
+                UI.showModal(`
+                    <h2>Manage Factory Visit Appointment</h2>
+                    <div style="background: rgba(255,255,255,0.02); padding: 15px; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 20px; font-size: 14px;">
+                        <div><strong>Visitor:</strong> ${data.full_name} (${data.email} | ${data.phone || 'No phone'})</div>
+                        <div><strong>Company:</strong> ${data.company_name || 'N/A'} [${data.country || 'Country unknown'}]</div>
+                        <div style="margin-top: 8px; border-top: 1px solid var(--border); padding-top: 8px;"><strong>Purpose of Visit:</strong> ${data.purpose_of_visit || 'General Tour'}</div>
+                        ${data.notes ? `<div style="margin-top: 4px; color: #bbb;"><strong>Client Notes:</strong> ${data.notes}</div>` : ''}
+                    </div>
+
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div class="form-group">
+                            <label>Confirmed / Preferred Date</label>
+                            <input type="date" id="v_date" value="${data.confirmed_date || data.preferred_visit_date || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label>Confirmed Time Slot</label>
+                            <input type="text" id="v_time" placeholder="e.g. 10:00 AM - 12:00 PM" value="${data.confirmed_time || data.preferred_time || ''}">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Appointment Status</label>
+                        <select id="v_status">
+                            <option ${data.status === 'Pending' ? 'selected' : ''}>Pending</option>
+                            <option ${data.status === 'Confirmed' ? 'selected' : ''}>Confirmed</option>
+                            <option ${data.status === 'Rescheduled' ? 'selected' : ''}>Rescheduled</option>
+                            <option ${data.status === 'Completed' ? 'selected' : ''}>Completed</option>
+                            <option ${data.status === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Internal Admin Notes & Security Clearance</label>
+                        <textarea id="v_admin_notes" rows="2" placeholder="Gate access details, guide assigned, etc...">${data.admin_notes || ''}</textarea>
+                    </div>
+
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:24px;">
+                        <button onclick="Modules.deleteVisit('${data.id}')" style="background:none; border:none; color:var(--danger); cursor:pointer; font-size:13px;">Delete Record</button>
+                        <div style="display:flex; gap:12px;">
+                            <button onclick="UI.closeModal()" style="background:none; border:1px solid var(--border); color:white; padding:10px 18px; border-radius:6px; cursor:pointer;">Cancel</button>
+                            <button class="btn-primary" onclick="Modules.saveVisit('${data.id}')">Update Visit</button>
+                        </div>
+                    </div>
+                `);
+            } catch (err) {
+                console.error(err);
+                UI.toast("Error loading visit record.");
+            }
+        },
+
+        saveVisit: async (id) => {
+            try {
+                const payload = {
+                    confirmed_date: document.getElementById('v_date').value || null,
+                    preferred_visit_date: document.getElementById('v_date').value || null,
+                    confirmed_time: document.getElementById('v_time').value,
+                    preferred_time: document.getElementById('v_time').value,
+                    status: document.getElementById('v_status').value,
+                    admin_notes: document.getElementById('v_admin_notes').value,
+                    updated_at: new Date()
+                };
+
+                const { error } = await eamaSupabase.from('factory_visits').update(payload).eq('id', id);
+                if (error) throw error;
+
+                UI.toast("Visit appointment updated.");
+                UI.closeModal();
+                Modules.visits();
+            } catch (err) {
+                console.error(err);
+                UI.toast("Failed to save updates.");
+            }
+        },
+
+        deleteVisit: async (id) => {
+            UI.confirm("Remove Appointment", "Are you sure you want to delete this factory visit schedule?", async () => {
+                await eamaSupabase.from('factory_visits').delete().eq('id', id);
+                UI.closeModal();
+                UI.toast("Visit schedule removed.");
+                Modules.visits();
+            });
+        },
+
+        // ================= CLIENTS (CRM) MODULE =================
+        clients: async () => {
+            UI.loading();
+            try {
+                const { data, error } = await eamaSupabase
+                    .from('clients')
+                    .select('*')
+                    .order('company_name', { ascending: true });
+
+                if (error) throw error;
+
+                UI.view.innerHTML = `
+                    <div class="view-header">
+                        <div>
+                            <h1 style="margin:0;">Client Management (CRM)</h1>
+                            <div style="color:var(--text-dim); font-size:13px; margin-top:4px;">Manage corporate accounts and business leads</div>
+                        </div>
+                        <button class="btn-primary" onclick="Modules.clientForm()">+ Add New Client</button>
+                    </div>
+                    <div class="data-table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Company</th>
+                                    <th>Primary Contact</th>
+                                    <th>Contact Info</th>
+                                    <th>Country</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${data && data.length > 0 ? data.map(c => `
+                                    <tr>
+                                        <td><strong>${c.company_name}</strong></td>
+                                        <td>${c.contact_person || 'N/A'}</td>
+                                        <td>
+                                            <div style="font-size:13px;">${c.email || 'No email'}</div>
+                                            <small style="color:var(--text-dim);">${c.phone || ''}</small>
+                                        </td>
+                                        <td>${c.country || 'N/A'}</td>
+                                        <td><span class="status-badge" style="${Utils.getStatusStyle(c.client_status)}">${c.client_status || 'Active'}</span></td>
+                                        <td>
+                                            <button onclick="Modules.clientForm('${c.id}')" style="background:none; border:none; color:var(--accent); cursor:pointer; font-size:13px; font-weight:500; margin-right:8px;">Edit</button>
+                                            <button onclick="Modules.deleteClient('${c.id}')" style="background:none; border:none; color:var(--danger); cursor:pointer; font-size:13px;">Delete</button>
+                                        </td>
+                                    </tr>
+                                `).join('') : `<tr><td colspan="6" style="text-align:center; padding: 40px; color: var(--text-dim);">No clients recorded in database.</td></tr>`}
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            } catch (error) {
+                console.error(error);
+                UI.toast("Error accessing CRM client list.");
+            }
+        },
+
+        clientForm: async (id = null) => {
+            try {
+                let client = { company_name: '', contact_person: '', email: '', phone: '', country: '', client_status: 'Active', notes: '' };
+                if (id) {
+                    const { data, error } = await eamaSupabase.from('clients').select('*').eq('id', id).single();
+                    if (error) throw error;
+                    client = data;
+                }
+
+                UI.showModal(`
+                    <h2>${id ? 'Edit Client Record' : 'Register Corporate Client'}</h2>
+                    <div class="form-group">
+                        <label>Company / Brand Name</label>
+                        <input type="text" id="c_company" placeholder="e.g. Luxe Apparel Group" value="${client.company_name || ''}">
+                    </div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px;">
+                        <div class="form-group">
+                            <label>Contact Person</label>
+                            <input type="text" id="c_person" placeholder="e.g. Jane Doe (Sourcing Mgr)" value="${client.contact_person || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label>Email Address</label>
+                            <input type="email" id="c_email" placeholder="jane@luxeapparel.com" value="${client.email || ''}">
+                        </div>
+                    </div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px;">
+                        <div class="form-group">
+                            <label>Phone Number</label>
+                            <input type="text" id="c_phone" placeholder="+1 (555) 019-2831" value="${client.phone || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label>Country / HQ Location</label>
+                            <input type="text" id="c_country" placeholder="United States" value="${client.country || ''}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Account Status</label>
+                        <select id="c_status">
+                            <option value="Active" ${client.client_status === 'Active' ? 'selected' : ''}>Active Partner</option>
+                            <option value="Lead" ${client.client_status === 'Lead' ? 'selected' : ''}>Lead / Prospective</option>
+                            <option value="Inactive" ${client.client_status === 'Inactive' ? 'selected' : ''}>Inactive / Past</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Internal Relationship Notes & Terms</label>
+                        <textarea id="c_notes" rows="3" placeholder="Payment terms, contract references, preferred logistics...">${client.notes || ''}</textarea>
+                    </div>
+                    <div style="display:flex; justify-content:flex-end; gap:12px; margin-top:24px;">
+                        <button onclick="UI.closeModal()" style="background:none; border:1px solid var(--border); color:white; padding:10px 18px; border-radius:6px; cursor:pointer;">Cancel</button>
+                        <button class="btn-primary" onclick="Modules.saveClient('${id || ''}')">Save Record</button>
+                    </div>
+                `);
+            } catch (err) {
+                console.error(err);
+                UI.toast("Failed to open client editor.");
+            }
+        },
+
+        saveClient: async (id) => {
+            try {
+                const companyName = document.getElementById('c_company').value;
+                if (!companyName) return UI.toast("Company Name is required.");
+
+                const payload = {
+                    company_name: companyName,
+                    contact_person: document.getElementById('c_person').value,
+                    email: document.getElementById('c_email').value,
+                    phone: document.getElementById('c_phone').value,
+                    country: document.getElementById('c_country').value,
+                    client_status: document.getElementById('c_status').value,
+                    notes: document.getElementById('c_notes').value
+                };
+
+                const { error } = id 
+                    ? await eamaSupabase.from('clients').update(payload).eq('id', id)
+                    : await eamaSupabase.from('clients').insert([payload]);
+
+                if (error) throw error;
+
+                UI.toast("Client database successfully updated.");
+                UI.closeModal();
+                Modules.clients();
+            } catch (error) {
+                console.error(error);
+                UI.toast("Error saving client record.");
+            }
+        },
+
+        deleteClient: async (id) => {
+            UI.confirm("Delete Client Account", "Are you sure you want to delete this corporate client record? Related requests will become orphaned.", async () => {
+                try {
+                    await eamaSupabase.from('clients').delete().eq('id', id);
+                    UI.closeModal();
+                    UI.toast("Client record deleted.");
+                    Modules.clients();
+                } catch (err) {
+                    UI.toast("Failed to delete client.");
+                }
+            });
+        },
+
+        // ================= INQUIRIES (INBOX) MODULE =================
+        inquiries: async () => {
+            UI.loading();
+            try {
+                const { data, error } = await eamaSupabase
+                    .from('inquiries')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                UI.view.innerHTML = `
+                    <div class="view-header">
+                        <div>
+                            <h1 style="margin:0;">Inquiries Inbox</h1>
+                            <div style="color:var(--text-dim); font-size:13px; margin-top:4px;">General messages sent through contact forms</div>
+                        </div>
+                        <span style="color: var(--text-dim); font-size: 14px;">${data ? data.length : 0} items</span>
+                    </div>
+                    <div class="data-table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Received Date</th>
+                                    <th>Sender / Company</th>
+                                    <th>Country</th>
+                                    <th>Message Snippet</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${data && data.length > 0 ? data.map(i => `
+                                    <tr style="cursor:pointer; transition: background 0.1s;" onclick="Modules.viewInquiry('${i.id}')" onmouseover="this.style.background='rgba(255,180,163,0.03)'" onmouseout="this.style.background='transparent'">
+                                        <td style="color: var(--text-dim); font-size: 13px;">${Utils.formatDate(i.created_at)}</td>
+                                        <td><strong>${i.name || 'Anonymous'}</strong><br><small style="color:var(--text-dim);">${i.email || 'No email'} • ${i.company_name || 'Individual'}</small></td>
+                                        <td>${i.country || 'N/A'}</td>
+                                        <td style="max-width:280px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color: #ccc;">${i.message || ''}</td>
+                                        <td><span class="status-badge" style="${Utils.getStatusStyle(i.status)}">${i.status || 'New'}</span></td>
+                                        <td><button class="btn-primary" style="padding:5px 12px; font-size:11px;" onclick="event.stopPropagation(); Modules.viewInquiry('${i.id}')">Read</button></td>
+                                    </tr>
+                                `).join('') : `<tr><td colspan="6" style="text-align:center; padding: 40px; color: var(--text-dim);">Your inquiry inbox is currently empty.</td></tr>`}
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            } catch (error) {
+                console.error(error);
+                UI.toast("Failed to load inquiries inbox.");
+            }
+        },
+
+        viewInquiry: async (id) => {
+            try {
+                const { data, error } = await eamaSupabase.from('inquiries').select('*').eq('id', id).single();
+                if (error) throw error;
+
+                // Auto update status to read/open if it was completely new
+                if (data.status === 'New') {
+                    await eamaSupabase.from('inquiries').update({ status: 'Read', updated_at: new Date() }).eq('id', id);
+                }
+
+                UI.showModal(`
+                    <div style="border-bottom:1px solid var(--border); padding-bottom:15px; margin-bottom:15px; display:flex; justify-content:space-between; align-items:flex-start;">
+                        <div>
+                            <h2 style="margin:0; font-size:20px; color: var(--accent);">Message from ${data.name || 'Visitor'}</h2>
+                            <small style="color:var(--text-dim);">${data.email} | Company: ${data.company_name || 'N/A'} (${data.country || 'Unknown'})</small>
+                        </div>
+                        <span style="font-size: 12px; color: var(--text-dim);">${Utils.formatDate(data.created_at)}</span>
+                    </div>
+                    
+                    <div style="background:rgba(0,0,0,0.4); padding:20px; border-radius:8px; border: 1px solid var(--border); margin-bottom:20px; line-height:1.6; color: #e3e2e2; font-size: 15px; max-height: 300px; overflow-y: auto; white-space: pre-wrap;">${data.message || 'No written content in message.'}</div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                        <div class="form-group" style="margin:0;">
+                            <label>Inquiry Status</label>
+                            <select id="i_status">
+                                <option ${data.status === 'New' || data.status === 'Read' ? 'selected' : ''}>Read</option>
+                                <option ${data.status === 'Replied' ? 'selected' : ''}>Replied</option>
+                                <option ${data.status === 'Archived' ? 'selected' : ''}>Archived</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Admin Internal Notes / Reply Summary</label>
+                        <textarea id="i_notes" rows="3" placeholder="Record internal follow-ups, quotes sent, or assignee notes...">${data.admin_notes || ''}</textarea>
+                    </div>
+
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-top: 24px;">
+                        <button onclick="Modules.deleteInquiry('${data.id}')" style="background:none; border:none; color:var(--danger); cursor:pointer; font-size: 13px;">Delete Message</button>
+                        <div style="display:flex; gap:12px;">
+                            <button onclick="UI.closeModal(); Modules.inquiries();" style="background:none; border:1px solid var(--border); color:white; padding:10px 18px; border-radius:6px; cursor:pointer;">Close</button>
+                            <button class="btn-primary" onclick="Modules.saveInquiryNote('${data.id}')">Save Notes & Status</button>
+                        </div>
+                    </div>
+                `);
+            } catch (err) {
+                console.error(err);
+                UI.toast("Error reading inquiry.");
+            }
+        },
+
+        saveInquiryNote: async (id) => {
+            try {
+                const payload = {
+                    status: document.getElementById('i_status').value,
+                    admin_notes: document.getElementById('i_notes').value,
+                    updated_at: new Date()
+                };
+
+                await eamaSupabase.from('inquiries').update(payload).eq('id', id);
+                UI.toast("Inquiry status and notes saved.");
+                UI.closeModal();
+                Modules.inquiries();
+            } catch (err) {
+                console.error(err);
+                UI.toast("Failed to update inquiry.");
+            }
+        },
+
+        deleteInquiry: async (id) => {
+            UI.confirm("Delete Inquiry Message", "Are you sure you want to delete this inquiry? This cannot be reversed.", async () => {
+                await eamaSupabase.from('inquiries').delete().eq('id', id);
+                UI.closeModal();
+                UI.toast("Inquiry deleted.");
+                Modules.inquiries();
+            });
+        }
+    };
+
+    // --- ROUTING ENGINE ---
+    const Router = {
+        async go(view) {
+            try {
+                await Auth.check();
+                
+                // Update UI Sidebar Active State
+                document.querySelectorAll('.nav-item').forEach(btn => {
+                    const btnText = btn.innerText.toLowerCase().trim();
+                    if (btnText === 'sign out') return;
+                    
+                    if (view === 'dashboard' && btnText === 'dashboard') btn.classList.add('active');
+                    else if (view === 'requests' && btnText.includes('manufacturing')) btn.classList.add('active');
+                    else if (view === 'samples' && btnText.includes('sample')) btn.classList.add('active');
+                    else if (view === 'visits' && btnText.includes('factory')) btn.classList.add('active');
+                    else if (view === 'clients' && btnText === 'clients') btn.classList.add('active');
+                    else if (view === 'inquiries' && btnText.includes('inquir')) btn.classList.add('active');
+                    else btn.classList.remove('active');
+                });
+                
+                if (Modules[view]) {
+                    await Modules[view]();
+                } else {
+                    UI.view.innerHTML = `<h1>View: ${view}</h1><p>Module configuration incomplete.</p>`;
+                }
+            } catch (error) {
+                console.error("Router Error:", error);
+            }
+        }
+    };
+
+    // Initialize System on Document Load
+    Auth.check().then(() => {
+        Router.go('dashboard');
+    }).catch(err => {
+        console.error("Authentication check failed on load:", err);
+    });
+</script>
+</body>
+</html>

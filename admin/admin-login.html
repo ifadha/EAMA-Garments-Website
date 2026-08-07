@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Admin Login | EAMA Garments</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&amp;family=Inter:wght@400;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-surface": "#e3e2e2",
+                        "surface-container-highest": "#343535",
+                        "secondary": "#c9c6c5",
+                        "outline": "#a88a83",
+                        "surface-container-high": "#292a2a",
+                        "surface-tint": "#ffb4a3",
+                        "on-tertiary-fixed-variant": "#474646",
+                        "inverse-primary": "#ae3115",
+                        "on-tertiary": "#313030",
+                        "error": "#ffb4ab",
+                        "tertiary-fixed-dim": "#c8c6c5",
+                        "on-error-container": "#ffdad6",
+                        "surface-variant": "#343535",
+                        "secondary-fixed": "#e5e2e1",
+                        "on-secondary-container": "#bab8b7",
+                        "on-tertiary-fixed": "#1c1b1b",
+                        "on-primary-fixed-variant": "#8c1900",
+                        "on-secondary": "#313030",
+                        "surface-container": "#1e2020",
+                        "on-secondary-fixed-variant": "#474646",
+                        "secondary-fixed-dim": "#c9c6c5",
+                        "on-primary-fixed": "#3d0600",
+                        "on-error": "#690005",
+                        "tertiary-container": "#9c9a99",
+                        "error-container": "#93000a",
+                        "inverse-on-surface": "#2f3131",
+                        "primary-container": "#ff6b4a",
+                        "surface-container-low": "#1a1c1c",
+                        "on-primary-container": "#661000",
+                        "secondary-container": "#4a4949",
+                        "tertiary": "#c8c6c5",
+                        "on-tertiary-container": "#323232",
+                        "primary-fixed-dim": "#ffb4a3",
+                        "surface": "#121414",
+                        "outline-variant": "#59413c",
+                        "on-secondary-fixed": "#1c1b1b",
+                        "background": "#121414",
+                        "surface-container-lowest": "#0d0e0f",
+                        "primary": "#ffb4a3",
+                        "surface-bright": "#383939",
+                        "primary-fixed": "#ffdad2",
+                        "tertiary-fixed": "#e5e2e1",
+                        "surface-dim": "#121414",
+                        "on-background": "#e3e2e2",
+                        "inverse-surface": "#e3e2e2",
+                        "on-primary": "#630f00",
+                        "on-surface-variant": "#e1bfb8"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "margin-mobile": "20px",
+                        "section-gap": "160px",
+                        "gutter": "24px",
+                        "margin-desktop": "80px",
+                        "base": "8px"
+                    },
+                    "fontFamily": {
+                        "headline-sm": ["Playfair Display"],
+                        "display-lg": ["Playfair Display"],
+                        "label-caps": ["Inter"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Playfair Display"],
+                        "headline-lg": ["Playfair Display"],
+                        "headline-lg-mobile": ["Playfair Display"]
+                    },
+                    "fontSize": {
+                        "headline-sm": ["24px", {"lineHeight": "1.4", "fontWeight": "400"}],
+                        "display-lg": ["72px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "400"}],
+                        "label-caps": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "headline-md": ["32px", {"lineHeight": "1.3", "fontWeight": "400"}],
+                        "headline-lg": ["48px", {"lineHeight": "1.2", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["36px", {"lineHeight": "1.2", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        
+        .login-backdrop {
+            background-image: linear-gradient(rgba(10, 10, 10, 0.85), rgba(10, 10, 10, 0.95)), url('https://lh3.googleusercontent.com/aida/AP1WRLt0q6DSX8AabnLZiW1nsmMqmy0u8aZdxP2HJ_Yp0smKGxfR5VSbyXlqogXrElzLVSpNjvojB1vd1vSo4qyt3igZcuspCjacjsZQVBxFjNX223ZGl2UqQFb5OjCijv8J3YecZwuxo21NzuXGXWWBhhsgJchd8G-XHOiD2LJqhKBT5DR3xhNVt8OA0TuOdYgAgrbpxmTdjuFsyL8-hUKCUwNwCSCGijd8saebe9MtN4jufo6onqtD09tP6Lc');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .border-subtle {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .input-focus-effect:focus {
+            outline: none;
+            border-color: #ff6b4a;
+            box-shadow: 0 0 15px rgba(255, 107, 74, 0.1);
+        }
+
+        /* Cinematic fade-in animation */
+        @keyframes subtleFade {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-subtle {
+            animation: subtleFade 1s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md overflow-hidden h-screen">
+<!-- Main Auth Shell -->
+<main class="relative h-full w-full flex items-center justify-center login-backdrop">
+<!-- Header / Logo Overlay -->
+<header class="fixed top-0 left-0 w-full flex justify-between items-center px-margin-mobile md:px-margin-desktop h-24 z-50">
+<div class="font-headline-md text-headline-md tracking-tighter text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="factory">factory</span>
+                EAMA Garments
+            </div>
+<div class="hidden md:flex gap-8">
+<span class="font-label-caps text-label-caps text-on-secondary-fixed-variant opacity-60">System Version 4.2.0</span>
+</div>
+</header>
+<!-- Centered Login Container -->
+<div class="w-full max-w-md px-margin-mobile z-10 animate-subtle">
+<div class="bg-surface-container-low border-subtle p-8 md:p-12 relative overflow-hidden">
+<!-- Top Decorative Bar -->
+<div class="absolute top-0 left-0 w-full h-1 bg-primary/20"></div>
+<div class="absolute top-0 left-0 w-1/3 h-1 bg-primary"></div>
+<!-- Branding & Title -->
+<div class="mb-10">
+<h1 class="font-headline-sm text-headline-sm mb-2 text-on-surface tracking-wide">Secure Access</h1>
+<p class="font-label-caps text-label-caps text-primary uppercase tracking-[0.2em] mb-6">Authorized EAMA personnel only.</p>
+</div>
+<!-- Form -->
+<form class="space-y-8" id="admin-login-form" onsubmit="event.preventDefault();">
+<!-- Email Field -->
+<div class="space-y-2">
+<label class="font-label-caps text-label-caps text-secondary opacity-80 flex items-center gap-2" for="email">
+<span class="material-symbols-outlined text-[14px]" data-icon="alternate_email">alternate_email</span>
+                            Corporate Email
+                        </label>
+<input class="w-full bg-surface-container-highest border-transparent py-4 px-4 text-on-surface font-body-md input-focus-effect transition-all duration-300" id="email" name="email" placeholder="username@eama.com" required="" type="email"/>
+</div>
+<!-- Password Field -->
+<div class="space-y-2">
+<div class="flex justify-between items-center">
+<label class="font-label-caps text-label-caps text-secondary opacity-80 flex items-center gap-2" for="password">
+<span class="material-symbols-outlined text-[14px]" data-icon="lock">lock</span>
+                                Security Key
+                            </label>
+<a class="font-label-caps text-label-caps text-primary hover:underline transition-all" href="#">Forgot?</a>
+</div>
+<input class="w-full bg-surface-container-highest border-transparent py-4 px-4 text-on-surface font-body-md input-focus-effect transition-all duration-300" id="password" name="password" placeholder="••••••••••••" required="" type="password"/>
+</div>
+<!-- Security Verification Prompt (Ghost UI) -->
+<div class="flex items-center gap-3 p-4 bg-primary/5 border border-primary/10 rounded-sm">
+<span class="material-symbols-outlined text-primary text-[18px]" data-icon="verified_user">verified_user</span>
+<p class="text-[11px] font-label-caps text-secondary leading-tight">
+                            Connection encrypted. 2FA may be required for global network access.
+                        </p>
+</div>
+<!-- Primary Action -->
+<button class="w-full bg-primary-container hover:bg-primary text-on-primary-container font-label-caps py-5 transition-all duration-300 uppercase tracking-widest flex items-center justify-center gap-3" type="submit">
+                        Access Admin Dashboard
+                        <span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</form>
+</div>
+<!-- Footer Note -->
+<div class="mt-8 text-center">
+<p class="font-label-caps text-[10px] text-secondary opacity-40 uppercase tracking-widest">
+                    Industrial Integrity &amp; Compliance © 2024 EAMA Garments
+                </p>
+</div>
+</div>
+<!-- Ambient Security Glow (Bottom Right) -->
+<div class="fixed bottom-0 right-0 w-96 h-96 bg-primary/5 blur-[120px] rounded-full pointer-events-none"></div>
+</main>
+<!-- Footer Component (Mandated Shell) -->
+<!-- Note: Following the "Destination Rule" filter, the Footer is suppressed on Login/Transactional pages to prioritize the Canvas. -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../supabase-client.js"></script>
+<script>
+
+const loginBtn = document.querySelector('button[type="submit"]');
+const form = document.getElementById('admin-login-form');
+
+if (form) {
+
+    form.addEventListener('submit', async function(event) {
+
+        event.preventDefault();
+
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+
+
+        if (!window.eamaSupabase) {
+            alert("Supabase is not connected.");
+            return;
+        }
+
+
+        const { data, error } = await window.eamaSupabase.auth.signInWithPassword({
+            email: email,
+            password: password
+        });
+
+
+        if (error) {
+            console.error(error);
+            alert("Invalid admin credentials.");
+            return;
+        }
+
+
+        // Login successful
+
+        localStorage.setItem(
+            "eama_admin_session",
+            JSON.stringify(data.user)
+        );
+
+
+        window.location.href = "admin-dashboard.html";
+
+    });
+
+}
+
+</script>
+</body></html>

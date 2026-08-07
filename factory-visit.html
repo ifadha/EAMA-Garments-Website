@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book a Factory Visit | EAMA Garments</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:wght@400;500&display=swap');
+
+        :root {
+            --bg-main: #121414;
+            --bg-surface: #1E2020;
+            --bg-elevated: #292A2A;
+            --text-primary: #E3E2E2;
+            --text-secondary: #E1BFB8;
+            --text-muted: #A88A83;
+            --accent: #FF6B4A;
+            --font-heading: 'Playfair Display', serif;
+            --font-body: 'Inter', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            margin: 0;
+            padding: 60px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+
+        .form-wrapper {
+            width: 100%;
+            max-width: 700px;
+        }
+
+        header {
+            margin-bottom: 48px;
+        }
+
+        h1 {
+            font-family: var(--font-heading);
+            font-size: 2.5rem;
+            font-weight: 400;
+            margin: 0 0 12px 0;
+            letter-spacing: -0.01em;
+        }
+
+        .description {
+            color: var(--text-muted);
+            font-size: 1rem;
+            line-height: 1.6;
+            max-width: 500px;
+        }
+
+        .section-title {
+            font-family: var(--font-heading);
+            color: var(--text-secondary);
+            font-size: 1.25rem;
+            margin: 32px 0 20px 0;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--bg-elevated);
+        }
+
+        /* Form Grid */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .full-width {
+            grid-column: span 2;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+        }
+
+        /* Input Styling */
+        input, select, textarea {
+            background-color: var(--bg-surface);
+            border: 1px solid var(--bg-elevated);
+            color: var(--text-primary);
+            padding: 12px 16px;
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            border-radius: 4px;
+            width: 100%;
+            transition: all 0.2s ease;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            background-color: var(--bg-elevated);
+        }
+
+        /* Customizing the date/time icons for dark theme */
+        input::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+            opacity: 0.5;
+            cursor: pointer;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        /* Button Styling */
+        .btn-primary {
+            background-color: var(--accent);
+            color: #FFFFFF;
+            font-family: var(--font-body);
+            font-weight: 500;
+            font-size: 1rem;
+            padding: 16px 40px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 40px;
+            width: 100%;
+            transition: opacity 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+
+        .btn-primary:disabled {
+            background-color: var(--bg-elevated);
+            color: var(--text-muted);
+            cursor: not-allowed;
+        }
+
+        /* Confirmation State */
+        #success-message {
+            display: none;
+            text-align: center;
+            padding: 60px 40px;
+            background: var(--bg-surface);
+            border: 1px solid var(--bg-elevated);
+            border-radius: 4px;
+        }
+
+        #success-message h2 {
+            font-family: var(--font-heading);
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+
+        #success-message p {
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        @media (max-width: 600px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            .full-width {
+                grid-column: span 1;
+            }
+        }
+    </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-client.js"></script><script src="supabase-fetch-adapter.js"></script></head>
+<body>
+
+<div class="form-wrapper">
+    <div id="booking-container">
+        <header>
+            <h1>Book a Factory Visit</h1>
+            <p class="description">Schedule a visit to our manufacturing facility. Submit your details and our team will contact you to confirm availability and arrange your visit.</p>
+        </header>
+
+        <form id="visit-form">
+            <div class="section-title">Visitor Information</div>
+            <div class="form-grid">
+                <div class="field">
+                    <label for="full_name">Full Name *</label>
+                    <input type="text" id="full_name" required placeholder="John Doe">
+                </div>
+                <div class="field">
+                    <label for="company_name">Company Name</label>
+                    <input type="text" id="company_name" placeholder="Brand or Company Ltd.">
+                </div>
+                <div class="field">
+                    <label for="email">Email Address *</label>
+                    <input type="email" id="email" required placeholder="name@company.com">
+                </div>
+                <div class="field">
+                    <label for="phone">WhatsApp / Phone Number *</label>
+                    <input type="tel" id="phone" required placeholder="+1 234 567 890">
+                </div>
+                <div class="field full-width">
+                    <label for="country">Country *</label>
+                    <input type="text" id="country" required placeholder="Operating Country">
+                </div>
+            </div>
+
+            <div class="section-title">Visit Details</div>
+            <div class="form-grid">
+                <div class="field">
+                    <label for="visit_date">Preferred Visit Date *</label>
+                    <input type="date" id="visit_date" required>
+                </div>
+                <div class="field">
+                    <label for="visit_time">Preferred Time *</label>
+                    <select id="visit_time" required>
+                        <option value="" disabled selected>Select time</option>
+                        <option value="Morning (09:00 - 12:00)">Morning (09:00 - 12:00)</option>
+                        <option value="Afternoon (13:00 - 17:00)">Afternoon (13:00 - 17:00)</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="visitor_count">Number of Visitors *</label>
+                    <select id="visitor_count" required>
+                        <option value="1">1 Person</option>
+                        <option value="2">2 People</option>
+                        <option value="3-5">3 - 5 People</option>
+                        <option value="5+">More than 5</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="purpose">Purpose of Visit *</label>
+                    <select id="purpose" required>
+                        <option value="" disabled selected>Select purpose</option>
+                        <option value="Production Facility Tour">Production Facility Tour</option>
+                        <option value="Quality Inspection">Quality Inspection</option>
+                        <option value="Business Meeting">Business Meeting</option>
+                        <option value="Discuss Manufacturing Partnership">Discuss Manufacturing Partnership</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="field full-width">
+                    <label for="message">Any specific requirements or questions before your visit?</label>
+                    <textarea id="message" placeholder="Optional notes for our team..."></textarea>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-primary" id="submit-btn">Request Factory Visit</button>
+        </form>
+    </div>
+
+    <!-- Success Message Container -->
+    <div id="success-message">
+        <h2>Request Sent</h2>
+        <p>Thank you for your request. Our team has received your factory visit inquiry and will contact you through email or WhatsApp to confirm the schedule.</p>
+        <button class="btn-primary" style="margin-top: 20px; width: auto;" onclick="window.location.reload()">Back to Form</button>
+    </div>
+</div>
+
+<script>
+    const visitForm = document.getElementById('visit-form');
+    const bookingContainer = document.getElementById('booking-container');
+    const successMessage = document.getElementById('success-message');
+    const submitBtn = document.getElementById('submit-btn');
+    const dateInput = document.getElementById('visit_date');
+    const timeInput = document.getElementById('visit_time');
+
+    async function loadAvailableSlots() {
+        if (!dateInput.value) return;
+        timeInput.innerHTML = '<option value="" selected>Loading available slots…</option>';
+        try {
+            const response = await fetch('admin/api.php?route=public/slots');
+            const data = await response.json();
+            const slots = (data.slots || []).filter(slot => slot.starts_at.slice(0, 10) === dateInput.value);
+            timeInput.innerHTML = '<option value="" disabled selected>' + (slots.length ? 'Select an available time' : 'No available times for this date') + '</option>';
+            slots.forEach(slot => {
+                const option = document.createElement('option');
+                option.value = slot.starts_at.replace(' ', 'T');
+                option.textContent = new Date(slot.starts_at.replace(' ', 'T')).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
+                timeInput.appendChild(option);
+            });
+        } catch (error) {
+            timeInput.innerHTML = '<option value="" disabled selected>Unable to load availability</option>';
+        }
+    }
+    dateInput.addEventListener('change', loadAvailableSlots);
+
+    visitForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        // Validate form
+        if (!visitForm.checkValidity()) {
+            return;
+        }
+
+        // Prepare data
+        const formData = {
+            requestType: 'FACTORY_VISIT',
+            fullName: document.getElementById('full_name').value,
+            company: document.getElementById('company_name').value,
+            email: document.getElementById('email').value,
+            phone: document.getElementById('phone').value,
+            country: document.getElementById('country').value,
+            preferredDate: document.getElementById('visit_date').value,
+            preferredTime: document.getElementById('visit_time').value,
+            visitorCount: document.getElementById('visitor_count').value,
+            purpose: document.getElementById('purpose').value,
+            message: document.getElementById('message').value,
+            timestamp: new Date().toISOString()
+        };
+
+        // UI State Change
+        submitBtn.disabled = true;
+        submitBtn.innerText = "Processing...";
+
+        try {
+            const response = await fetch('admin/api.php?route=public/submit', {
+                method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(formData)
+            });
+            const result = await response.json();
+            if (!response.ok) throw new Error(result.error || 'Unable to send request.');
+            bookingContainer.style.display = 'none';
+            successMessage.style.display = 'block';
+            window.scrollTo(0, 0);
+        } catch (error) {
+            alert(error.message || 'Unable to submit your request. Please try again.');
+            submitBtn.disabled = false;
+            submitBtn.innerText = 'Request Factory Visit';
+        }
+    });
+</script>
+
+</body>
+</html>

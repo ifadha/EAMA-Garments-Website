@@ -1,0 +1,89 @@
+/* --- INDUSTRIAL COUTURE DESIGN SYSTEM --- */
+:root {
+  --primary: #FF6B4A;
+  --background: #0A0A0A;
+  --surface: #121212;
+  --on-surface: #E3E2E2;
+  --muted: #A1A1A1;
+  --outline: rgba(255, 255, 255, 0.1);
+  --section-gap: 120px;
+  --radius: 4px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background-color: var(--background);
+  color: var(--on-surface);
+  font-family: 'Inter', sans-serif;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+h1, h2, h3 { font-family: 'Playfair Display', serif; font-weight: 400; color: #FFF; }
+
+.container { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
+
+/* Typography Helper */
+.label-caps {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--primary);
+  margin-bottom: 8px;
+  display: block;
+}
+
+/* Header & Footer */
+header { padding: 40px 0; border-bottom: 1px solid var(--outline); text-align: center; }
+.logo { font-size: 20px; letter-spacing: 5px; text-transform: uppercase; color: #FFF; text-decoration: none; font-weight: 700; }
+
+footer { padding: 60px 0; border-top: 1px solid var(--outline); text-align: center; margin-top: var(--section-gap); }
+.confidential-note { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; max-width: 600px; margin: 0 auto; line-height: 1.8; }
+
+/* Hero Section */
+.hero { padding: 100px 0 60px; text-align: center; }
+.hero h1 { font-size: 3.5rem; margin-top: 10px; margin-bottom: 20px; }
+.hero p { color: var(--muted); max-width: 650px; margin: 0 auto; font-size: 18px; }
+
+/* Form Elements */
+.form-card { background: var(--surface); padding: 60px; border: 1px solid var(--outline); border-radius: var(--radius); max-width: 900px; margin: 0 auto; }
+.form-section-title { font-family: 'Playfair Display', serif; font-size: 24px; margin-bottom: 30px; border-left: 2px solid var(--primary); padding-left: 20px; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-bottom: 50px; }
+.full-width { grid-column: span 2; }
+
+.input-group { display: flex; flex-direction: column; gap: 10px; }
+label { font-size: 11px; font-weight: 600; text-transform: uppercase; color: var(--muted); letter-spacing: 0.1em; }
+
+/* Industrial Underline Inputs */
+input, select, textarea {
+  background: transparent; border: none; border-bottom: 1px solid var(--outline);
+  padding: 12px 0; color: #FFF; font-size: 16px; transition: 0.3s; width: 100%; border-radius: 0;
+}
+input:focus, select:focus, textarea:focus { outline: none; border-bottom-color: var(--primary); }
+
+.btn-primary {
+  background: var(--primary); color: #FFF; border: none; padding: 20px 40px; 
+  font-weight: 700; text-transform: uppercase; letter-spacing: 0.2em; cursor: pointer; transition: 0.4s;
+  width: 100%; margin-top: 20px;
+}
+.btn-primary:hover { background: #FFF; color: #000; transform: translateY(-2px); }
+
+/* Process Section */
+.process-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; margin-top: 60px; }
+.process-step { text-align: center; padding: 20px; }
+.step-num { font-family: 'Playfair Display', serif; font-size: 48px; color: var(--primary); margin-bottom: 10px; }
+.process-step h3 { font-size: 14px; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
+.process-step p { font-size: 14px; color: var(--muted); }
+
+/* Success State */
+#success-state { display: none; text-align: center; padding: 100px 0; }
+#success-state h2 { font-size: 3rem; color: var(--primary); }
+
+@media (max-width: 768px) {
+  .form-grid { grid-template-columns: 1fr; gap: 25px; }
+  .process-grid { grid-template-columns: 1fr; }
+  .hero h1 { font-size: 2.5rem; }
+}

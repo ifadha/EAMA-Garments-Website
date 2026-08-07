@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Client Login | EAMA Garments</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../supabase-client.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1" rel="stylesheet"/>
+    <style>
+        body { background-color: #0A0A0A; color: #e3e2e2; }
+        .cinematic-overlay { background: linear-gradient(to right, rgba(10, 10, 10, 0.9) 0%, rgba(10, 10, 10, 0.4) 50%, rgba(10, 10, 10, 0.9) 100%); }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-8 md:px-20 h-20">
+    <div class="text-2xl font-serif tracking-tighter">EAMA Garments</div>
+</header>
+
+<main class="flex-grow flex items-center justify-center relative overflow-hidden">
+    <div class="absolute inset-0 z-0">
+        <div class="w-full h-full bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=2000');"></div>
+        <div class="absolute inset-0 cinematic-overlay"></div>
+    </div>
+
+    <div class="relative z-10 w-full max-w-md px-6">
+        <div class="bg-black/60 backdrop-blur-xl border border-white/10 p-10 rounded-lg shadow-2xl">
+            <div class="text-center mb-8">
+                <h1 class="text-4xl font-serif mb-2">Client Portal</h1>
+                <p class="text-[10px] uppercase tracking-widest text-gray-500">Technical Authority & Industrial Excellence</p>
+            </div>
+
+            <div id="login-error" class="hidden mb-4 p-3 bg-red-900/20 border border-red-500/50 text-red-200 text-xs text-center"></div>
+
+            <form class="space-y-6" onsubmit="handleClientLogin(event)">
+                <div class="space-y-2">
+                    <label class="block text-[10px] uppercase text-gray-400">Business Email</label>
+                    <input class="w-full bg-[#1a1c1c] border-b border-white/10 p-3 text-white focus:border-[#ffb4a3] outline-none" id="email" type="email" required>
+                </div>
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center">
+                        <label class="block text-[10px] uppercase text-gray-400">Password</label>
+                        <a href="../eama_garments_secure_password_recovery/code.html" class="text-[10px] text-[#ffb4a3]">Forgot Password?</a>
+                    </div>
+                    <input class="w-full bg-[#1a1c1c] border-b border-white/10 p-3 text-white focus:border-[#ffb4a3] outline-none" id="password" type="password" required>
+                </div>
+                <button class="w-full bg-[#ffb4a3] text-[#3d0600] font-bold py-4 uppercase tracking-widest hover:bg-white transition-all">Sign In</button>
+            </form>
+
+            <div class="mt-8 pt-6 border-t border-white/5 text-center">
+                <p class="text-sm text-gray-500">Don't have an account? <a href="../business_registration/code.html" class="text-white font-semibold hover:text-[#ffb4a3] ml-1">Create Account</a></p>
+            </div>
+        </div>
+
+        <div class="mt-8 flex justify-center gap-6 opacity-40">
+            <div class="flex items-center gap-2"><span class="material-symbols-outlined text-sm">security</span><span class="text-[10px] uppercase tracking-tighter">AES-256</span></div>
+            <div class="flex items-center gap-2"><span class="material-symbols-outlined text-sm">verified_user</span><span class="text-[10px] uppercase tracking-tighter">B2B Verified</span></div>
+        </div>
+    </div>
+</main>
+
+<footer class="bg-black border-t border-white/10 py-12 px-8 md:px-20">
+    <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+        <div class="text-gray-500 text-sm">© 2024 EAMA Garments.</div>
+        <div class="flex gap-6 text-[10px] uppercase tracking-widest text-gray-500">
+            <a href="#" class="hover:text-white">Ethics</a>
+            <a href="#" class="hover:text-white">Privacy</a>
+        </div>
+    </div>
+</footer>
+
+<script>
+    async function handleClientLogin(e) {
+        e.preventDefault();
+        const errEl = document.getElementById('login-error');
+        errEl.classList.add('hidden');
+
+        const { data, error } = await eamaSupabase.auth.signInWithPassword({
+            email: document.getElementById('email').value,
+            password: document.getElementById('password').value
+        });
+
+        if (error) {
+            errEl.innerText = error.message; errEl.classList.remove('hidden'); return;
+        }
+
+        if (!data.user.email_confirmed_at) {
+            errEl.innerText = "Please verify your email before logging in.";
+            errEl.classList.remove('hidden');
+            await eamaSupabase.auth.signOut();
+            return;
+        }
+
+        window.location.href = '../client_dashboard/code.html';
+    }
+</script>
+</body>
+</html>

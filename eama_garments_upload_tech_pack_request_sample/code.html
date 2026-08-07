@@ -1,0 +1,518 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>EAMA Garments | Tech Pack Portal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&amp;family=Inter:wght@100..900&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;family=Playfair+Display:wght@100..900&amp;display=swap" rel="stylesheet">
+<style>
+        body {
+            background-color: #121414;
+            color: #e3e2e2;
+            -webkit-font-smoothing: antialiased;
+        }
+        .step-transition {
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .form-input-focus:focus {
+            outline: none;
+            border-color: #ffb4a3;
+            box-shadow: 0 0 0 1px rgba(255, 180, 163, 0.2);
+        }
+        .architectural-grid {
+            background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        [data-weight="fill"] {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed": "#ffdad2",
+                        "on-secondary-fixed-variant": "#474646",
+                        "on-error-container": "#ffdad6",
+                        "primary-fixed-dim": "#ffb4a3",
+                        "on-secondary-container": "#bab8b7",
+                        "error-container": "#93000a",
+                        "background": "#121414",
+                        "outline": "#a88a83",
+                        "secondary-fixed": "#e5e2e1",
+                        "surface": "#121414",
+                        "on-tertiary": "#313030",
+                        "on-primary-fixed": "#3d0600",
+                        "inverse-primary": "#ae3115",
+                        "tertiary-fixed-dim": "#c8c6c5",
+                        "surface-container": "#1e2020",
+                        "on-secondary-fixed": "#1c1b1b",
+                        "surface-dim": "#121414",
+                        "on-primary-container": "#661000",
+                        "on-primary": "#630f00",
+                        "primary-container": "#ff6b4a",
+                        "on-secondary": "#313030",
+                        "surface-container-high": "#292a2a",
+                        "on-tertiary-container": "#323232",
+                        "on-error": "#690005",
+                        "on-surface-variant": "#e1bfb8",
+                        "primary": "#ffb4a3",
+                        "inverse-on-surface": "#2f3131",
+                        "surface-container-lowest": "#0d0e0f",
+                        "surface-container-low": "#1a1c1c",
+                        "tertiary": "#c8c6c5",
+                        "on-tertiary-fixed": "#1c1b1b",
+                        "error": "#ffb4ab",
+                        "secondary-fixed-dim": "#c9c6c5",
+                        "on-background": "#e3e2e2",
+                        "surface-variant": "#343535",
+                        "on-tertiary-fixed-variant": "#474646",
+                        "on-surface": "#e3e2e2",
+                        "surface-container-highest": "#343535",
+                        "on-primary-fixed-variant": "#8c1900",
+                        "surface-tint": "#ffb4a3",
+                        "surface-bright": "#383939",
+                        "tertiary-container": "#9c9a99",
+                        "inverse-surface": "#e3e2e2",
+                        "secondary": "#c9c6c5",
+                        "outline-variant": "#59413c",
+                        "tertiary-fixed": "#e5e2e1",
+                        "secondary-container": "#4a4949"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "margin-mobile": "20px",
+                        "margin-desktop": "80px",
+                        "section-gap": "160px",
+                        "gutter": "24px",
+                        "base": "8px"
+                    },
+                    "fontFamily": {
+                        "headline-sm": ["Playfair Display"],
+                        "display-lg": ["Playfair Display"],
+                        "headline-md": ["Playfair Display"],
+                        "body-md": ["Inter"],
+                        "headline-lg-mobile": ["Playfair Display"],
+                        "label-caps": ["Inter"],
+                        "headline-lg": ["Playfair Display"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-sm": ["24px", {"lineHeight": "1.4", "fontWeight": "400"}],
+                        "display-lg": ["72px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "400"}],
+                        "headline-md": ["32px", {"lineHeight": "1.3", "fontWeight": "400"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["36px", {"lineHeight": "1.2", "fontWeight": "400"}],
+                        "label-caps": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                        "headline-lg": ["48px", {"lineHeight": "1.2", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="architectural-grid">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-background dark:bg-background border-b border-on-surface/10 flex justify-between items-center px-margin-mobile md:px-margin-desktop h-20 w-full max-w-full transition-all duration-500 ease-in-out">
+<div class="font-headline-md text-headline-md tracking-tighter text-on-surface dark:text-on-surface">EAMA Garments</div>
+<div class="hidden md:flex gap-10 items-center">
+<a class="text-on-surface-variant font-body-md hover:text-primary transition-colors duration-300" href="#">Manufacturing</a>
+<a class="text-on-surface-variant font-body-md hover:text-primary transition-colors duration-300" href="#">Sustainability</a>
+<a class="text-on-surface-variant font-body-md hover:text-primary transition-colors duration-300" href="#">Global Network</a>
+<button class="bg-primary-container text-on-primary-container font-label-caps px-6 py-2.5 rounded-lg hover:brightness-110 transition-all">Partner Portal</button>
+</div>
+<button class="md:hidden text-on-surface">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</nav>
+<main class="pt-32 pb-section-gap px-margin-mobile md:px-margin-desktop max-w-7xl mx-auto">
+<!-- Header Section -->
+<header class="mb-16 md:mb-24">
+<h1 class="font-headline-lg text-headline-lg mb-6 max-w-3xl">Upload Tech Pack &amp; Request Sample</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl opacity-80">
+                Already have a design? Upload your technical documents and project requirements for our team to review. We'll assess your specifications and discuss the next steps for sample development.
+            </p>
+</header>
+<!-- Multi-Step Portal Container -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+<!-- Left: Progress Indicator (Desktop) -->
+<aside class="hidden lg:block lg:col-span-3">
+<div class="sticky top-32 flex flex-col gap-8">
+<div class="flex items-center gap-4 group cursor-pointer active-step-indicator" id="step-nav-1">
+<div class="w-8 h-8 rounded-full border border-primary flex items-center justify-center text-primary font-label-caps">1</div>
+<span class="font-label-caps tracking-widest text-primary">Company Info</span>
+</div>
+<div class="flex items-center gap-4 group cursor-pointer" id="step-nav-2">
+<div class="w-8 h-8 rounded-full border border-on-surface/20 flex items-center justify-center text-on-surface-variant font-label-caps group-hover:border-primary/50">2</div>
+<span class="font-label-caps tracking-widest text-on-surface-variant group-hover:text-primary/50">Project Overview</span>
+</div>
+<div class="flex items-center gap-4 group cursor-pointer" id="step-nav-3">
+<div class="w-8 h-8 rounded-full border border-on-surface/20 flex items-center justify-center text-on-surface-variant font-label-caps group-hover:border-primary/50">3</div>
+<span class="font-label-caps tracking-widest text-on-surface-variant group-hover:text-primary/50">Technical Assets</span>
+</div>
+<div class="flex items-center gap-4 group cursor-pointer" id="step-nav-4">
+<div class="w-8 h-8 rounded-full border border-on-surface/20 flex items-center justify-center text-on-surface-variant font-label-caps group-hover:border-primary/50">4</div>
+<span class="font-label-caps tracking-widest text-on-surface-variant group-hover:text-primary/50">Requirements</span>
+</div>
+<div class="flex items-center gap-4 group cursor-pointer" id="step-nav-5">
+<div class="w-8 h-8 rounded-full border border-on-surface/20 flex items-center justify-center text-on-surface-variant font-label-caps group-hover:border-primary/50">5</div>
+<span class="font-label-caps tracking-widest text-on-surface-variant group-hover:text-primary/50">Final Review</span>
+</div>
+</div>
+</aside>
+<!-- Mobile Progress Bar -->
+<div class="lg:hidden col-span-1 mb-8">
+<div class="w-full bg-surface-container-low h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-1/5 transition-all duration-500" id="mobile-progress-fill"></div>
+</div>
+<div class="mt-4 flex justify-between items-center font-label-caps text-primary uppercase">
+<span id="mobile-step-name">Step 1: Company Info</span>
+<span id="mobile-step-count">1/5</span>
+</div>
+</div>
+<!-- Right: Form Canvas -->
+<div class="lg:col-span-9 bg-surface-container-lowest border border-white/10 p-8 md:p-12 min-h-[600px] flex flex-col">
+<form class="flex-grow" id="multi-step-form">
+<!-- Step 1: Company Info -->
+<div class="step-transition" id="step-content-1">
+<h2 class="font-headline-sm text-headline-sm mb-8 text-primary">Company Information</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<div class="flex flex-col gap-2">
+<label class="font-label-caps text-on-surface-variant">Company Name</label>
+<input class="bg-transparent border-b border-on-surface/20 py-3 font-body-md focus:border-primary transition-colors focus:ring-0" placeholder="Acme Textiles Ltd." type="text">
+</div>
+<div class="flex flex-col gap-2">
+<label class="font-label-caps text-on-surface-variant">Contact Person</label>
+<input class="bg-transparent border-b border-on-surface/20 py-3 font-body-md focus:border-primary transition-colors focus:ring-0" placeholder="Jane Doe" type="text">
+</div>
+<div class="flex flex-col gap-2">
+<label class="font-label-caps text-on-surface-variant">Business Email</label>
+<input class="bg-transparent border-b border-on-surface/20 py-3 font-body-md focus:border-primary transition-colors focus:ring-0" placeholder="j.doe@acme.com" type="email">
+</div>
+<div class="flex flex-col gap-2">
+<label class="font-label-caps text-on-surface-variant">Phone Number</label>
+<input class="bg-transparent border-b border-on-surface/20 py-3 font-body-md focus:border-primary transition-colors focus:ring-0" placeholder="+1 (555) 000-0000" type="tel">
+</div>
+<div class="flex flex-col gap-2 md:col-span-2">
+<label class="font-label-caps text-on-surface-variant">Country</label>
+<select class="bg-transparent border-b border-on-surface/20 py-3 font-body-md focus:border-primary transition-colors focus:ring-0 appearance-none">
+<option class="bg-surface-container-lowest">Select Country</option>
+<option class="bg-surface-container-lowest">United Kingdom</option>
+<option class="bg-surface-container-lowest">United States</option>
+<option class="bg-surface-container-lowest">France</option>
+<option class="bg-surface-container-lowest">Italy</option>
+</select>
+</div>
+</div>
+</div>
+<!-- Step 2: Project Overview (Hidden) -->
+<div class="step-transition hidden" id="step-content-2">
+<h2 class="font-headline-sm text-headline-sm mb-8 text-primary">Project Overview</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<div class="flex flex-col gap-2">
+<label class="font-label-caps text-on-surface-variant">Garment Category</label>
+<select class="bg-transparent border-b border-on-surface/20 py-3 font-body-md focus:border-primary transition-colors focus:ring-0 appearance-none">
+<option class="bg-surface-container-lowest">Menswear - Outerwear</option>
+<option class="bg-surface-container-lowest">Womenswear - Dresses</option>
+<option class="bg-surface-container-lowest">Activewear - Technical</option>
+<option class="bg-surface-container-lowest">Luxury Knitwear</option>
+</select>
+</div>
+<div class="flex flex-col gap-2">
+<label class="font-label-caps text-on-surface-variant">Project Name (Optional)</label>
+<input class="bg-transparent border-b border-on-surface/20 py-3 font-body-md focus:border-primary transition-colors focus:ring-0" placeholder="Winter Capsule 2025" type="text">
+</div>
+<div class="flex flex-col gap-2">
+<label class="font-label-caps text-on-surface-variant">Intended Market</label>
+<input class="bg-transparent border-b border-on-surface/20 py-3 font-body-md focus:border-primary transition-colors focus:ring-0" placeholder="e.g. EU Premium Retail" type="text">
+</div>
+<div class="flex flex-col gap-2">
+<label class="font-label-caps text-on-surface-variant">Est. Production Qty</label>
+<input class="bg-transparent border-b border-on-surface/20 py-3 font-body-md focus:border-primary transition-colors focus:ring-0" placeholder="e.g. 500" type="number">
+</div>
+</div>
+</div>
+<!-- Step 3: Technical Uploads (Hidden) -->
+<div class="step-transition hidden" id="step-content-3">
+<h2 class="font-headline-sm text-headline-sm mb-4 text-primary">Technical Documentation</h2>
+<p class="font-body-md text-on-surface-variant mb-8 opacity-70">Upload your master assets for engineering review.</p>
+<div class="border-2 border-dashed border-on-surface/10 rounded-lg p-12 flex flex-col items-center justify-center text-center hover:border-primary/30 transition-colors group cursor-pointer mb-8">
+<span class="material-symbols-outlined text-4xl text-on-surface-variant group-hover:text-primary transition-colors mb-4">cloud_upload</span>
+<p class="font-body-md text-on-surface mb-1">Drag and drop technical files or <span class="text-primary font-bold">browse</span></p>
+<p class="font-label-caps text-on-secondary-fixed-variant">PDF, AI, DXF, JPG (Max 50MB per file)</p>
+</div>
+<div class="space-y-4">
+<div class="bg-surface-container-low p-4 flex items-center justify-between border border-white/5">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary">description</span>
+<div>
+<p class="font-body-md">Tech_Pack_Main_Coat_V2.pdf</p>
+<p class="text-[10px] uppercase tracking-widest text-on-secondary-fixed-variant">Technical Specifications • 4.2 MB</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant hover:text-error cursor-pointer">close</span>
+</div>
+<div class="bg-surface-container-low p-4 flex items-center justify-between border border-white/5">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary">architecture</span>
+<div>
+<p class="font-body-md">Pattern_Grading_Chart.ai</p>
+<p class="text-[10px] uppercase tracking-widest text-on-secondary-fixed-variant">Adobe Illustrator • 12.8 MB</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant hover:text-error cursor-pointer">close</span>
+</div>
+</div>
+</div>
+<!-- Step 4: Sample Requirements (Hidden) -->
+<div class="step-transition hidden" id="step-content-4">
+<h2 class="font-headline-sm text-headline-sm mb-8 text-primary">Development Requirements</h2>
+<div class="space-y-8">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<div class="flex flex-col gap-2">
+<label class="font-label-caps text-on-surface-variant">Preferred Fabric</label>
+<input class="bg-transparent border-b border-on-surface/20 py-3 font-body-md focus:border-primary transition-colors focus:ring-0" placeholder="e.g. 100% Merino Wool 280gsm" type="text">
+</div>
+<div class="flex flex-col gap-2">
+<label class="font-label-caps text-on-surface-variant">Colour Requirements</label>
+<input class="bg-transparent border-b border-on-surface/20 py-3 font-body-md focus:border-primary transition-colors focus:ring-0" placeholder="e.g. Pantone 19-4052 TCX" type="text">
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<label class="font-label-caps text-on-surface-variant">Branding &amp; Labelling</label>
+<input class="bg-transparent border-b border-on-surface/20 py-3 font-body-md focus:border-primary transition-colors focus:ring-0" placeholder="e.g. Woven main label, heat-press care label" type="text">
+</div>
+<div class="flex flex-col gap-2">
+<label class="font-label-caps text-on-surface-variant">Additional Engineering Notes</label>
+<textarea class="bg-surface-container-low border border-on-surface/10 p-4 font-body-md focus:border-primary transition-colors focus:ring-0 resize-none" placeholder="Detail any specific seam constructions, hardware sources or finishing treatments..." rows="4"></textarea>
+</div>
+</div>
+</div>
+<!-- Step 5: Review (Hidden) -->
+<div class="step-transition hidden" id="step-content-5">
+<h2 class="font-headline-sm text-headline-sm mb-8 text-primary">Final Review</h2>
+<div class="space-y-12">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+<div>
+<h4 class="font-label-caps text-primary border-b border-primary/20 pb-2 mb-4">Entity Details</h4>
+<dl class="space-y-3">
+<div class="flex justify-between border-b border-white/5 pb-1">
+<dt class="font-body-md text-on-surface-variant">Company</dt>
+<dd class="font-body-md">Acme Textiles Ltd.</dd>
+</div>
+<div class="flex justify-between border-b border-white/5 pb-1">
+<dt class="font-body-md text-on-surface-variant">Contact</dt>
+<dd class="font-body-md">Jane Doe</dd>
+</div>
+<div class="flex justify-between border-b border-white/5 pb-1">
+<dt class="font-body-md text-on-surface-variant">Market</dt>
+<dd class="font-body-md">EU Premium</dd>
+</div>
+</dl>
+</div>
+<div>
+<h4 class="font-label-caps text-primary border-b border-primary/20 pb-2 mb-4">Technical Assets</h4>
+<div class="flex flex-col gap-2">
+<div class="flex items-center gap-2 text-on-surface">
+<span class="material-symbols-outlined text-sm">check_circle</span>
+<span class="font-body-md">Tech_Pack_Main_Coat_V2.pdf</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface">
+<span class="material-symbols-outlined text-sm">check_circle</span>
+<span class="font-body-md">Pattern_Grading_Chart.ai</span>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-primary/5 p-6 border border-primary/10 rounded">
+<h4 class="font-label-caps text-primary mb-3">Notice of Industrial Review</h4>
+<p class="font-body-md text-on-surface-variant opacity-80 leading-relaxed">
+                                    By submitting this request, you acknowledge that our engineering team will perform a feasibility audit on your tech pack. Commercial quotes and sample lead times will be provided upon successful technical verification.
+                                </p>
+</div>
+</div>
+</div>
+<!-- Navigation Controls -->
+<div class="mt-16 pt-8 border-t border-on-surface/10 flex items-center justify-between">
+<button class="hidden font-label-caps text-on-surface-variant hover:text-primary transition-colors flex items-center gap-2 group" id="prev-btn" type="button">
+<span class="material-symbols-outlined group-hover:-translate-x-1 transition-transform">arrow_back</span>
+                            Previous
+                        </button>
+<div class="flex-grow"></div>
+<button class="bg-primary-container text-on-primary-container font-label-caps px-10 py-4 rounded hover:brightness-110 transition-all flex items-center gap-2" id="next-btn" type="button">
+                            Continue
+                            <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+<button class="hidden bg-primary-container text-on-primary-container font-label-caps px-10 py-4 rounded hover:brightness-110 transition-all flex items-center gap-2" id="submit-btn" type="button">
+                            Submit Sample Development Request
+                            <span class="material-symbols-outlined">check</span>
+</button>
+</div>
+</form>
+<!-- Success State (Overlay) -->
+<div class="hidden flex-grow flex flex-col items-center justify-center text-center animate-in fade-in duration-700" id="success-state">
+<div class="w-24 h-24 rounded-full border border-primary flex items-center justify-center mb-8">
+<span class="material-symbols-outlined text-5xl text-primary" data-weight="fill">verified</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg mb-6">Submission Successful</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-lg mb-12 opacity-80">
+                        Your request has been successfully submitted. Our team will review your technical documents and contact you regarding sample development.
+                    </p>
+<button class="border border-on-surface/20 px-8 py-3 font-label-caps hover:bg-white/5 transition-all">Return to Dashboard</button>
+</div>
+</div>
+</div>
+<!-- Visual Anchor: Contextual Image -->
+<section class="mt-section-gap grid grid-cols-1 md:grid-cols-2 gap-gutter items-center">
+<div class="relative aspect-square md:aspect-auto md:h-[600px] overflow-hidden">
+<div class="bg-cover bg-center w-full h-full grayscale opacity-60" data-alt="Close up cinematic shot of a high-end luxury garment being measured with a silver calipers tool on a dark industrial workbench. Soft directional lighting highlights the rich texture of heavy wool fabric and the precision of the measurement. Minimalist dark aesthetic with subtle warm reflections from the metal tools." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDEV_39xuUXJIlSfRX2h3e7LMpDxmbH7GzCqX28zY60K_4jBknZFoeE-PSVPl6TruwQW6-qYDboHpza5d4JrZLyoEKeZ1fCX48pS0A4gmfzHr5UdG2q2-jGdQBdziGMwyS9iysLcfLyAh2-iYmVR_NjxAs0qP-94uj_CyWwIbrNDYnvvrObPThW-418qTVUUdDhqLRoYVRldRYISH8XOEb_E484H7JncKSbxP0dHtv9vKPJyK9a6_gYQgvLDgEHRVNLzsZNXy8Vebk')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-background to-transparent"></div>
+</div>
+<div class="flex flex-col justify-center px-4 md:px-12">
+<span class="font-label-caps text-primary tracking-[0.2em] mb-4">Precision Engineering</span>
+<h3 class="font-headline-md text-headline-md mb-6">From Tech Pack to Physical Excellence.</h3>
+<p class="font-body-md text-on-surface-variant opacity-70 leading-relaxed mb-8">
+                    Our technical development team bridges the gap between creative design and industrial production. Each tech pack is audited by pattern masters and garment technicians to ensure optimal drape, durability, and cost-efficiency.
+                </p>
+<div class="grid grid-cols-2 gap-8 border-t border-on-surface/10 pt-8">
+<div>
+<h5 class="font-label-caps mb-1">Standard Review</h5>
+<p class="font-body-md text-primary">48-72 Hours</p>
+</div>
+<div>
+<h5 class="font-label-caps mb-1">Sample Lead</h5>
+<p class="font-body-md text-primary">14-21 Days</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-lowest dark:bg-surface-container-lowest border-t border-on-surface/10 grid grid-cols-1 md:grid-cols-2 gap-gutter px-margin-mobile md:px-margin-desktop py-section-gap w-full">
+<div class="flex flex-col gap-6">
+<div class="font-headline-sm text-headline-sm text-on-surface">EAMA Garments</div>
+<p class="font-body-md text-primary-fixed-dim max-w-sm opacity-80">Industrial excellence in garment manufacturing. Trusted by global fashion labels for precision, ethics, and scale.</p>
+<p class="font-body-md text-on-secondary-fixed-variant mt-auto">© 2024 EAMA Garments. Industrial Excellence.</p>
+</div>
+<div class="grid grid-cols-2 gap-8">
+<div class="flex flex-col gap-4">
+<h6 class="font-label-caps text-on-surface tracking-widest">Capabilities</h6>
+<a class="font-label-caps text-on-secondary-fixed-variant hover:text-primary-fixed transition-all duration-200" href="#">Ethics &amp; Compliance</a>
+<a class="font-label-caps text-on-secondary-fixed-variant hover:text-primary-fixed transition-all duration-200" href="#">Supply Chain Transparency</a>
+<a class="font-label-caps text-on-secondary-fixed-variant hover:text-primary-fixed transition-all duration-200" href="#">Technical Specifications</a>
+</div>
+<div class="flex flex-col gap-4">
+<h6 class="font-label-caps text-on-surface tracking-widest">Legal</h6>
+<a class="font-label-caps text-on-secondary-fixed-variant hover:text-primary-fixed transition-all duration-200" href="#">Global Logistics</a>
+<a class="font-label-caps text-on-secondary-fixed-variant hover:text-primary-fixed transition-all duration-200" href="#">Privacy Policy</a>
+</div>
+</div>
+</footer>
+<script>
+        let currentStep = 1;
+        const totalSteps = 5;
+
+        const nextBtn = document.getElementById('next-btn');
+        const prevBtn = document.getElementById('prev-btn');
+        const submitBtn = document.getElementById('submit-btn');
+        const form = document.getElementById('multi-step-form');
+        const successState = document.getElementById('success-state');
+        const mobileProgressFill = document.getElementById('mobile-progress-fill');
+        const mobileStepName = document.getElementById('mobile-step-name');
+        const mobileStepCount = document.getElementById('mobile-step-count');
+
+        const stepNames = [
+            "Company Info",
+            "Project Overview",
+            "Technical Assets",
+            "Requirements",
+            "Final Review"
+        ];
+
+        function updateUI() {
+            // Hide all steps
+            for (let i = 1; i <= totalSteps; i++) {
+                document.getElementById(`step-content-${i}`).classList.add('hidden');
+                const nav = document.getElementById(`step-nav-${i}`);
+                if (nav) {
+                    nav.classList.remove('active-step-indicator');
+                    const circle = nav.querySelector('div');
+                    const text = nav.querySelector('span');
+                    if (i < currentStep) {
+                        circle.classList.replace('border-on-surface/20', 'border-primary');
+                        circle.innerHTML = '<span class="material-symbols-outlined text-sm">check</span>';
+                        text.classList.replace('text-on-surface-variant', 'text-primary');
+                    } else if (i === currentStep) {
+                        circle.classList.replace('border-on-surface/20', 'border-primary');
+                        circle.innerHTML = i;
+                        text.classList.replace('text-on-surface-variant', 'text-primary');
+                    } else {
+                        circle.classList.replace('border-primary', 'border-on-surface/20');
+                        circle.innerHTML = i;
+                        text.classList.replace('text-primary', 'text-on-surface-variant');
+                    }
+                }
+            }
+
+            // Show current step
+            document.getElementById(`step-content-${currentStep}`).classList.remove('hidden');
+
+            // Toggle buttons
+            prevBtn.classList.toggle('hidden', currentStep === 1);
+            if (currentStep === totalSteps) {
+                nextBtn.classList.add('hidden');
+                submitBtn.classList.remove('hidden');
+            } else {
+                nextBtn.classList.remove('hidden');
+                submitBtn.classList.add('hidden');
+            }
+
+            // Mobile Progress
+            mobileProgressFill.style.width = `${(currentStep / totalSteps) * 100}%`;
+            mobileStepName.innerText = `Step ${currentStep}: ${stepNames[currentStep - 1]}`;
+            mobileStepCount.innerText = `${currentStep}/${totalSteps}`;
+
+            // Smooth scroll to top of form area
+            window.scrollTo({
+                top: document.getElementById('multi-step-form').offsetTop - 200,
+                behavior: 'smooth'
+            });
+        }
+
+        nextBtn.addEventListener('click', () => {
+            if (currentStep < totalSteps) {
+                currentStep++;
+                updateUI();
+            }
+        });
+
+        prevBtn.addEventListener('click', () => {
+            if (currentStep > 1) {
+                currentStep--;
+                updateUI();
+            }
+        });
+
+        submitBtn.addEventListener('click', () => {
+            form.classList.add('hidden');
+            document.getElementById('prev-btn').parentElement.classList.add('hidden');
+            successState.classList.remove('hidden');
+        });
+
+        // Initialize UI
+        updateUI();
+    </script>
+</body></html>
