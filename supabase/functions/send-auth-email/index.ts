@@ -11,11 +11,19 @@ serve(async (req) => {
 
   try {
     const { email, type } = await req.json();
-    const supabaseAdmin = createClient(Deno.env.get('MY_SUPABASE_URL') ?? '', Deno.env.get('MY_SUPABASE_SERVICE_ROLE_KEY') ?? '');
 
-    // 1. UPDATE THIS TO YOUR GITHUB LINK
-    const siteUrl = Deno.env.get("SITE_ORIGIN") ?? "https://8r057mrp-3000.asse.devtunnels.ms/";
-    const resetUrl = `${siteUrl}/create-new-password.html`;
+    const SUPABASE_URL = Deno.env.get('MY_SUPABASE_URL');
+    const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('MY_SUPABASE_SERVICE_ROLE_KEY');
+    const BREVO_KEY = Deno.env.get('BREVO_API_KEY');
+    const SITE_ORIGIN = Deno.env.get('SITE_ORIGIN');
+
+    if (!SUPABASE_URL) throw new Error('MY_SUPABASE_URL is not configured.');
+    if (!SUPABASE_SERVICE_ROLE_KEY) throw new Error('MY_SUPABASE_SERVICE_ROLE_KEY is not configured.');
+    if (!BREVO_KEY) throw new Error('BREVO_API_KEY is not configured.');
+    if (!SITE_ORIGIN) throw new Error('SITE_ORIGIN is not configured.');
+
+    const supabaseAdmin = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+    const resetUrl = new URL('/create-new-password.html', SITE_ORIGIN).toString();
 
     // 2. Generate link
     const { data, error } = await supabaseAdmin.auth.admin.generateLink({
@@ -28,15 +36,14 @@ serve(async (req) => {
     const secureLink = data?.properties?.action_link;
 
     // 3. Send to Brevo
-    const BREVO_KEY = Deno.env.get('BREVO_API_KEY');
     const response = await fetch("https://api.brevo.com/v3/smtp/email", {
       method: "POST",
-      headers: { "api-key": BREVO_KEY || '', "content-type": "application/json" },
+      headers: { "api-key": BREVO_KEY, "content-type": "application/json" },
       body: JSON.stringify({
         // IMPORTANT: Ensure this email is a "Verified Sender" in Brevo Dashboard
         sender: { name: "EAMA Garments", email: "info@eamagarments.com" },
         to: [{ email: email }],
-        templateId: 3, 
+        templateId: 3,
         params: { ACTION_LINK: secureLink }
       })
     });
