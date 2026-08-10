@@ -143,7 +143,7 @@ document.getElementById('registration-form').addEventListener('submit', async (e
     try {
 
         // 1. Create Supabase Auth account
-        const redirectUrl = window.location.origin + "/client-portal-sign-in.html";
+        const redirectUrl = new URL('client-portal-sign-in.html', window.location.href).href;
 
         const { data: authData, error: authError } = await eamaSupabase.auth.signUp({
             email,

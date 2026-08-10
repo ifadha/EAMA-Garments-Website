@@ -20,11 +20,6 @@ html {
 <meta charset="utf-8">
 <meta content="width=device-width, initial-scale=1.0" name="viewport">
 <title>EAMA GARMENTS | Industrial Craftsmanship</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
 <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
@@ -116,6 +111,11 @@ html {
             },
         }
     </script>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
 <style>
         body {
             background-color: #0A0A0A;
@@ -443,19 +443,53 @@ class="bg-primary-container text-on-primary-container px-8 py-3 rounded-DEFAULT 
             threshold: 0.1
         };
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('opacity-100');
-                    entry.target.classList.remove('opacity-0', 'translate-y-10');
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('section > div').forEach(el => {
+        const applyRevealClasses = (el) => {
             el.classList.add('transition-all', 'duration-1000', 'opacity-0', 'translate-y-10');
-            observer.observe(el);
-        });
+        };
+
+        const revealSection = (el) => {
+            el.classList.add('opacity-100');
+            el.classList.remove('opacity-0', 'translate-y-10');
+        };
+
+        const showAllSections = () => {
+            document.querySelectorAll('section > div').forEach(el => {
+                el.classList.remove('opacity-0', 'translate-y-10');
+                el.classList.add('opacity-100');
+            });
+        };
+
+        const initRevealAnimations = () => {
+            const elements = Array.from(document.querySelectorAll('section > div'));
+            if (!elements.length) return;
+
+            elements.forEach(applyRevealClasses);
+
+            if ('IntersectionObserver' in window) {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            revealSection(entry.target);
+                        }
+                    });
+                }, observerOptions);
+
+                elements.forEach(el => observer.observe(el));
+            } else {
+                showAllSections();
+            }
+        };
+
+        try {
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initRevealAnimations);
+            } else {
+                initRevealAnimations();
+            }
+        } catch (error) {
+            console.error('Reveal animation failed:', error);
+            showAllSections();
+        }
 
         // Hover sound effects or micro-interactions could be added here
 
