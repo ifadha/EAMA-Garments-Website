@@ -6,7 +6,7 @@
     <title>EAMA Dashboard | Client Portal</title>
     <!-- Dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="../supabase-client.js"></script>
+    <script src="supabase-client.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;500&display=swap');
 
@@ -245,7 +245,7 @@
                 try {
                     const { data: { session } } = await eamaSupabase.auth.getSession();
                     if (!session) {
-                        window.location.href = './login.html';
+                        window.location.href = 'client-portal-sign-in.html';
                         return;
                     }
 

@@ -14,8 +14,8 @@ serve(async (req) => {
     const supabaseAdmin = createClient(Deno.env.get('MY_SUPABASE_URL') ?? '', Deno.env.get('MY_SUPABASE_SERVICE_ROLE_KEY') ?? '');
 
     // 1. UPDATE THIS TO YOUR GITHUB LINK
-    const siteUrl = "https://8r057mrp-3000.asse.devtunnels.ms/"; 
-    const resetUrl = `${siteUrl}/eama_garments_create_new_password/code.html`;
+    const siteUrl = Deno.env.get("SITE_ORIGIN") ?? "https://8r057mrp-3000.asse.devtunnels.ms/";
+    const resetUrl = `${siteUrl}/create-new-password.html`;
 
     // 2. Generate link
     const { data, error } = await supabaseAdmin.auth.admin.generateLink({

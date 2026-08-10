@@ -21,7 +21,7 @@ VALUES ('Admin User', 'admin@eama.com', '<password_hash>', 'admin');
 - `request-quote.html` creates `MANUFACTURING_INQUIRY` records.
 - `techpack.html` creates `DESIGN_SUBMISSION` records and uploads attached files.
 - `factory-visit.html` creates `FACTORY_VISIT` records and loads admin-created time slots.
-- The inquiry form in `eama_garments_contact_footer_added/code.html` creates `GENERAL_INQUIRY` records.
+- The inquiry form in `index.html` creates `GENERAL_INQUIRY` records.
 
 The admin application includes dynamic overview metrics, unified request management with statuses, notes and replies, sample creation/archive/publishing, factory-slot management, client records, and publishable CMS records. Uploads are stored under `uploads/YYYY/MM` at runtime and recorded in `documents`.
 

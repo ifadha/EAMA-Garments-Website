@@ -6,7 +6,7 @@
     <title>Client Registration | EAMA Garments</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="../supabase-client.js"></script>
+    <script src="supabase-client.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1" rel="stylesheet"/>
     <style>
@@ -92,7 +92,7 @@
                 </div>
 
                 <p class="text-center text-xs text-gray-500 mt-6">
-                    Already have an account? <a href="../client_portal_sign_in/code.html" class="text-[#ffb4a3] hover:underline">Sign In</a>
+                    Already have an account? <a href="client-portal-sign-in.html" class="text-[#ffb4a3] hover:underline">Sign In</a>
                 </p>
             </form>
         </div>
@@ -143,7 +143,7 @@ document.getElementById('registration-form').addEventListener('submit', async (e
     try {
 
         // 1. Create Supabase Auth account
-        const redirectUrl = window.location.origin + "/client_portal_sign_in/code.html";
+        const redirectUrl = window.location.origin + "/client-portal-sign-in.html";
 
         const { data: authData, error: authError } = await eamaSupabase.auth.signUp({
             email,
@@ -190,7 +190,7 @@ document.getElementById('registration-form').addEventListener('submit', async (e
                     Please verify your email address before signing in.
                 </p>
 
-                <a href="../client_portal_sign_in/code.html"
+                <a href="client-portal-sign-in.html"
                 class="bg-[#ffb4a3] text-[#3d0600] px-8 py-4 font-bold uppercase tracking-widest">
                     Go to Login
                 </a>

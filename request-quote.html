@@ -102,7 +102,7 @@
         const { data: { user } } = await _supabase.auth.getUser();
         if (!user) {
             alert("Please log in to submit an inquiry.");
-            window.location.href = "../login.html";
+            window.location.href = "client-portal-sign-in.html";
             return;
         }
         currentUser = user;

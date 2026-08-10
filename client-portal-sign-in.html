@@ -6,7 +6,7 @@
     <title>Client Login | EAMA Garments</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="../supabase-client.js"></script>
+    <script src="supabase-client.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1" rel="stylesheet"/>
     <style>
@@ -42,7 +42,7 @@
                 <div class="space-y-2">
                     <div class="flex justify-between items-center">
                         <label class="block text-[10px] uppercase text-gray-400">Password</label>
-                        <a href="../eama_garments_secure_password_recovery/code.html" class="text-[10px] text-[#ffb4a3]">Forgot Password?</a>
+                        <a href="secure-password-recovery.html" class="text-[10px] text-[#ffb4a3]">Forgot Password?</a>
                     </div>
                     <input class="w-full bg-[#1a1c1c] border-b border-white/10 p-3 text-white focus:border-[#ffb4a3] outline-none" id="password" type="password" required>
                 </div>
@@ -50,7 +50,7 @@
             </form>
 
             <div class="mt-8 pt-6 border-t border-white/5 text-center">
-                <p class="text-sm text-gray-500">Don't have an account? <a href="../business_registration/code.html" class="text-white font-semibold hover:text-[#ffb4a3] ml-1">Create Account</a></p>
+                <p class="text-sm text-gray-500">Don't have an account? <a href="business-registration.html" class="text-white font-semibold hover:text-[#ffb4a3] ml-1">Create Account</a></p>
             </div>
         </div>
 
@@ -93,7 +93,7 @@
             return;
         }
 
-        window.location.href = '../client_dashboard/code.html';
+        window.location.href = 'client-dashboard.html';
     }
 </script>
 </body>
