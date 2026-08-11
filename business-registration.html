@@ -99,116 +99,320 @@
     </section>
 </main>
 
+
 <script>
-    // Country logic
+    // ==============================
+    // Country Logic
+    // ==============================
+
     const countrySearch = document.getElementById('country-search');
     const countryList = document.getElementById('country-list');
-    const countries = ["Afghanistan", "Albania", "Algeria", "Argentina", "Australia", "Bangladesh", "Belgium", "Brazil", "Canada", "China", "Egypt", "France", "Germany", "India", "Italy", "Japan", "Mexico", "Netherlands", "Pakistan", "Singapore", "South Africa", "Spain", "Sri Lanka", "Turkey", "UAE", "United Kingdom", "United States"];
+
+    const countries = [
+        "Afghanistan",
+        "Albania",
+        "Algeria",
+        "Argentina",
+        "Australia",
+        "Bangladesh",
+        "Belgium",
+        "Brazil",
+        "Canada",
+        "China",
+        "Egypt",
+        "France",
+        "Germany",
+        "India",
+        "Italy",
+        "Japan",
+        "Mexico",
+        "Netherlands",
+        "Pakistan",
+        "Singapore",
+        "South Africa",
+        "Spain",
+        "Sri Lanka",
+        "Turkey",
+        "UAE",
+        "United Kingdom",
+        "United States"
+    ];
 
     countrySearch.addEventListener('input', (e) => {
-        const val = e.target.value.toLowerCase();
-        const filtered = countries.filter(c => c.toLowerCase().includes(val));
-        countryList.innerHTML = filtered.map(c => `<div class="country-option">${c}</div>`).join('');
-        countryList.style.display = filtered.length ? 'block' : 'none';
-        
-        document.querySelectorAll('.country-option').forEach(opt => {
-            opt.addEventListener('click', () => {
-                countrySearch.value = opt.innerText;
+        const value = e.target.value.toLowerCase().trim();
+
+        const filtered = countries.filter(country =>
+            country.toLowerCase().includes(value)
+        );
+
+        countryList.innerHTML = filtered
+            .map(country => `
+                <div class="country-option">
+                    ${country}
+                </div>
+            `)
+            .join('');
+
+        countryList.style.display =
+            filtered.length > 0 ? 'block' : 'none';
+
+        document.querySelectorAll('.country-option').forEach(option => {
+            option.addEventListener('click', () => {
+                countrySearch.value = option.innerText.trim();
                 countryList.style.display = 'none';
             });
         });
     });
 
-    // Registration logic
-    // Registration logic
-document.getElementById('registration-form').addEventListener('submit', async (e) => {
-    e.preventDefault();
+    document.addEventListener('click', (e) => {
+        if (
+            !countrySearch.contains(e.target) &&
+            !countryList.contains(e.target)
+        ) {
+            countryList.style.display = 'none';
+        }
+    });
 
-    const btn = document.getElementById('submit-btn');
-    const errEl = document.getElementById('global-error');
 
-    const email = document.getElementById('email').value.trim();
-    const password = document.getElementById('password').value;
-    const confirmPassword = document.getElementById('confirm_password').value;
+    // ==============================
+    // Client Registration
+    // ==============================
 
-    if (password !== confirmPassword) {
-        errEl.innerText = "Passwords do not match.";
-        errEl.classList.remove('hidden');
-        return;
-    }
+    document
+        .getElementById('registration-form')
+        .addEventListener('submit', async (e) => {
 
-    btn.disabled = true;
-    btn.innerText = "Creating Account...";
+            e.preventDefault();
 
-    try {
+            const btn = document.getElementById('submit-btn');
+            const errEl = document.getElementById('global-error');
 
-        // 1. Create Supabase Auth account
-        const redirectUrl = new URL('client-portal-sign-in.html', window.location.href).href;
+            // Clear previous errors
+            errEl.innerText = '';
+            errEl.classList.add('hidden');
 
-        const { data: authData, error: authError } = await eamaSupabase.auth.signUp({
-            email,
-            password,
-            options: {
-                emailRedirectTo: redirectUrl
+            // Get form values
+            const companyName =
+                document.getElementById('company_name').value.trim();
+
+            const contactPerson =
+                document.getElementById('contact_person').value.trim();
+
+            const email =
+                document.getElementById('email').value.trim();
+
+            const phone =
+                document.getElementById('phone').value.trim();
+
+            const country =
+                countrySearch.value.trim();
+
+            const password =
+                document.getElementById('password').value;
+
+            const confirmPassword =
+                document.getElementById('confirm_password').value;
+
+
+            // ==============================
+            // Validation
+            // ==============================
+
+            if (!companyName || !contactPerson || !email || !country) {
+                errEl.innerText =
+                    "Please complete all required fields.";
+
+                errEl.classList.remove('hidden');
+                return;
             }
+
+            if (password.length < 6) {
+                errEl.innerText =
+                    "Password must be at least 6 characters long.";
+
+                errEl.classList.remove('hidden');
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                errEl.innerText =
+                    "Passwords do not match.";
+
+                errEl.classList.remove('hidden');
+                return;
+            }
+
+
+            btn.disabled = true;
+            btn.innerText = "Creating Account...";
+
+
+            try {
+
+                // ==========================================
+                // 1. CREATE SUPABASE AUTH ACCOUNT
+                // ==========================================
+
+                const redirectUrl = new URL(
+                    'client-portal-sign-in.html',
+                    window.location.href
+                ).href;
+
+                const {
+                    data: authData,
+                    error: authError
+                } = await eamaSupabase.auth.signUp({
+                    email: email,
+                    password: password,
+
+                    options: {
+                        emailRedirectTo: redirectUrl
+                    }
+                });
+
+                if (authError) {
+                    throw authError;
+                }
+
+                if (!authData || !authData.user) {
+                    throw new Error(
+                        "The account could not be created."
+                    );
+                }
+
+                const userId = authData.user.id;
+
+
+                // ==========================================
+                // 2. SEND VERIFICATION EMAIL THROUGH BREVO
+                // ==========================================
+
+                console.log(
+                    "Calling send-auth-email for verification..."
+                );
+
+                const {
+                    data: emailData,
+                    error: emailError
+                } =
+                    await eamaSupabase.functions.invoke(
+                        'send-auth-email',
+                        {
+                            body: {
+                                email: email,
+                                type: 'verify'
+                            }
+                        }
+                    );
+
+
+                console.log(
+                    "send-auth-email response:",
+                    emailData
+                );
+
+
+                if (emailError) {
+
+                    console.error(
+                        "send-auth-email error:",
+                        emailError
+                    );
+
+                    throw new Error(
+                        emailError.message ||
+                        "The verification email could not be sent."
+                    );
+                }
+
+
+                // ==========================================
+                // 3. SAVE CLIENT INFORMATION
+                // ==========================================
+
+                const {
+                    error: dbError
+                } = await eamaSupabase
+                    .from('clients')
+                    .insert([{
+                        id: userId,
+                        company_name: companyName,
+                        contact_person: contactPerson,
+                        email: email,
+                        phone: phone,
+                        country: country,
+                        client_status: 'Lead'
+                    }]);
+
+
+                if (dbError) {
+
+                    console.error(
+                        "Client database error:",
+                        dbError
+                    );
+
+                    throw dbError;
+                }
+
+
+                // ==========================================
+                // 4. SHOW VERIFICATION MESSAGE
+                // ==========================================
+
+                document.getElementById(
+                    'signup-container'
+                ).innerHTML = `
+
+                    <div class="text-center py-10">
+
+                        <span
+                            class="material-symbols-outlined text-6xl text-[#ffb4a3] mb-4">
+                            mail
+                        </span>
+
+                        <h2 class="text-3xl font-serif mb-4">
+                            Check Your Inbox
+                        </h2>
+
+                        <p class="text-gray-400 mb-8">
+                            We have sent a verification email to
+                            <b>${email}</b>.
+                            Please verify your email address before signing in.
+                        </p>
+
+                        <a
+                            href="client-portal-sign-in.html"
+                            class="inline-block bg-[#ffb4a3] text-[#3d0600] px-8 py-4 font-bold uppercase tracking-widest hover:bg-white transition-all">
+
+                            Go to Login
+
+                        </a>
+
+                    </div>
+                `;
+
+
+            } catch (err) {
+
+                console.error(
+                    "Registration error:",
+                    err
+                );
+
+                errEl.innerText =
+                    err?.message ||
+                    "Something went wrong while creating your account.";
+
+                errEl.classList.remove('hidden');
+
+                btn.disabled = false;
+                btn.innerText = "Create Account";
+            }
+
         });
-
-        if (authError) throw authError;
-
-
-        // 2. Save client information
-        const { error: dbError } = await eamaSupabase
-            .from('clients')
-            .insert([{
-                id: authData.user.id,
-                company_name: document.getElementById('company_name').value,
-                contact_person: document.getElementById('contact_person').value,
-                email: email,
-                phone: document.getElementById('phone').value,
-                country: countrySearch.value,
-                client_status: 'Lead'
-            }]);
-
-
-        if (dbError) throw dbError;
-
-
-        // 3. Show confirmation message
-        document.getElementById('signup-container').innerHTML = `
-            <div class="text-center py-10">
-                <span class="material-symbols-outlined text-6xl text-[#ffb4a3] mb-4">
-                    mail
-                </span>
-
-                <h2 class="text-3xl font-serif mb-4">
-                    Check Your Inbox
-                </h2>
-
-                <p class="text-gray-400 mb-8">
-                    We have sent a verification email to 
-                    <b>${email}</b>.
-                    Please verify your email address before signing in.
-                </p>
-
-                <a href="client-portal-sign-in.html"
-                class="bg-[#ffb4a3] text-[#3d0600] px-8 py-4 font-bold uppercase tracking-widest">
-                    Go to Login
-                </a>
-            </div>
-        `;
-
-
-    } catch (err) {
-
-        console.error(err);
-
-        errEl.innerText = err.message;
-        errEl.classList.remove('hidden');
-
-        btn.disabled = false;
-        btn.innerText = "Create Account";
-    }
-});
 </script>
+
+
 </body>
 </html>
