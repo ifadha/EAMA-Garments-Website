@@ -8,7 +8,6 @@ const corsHeaders = {
 };
 
 serve(async (req) => {
-  // Handle CORS preflight
   if (req.method === "OPTIONS") {
     return new Response("ok", {
       headers: corsHeaders,
@@ -16,113 +15,80 @@ serve(async (req) => {
   }
 
   try {
-    console.log("STEP 1: Function started");
-
-    // Read request body
     const { email, type } = await req.json();
 
-    console.log("STEP 1: Request received", {
-      email,
-      type,
-    });
+    if (!email) {
+      throw new Error("Email is required.");
+    }
 
-    // =========================================================
-    // SUPABASE DEFAULT SECRETS
-    // These are provided automatically by Supabase.
-    // =========================================================
-
+    // Supabase's built-in secrets
     const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
     const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get(
       "SUPABASE_SERVICE_ROLE_KEY"
     );
 
-    // =========================================================
-    // CUSTOM SECRETS
-    // These are the only custom secrets required.
-    // =========================================================
-
-    const BREVO_KEY = Deno.env.get("BREVO_API_KEY");
+    // Your custom secrets
+    const BREVO_API_KEY = Deno.env.get("BREVO_API_KEY");
     const SITE_ORIGIN = Deno.env.get("SITE_ORIGIN");
 
-    // =========================================================
-    // CHECK REQUIRED CONFIGURATION
-    // =========================================================
-
-    console.log("STEP 1: Environment check", {
-      supabaseUrl: !!SUPABASE_URL,
-      serviceRoleKey: !!SUPABASE_SERVICE_ROLE_KEY,
-      brevoKey: !!BREVO_KEY,
-      siteOrigin: !!SITE_ORIGIN,
-    });
-
     if (!SUPABASE_URL) {
-      throw new Error(
-        "STEP 1 FAILED: SUPABASE_URL is not available."
-      );
+      throw new Error("SUPABASE_URL is missing.");
     }
 
     if (!SUPABASE_SERVICE_ROLE_KEY) {
-      throw new Error(
-        "STEP 1 FAILED: SUPABASE_SERVICE_ROLE_KEY is not available."
-      );
+      throw new Error("SUPABASE_SERVICE_ROLE_KEY is missing.");
     }
 
-    if (!BREVO_KEY) {
-      throw new Error(
-        "STEP 1 FAILED: BREVO_API_KEY is not configured."
-      );
+    if (!BREVO_API_KEY) {
+      throw new Error("BREVO_API_KEY is missing.");
     }
 
     if (!SITE_ORIGIN) {
-      throw new Error(
-        "STEP 1 FAILED: SITE_ORIGIN is not configured."
-      );
+      throw new Error("SITE_ORIGIN is missing.");
     }
-
-    // =========================================================
-    // CREATE SUPABASE ADMIN CLIENT
-    // =========================================================
-
-    console.log("STEP 2: Creating Supabase admin client");
 
     const supabaseAdmin = createClient(
       SUPABASE_URL,
       SUPABASE_SERVICE_ROLE_KEY
     );
 
-    // GitHub Pages website URL
-    const resetUrl = new URL(
-      "/create-new-password.html",
-      SITE_ORIGIN
-    ).toString();
+    // Determine whether this is verification or password reset
+    const isVerification = type === "verify";
 
-    console.log("STEP 2: Reset URL:", resetUrl);
+    const redirectTo = isVerification
+      ? new URL(
+          "/client-portal-sign-in.html",
+          SITE_ORIGIN
+        ).toString()
+      : new URL(
+          "/create-new-password.html",
+          SITE_ORIGIN
+        ).toString();
 
-    // =========================================================
-    // GENERATE PASSWORD RECOVERY LINK
-    // =========================================================
-
-    console.log(
-      "STEP 2: Generating password recovery link"
-    );
-
+    // Generate secure Supabase link
     const { data, error } =
       await supabaseAdmin.auth.admin.generateLink({
-        type: "recovery",
+        type: isVerification ? "signup" : "recovery",
         email: email,
         options: {
-          redirectTo: resetUrl,
+          redirectTo,
         },
       });
 
     if (error) {
-      console.error(
-        "STEP 2 FAILED: Supabase generateLink error:",
-        error
-      );
+      console.error("Supabase generateLink error:", error);
 
-      throw new Error(
-        `STEP 2 FAILED: ${error.message}`
+      return new Response(
+        JSON.stringify({
+          error: error.message,
+        }),
+        {
+          status: 400,
+          headers: {
+            ...corsHeaders,
+            "Content-Type": "application/json",
+          },
+        }
       );
     }
 
@@ -130,19 +96,15 @@ serve(async (req) => {
 
     if (!secureLink) {
       throw new Error(
-        "STEP 2 FAILED: Supabase did not return a recovery link."
+        "Supabase did not return an action link."
       );
     }
 
-    console.log(
-      "STEP 2: Recovery link generated successfully"
-    );
+    // Template 2 = verification
+    // Template 3 = password reset
+    const templateId = isVerification ? 2 : 3;
 
-    // =========================================================
-    // SEND EMAIL THROUGH BREVO
-    // =========================================================
-
-    console.log("STEP 3: Sending email through Brevo");
+    console.log("Sending Brevo template:", templateId);
 
     const brevoResponse = await fetch(
       "https://api.brevo.com/v3/smtp/email",
@@ -150,79 +112,52 @@ serve(async (req) => {
         method: "POST",
 
         headers: {
-          "api-key": BREVO_KEY,
+          accept: "application/json",
+          "api-key": BREVO_API_KEY,
           "content-type": "application/json",
         },
 
         body: JSON.stringify({
-          sender: {
-            name: "EAMA Garments",
-            email: "info@eamagarments.com",
-          },
-
           to: [
             {
               email: email,
             },
           ],
 
-          templateId: 3,
+          templateId: templateId,
 
           params: {
-            ACTION_LINK: secureLink,
+            VERIFICATION_LINK: secureLink,
+            RESET_LINK: secureLink,
           },
         }),
       }
     );
 
-    const brevoResponseText =
-      await brevoResponse.text();
-
-    let brevoResult;
-
-    try {
-      brevoResult = JSON.parse(
-        brevoResponseText
-      );
-    } catch {
-      brevoResult = brevoResponseText;
-    }
+    const brevoText = await brevoResponse.text();
 
     console.log(
-      "STEP 3: Brevo HTTP status:",
+      "Brevo status:",
       brevoResponse.status
     );
 
     console.log(
-      "STEP 3: Brevo response:",
-      brevoResult
+      "Brevo response:",
+      brevoText
     );
-
-    // =========================================================
-    // CHECK BREVO RESPONSE
-    // =========================================================
 
     if (!brevoResponse.ok) {
       throw new Error(
-        `STEP 3 FAILED: Brevo returned HTTP ${brevoResponse.status}: ${brevoResponseText}`
+        `Brevo returned ${brevoResponse.status}: ${brevoText}`
       );
     }
 
-    console.log(
-      "STEP 3: Email sent successfully through Brevo"
-    );
-
-    // =========================================================
-    // SUCCESS
-    // =========================================================
-
     return new Response(
       JSON.stringify({
-        success: true,
+        sent: true,
       }),
       {
         status: 200,
-
         headers: {
           ...corsHeaders,
           "Content-Type": "application/json",
@@ -230,10 +165,7 @@ serve(async (req) => {
       }
     );
   } catch (err) {
-    console.error(
-      "FUNCTION FAILED:",
-      err
-    );
+    console.error("send-auth-email error:", err);
 
     return new Response(
       JSON.stringify({
@@ -244,7 +176,6 @@ serve(async (req) => {
       }),
       {
         status: 400,
-
         headers: {
           ...corsHeaders,
           "Content-Type": "application/json",
