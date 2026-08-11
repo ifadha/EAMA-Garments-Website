@@ -22,7 +22,7 @@ serve(async (req) => {
     }
 
     // Supabase's built-in secrets
-    const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
+    let SUPABASE_URL = Deno.env.get("SUPABASE_URL");
     const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get(
       "SUPABASE_SERVICE_ROLE_KEY"
     );
@@ -31,8 +31,14 @@ serve(async (req) => {
     const BREVO_API_KEY = Deno.env.get("BREVO_API_KEY");
     const SITE_ORIGIN = Deno.env.get("SITE_ORIGIN");
 
-    if (!SUPABASE_URL) {
-      throw new Error("SUPABASE_URL is missing.");
+    const DEFAULT_SUPABASE_URL =
+      "https://mxbzlscxsonbwiqjmnzx.supabase.co";
+
+    if (!SUPABASE_URL || SUPABASE_URL.includes("MY_SUPABASE")) {
+      console.warn(
+        "SUPABASE_URL is missing or placeholder. Falling back to the known project URL."
+      );
+      SUPABASE_URL = DEFAULT_SUPABASE_URL;
     }
 
     if (!SUPABASE_SERVICE_ROLE_KEY) {
@@ -47,6 +53,11 @@ serve(async (req) => {
       throw new Error("SITE_ORIGIN is missing.");
     }
 
+    const normalizedOrigin = SITE_ORIGIN.trim().replace(/\/+$|\s+/g, "");
+    const originBase = normalizedOrigin.endsWith("/")
+      ? normalizedOrigin
+      : `${normalizedOrigin}/`;
+
     const supabaseAdmin = createClient(
       SUPABASE_URL,
       SUPABASE_SERVICE_ROLE_KEY
@@ -56,14 +67,8 @@ serve(async (req) => {
     const isVerification = type === "verify";
 
     const redirectTo = isVerification
-      ? new URL(
-          "/client-portal-sign-in.html",
-          SITE_ORIGIN
-        ).toString()
-      : new URL(
-          "/create-new-password.html",
-          SITE_ORIGIN
-        ).toString();
+      ? new URL("client-portal-sign-in.html", originBase).toString()
+      : new URL("create-new-password.html", originBase).toString();
 
     // Generate secure Supabase link
     const { data, error } =
@@ -129,6 +134,7 @@ serve(async (req) => {
           params: {
             VERIFICATION_LINK: secureLink,
             RESET_LINK: secureLink,
+            ACTION_LINK: secureLink,
           },
         }),
       }
