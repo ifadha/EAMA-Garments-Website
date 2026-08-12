@@ -437,7 +437,7 @@
 
                 list.innerHTML = data.map(r => `
                     <tr onclick="App.openDetails('${r.id}')">
-                        <td>#${r.id.slice(0, 8).toUpperCase()}</td>
+                        <td>#${String(r.id).slice(0, 8).toUpperCase()}</td>
                         <td style="color: var(--text-secondary)">${r.unified_type}</td>
                         <td>${r.subject}</td>
                         <td>${new Date(r.created_at).toLocaleDateString(undefined, {month: 'short', day: 'numeric', year: 'numeric'})}</td>
@@ -465,7 +465,7 @@
 
                 // Fetch documents and messages
                 const [{data: docs}, {data: msgs}] = await Promise.all([
-                    eamaSupabase.from('documents').select('*').eq('request_id', r.id),
+                    eamaSupabase.from('documents').select('*').eq('manufacturing_request_id', r.id),
                     eamaSupabase.from('request_messages').select('*').eq('request_id', r.id).order('created_at', {ascending: true})
                 ]);
 
@@ -481,7 +481,7 @@
                 body.innerHTML = `
                     <span class="close-overlay" onclick="App.closeDetails()">← Back to Dashboard</span>
                     
-                    <h2 style="font-family: var(--font-heading); font-size: 2rem; margin: 0;">#${r.id.slice(0, 8).toUpperCase()}</h2>
+                    <h2 style="font-family: var(--font-heading); font-size: 2rem; margin: 0;">#${String(r.id).slice(0, 8).toUpperCase()}</h2>
                     <p style="color: var(--text-secondary); margin: 5px 0 30px 0;">${r.unified_type}: ${r.subject}</p>
 
                     <div class="timeline">

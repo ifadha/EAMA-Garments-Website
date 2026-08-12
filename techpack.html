@@ -183,6 +183,25 @@
 
         .btn-primary:hover { opacity: 0.9; }
 
+        .btn-primary:disabled { cursor: not-allowed; opacity: 0.65; }
+
+        .upload-feedback, .submission-feedback {
+            display: none;
+            margin-top: 12px;
+            font-size: 0.85rem;
+            line-height: 1.45;
+        }
+
+        .upload-feedback.is-error, .submission-feedback.is-error { color: #ff9b9b; }
+        .upload-feedback.is-success, .submission-feedback.is-success { color: #8ed8ac; }
+
+        .submission-feedback {
+            padding: 16px 20px;
+            border: 1px solid currentColor;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
         .legal-note {
             font-size: 0.75rem;
             color: var(--text-muted);
@@ -268,10 +287,13 @@
         <section>
             <h2>Design File Upload</h2>
             <div class="upload-zone" onclick="document.getElementById('design_files').click();">
-                <input type="file" id="design_files" name="design_files" multiple style="display:none">
+                <input type="file" id="design_files" name="design_files" multiple
+                    accept=".pdf,.jpg,.jpeg,.png,.ai,.zip,application/pdf,image/jpeg,image/png,application/postscript,application/zip"
+                    style="display:none">
                 <p style="color: var(--text-secondary); font-weight: 500;">Click to upload or drag files here</p>
-                <p class="file-types">Supported: PDF, AI, ZIP, JPG, PNG (Max 20MB)</p>
+                <p class="file-types">Supported: PDF, AI, ZIP, JPG, JPEG, PNG (Max 20MB per file)</p>
                 <p class="file-types" style="margin-top: 12px; font-style: italic;">Tech Packs, CAD Files, Reference Images, Measurement Charts</p>
+                <p id="file-feedback" class="upload-feedback" role="status" aria-live="polite"></p>
             </div>
         </section>
 
@@ -347,6 +369,7 @@
         <!-- FINAL ACTION -->
         <div class="submit-area">
             <button type="submit" class="btn-primary">Submit Design Request</button>
+            <div id="submission-feedback" class="submission-feedback" role="status" aria-live="polite"></div>
             <p class="legal-note">By submitting this request, you agree that our team may contact you regarding your manufacturing requirements.</p>
         </div>
     </form>
@@ -356,10 +379,79 @@
 <script>
     const supabase = window.eamaSupabase;
     const form = document.getElementById('design-inquiry-form');
+    const fileInput = document.getElementById('design_files');
+    const fileFeedback = document.getElementById('file-feedback');
+    const submissionFeedback = document.getElementById('submission-feedback');
+    const MAX_FILE_SIZE = 20 * 1024 * 1024;
+    const ALLOWED_FILES = {
+        pdf: ['application/pdf'],
+        jpg: ['image/jpeg'],
+        jpeg: ['image/jpeg'],
+        png: ['image/png'],
+        ai: ['application/postscript', 'application/illustrator'],
+        zip: ['application/zip', 'application/x-zip-compressed', 'multipart/x-zip']
+    };
 
     if (!form) {
         throw new Error('Design inquiry form not found.');
     }
+
+    function showFeedback(element, message, type) {
+        element.textContent = message;
+        element.className = `${element.id === 'file-feedback' ? 'upload' : 'submission'}-feedback is-${type}`;
+        element.style.display = 'block';
+    }
+
+    function clearFeedback(element) {
+        element.textContent = '';
+        element.className = element.id === 'file-feedback' ? 'upload-feedback' : 'submission-feedback';
+        element.style.display = 'none';
+    }
+
+    function validateFiles(files) {
+        for (const file of files) {
+            const extension = file.name.split('.').pop().toLowerCase();
+            const allowedMimeTypes = ALLOWED_FILES[extension];
+
+            if (!allowedMimeTypes) {
+                return `“${file.name}” is not supported. Upload PDF, AI, ZIP, JPG, JPEG, or PNG files only.`;
+            }
+
+            // Some browsers leave File.type blank for local files. A non-empty
+            // MIME type must still match the extension to prevent type spoofing.
+            if (file.type && !allowedMimeTypes.includes(file.type.toLowerCase())) {
+                return `“${file.name}” has an invalid file type for its extension.`;
+            }
+
+            if (file.size > MAX_FILE_SIZE) {
+                return `“${file.name}” exceeds the 20MB per-file size limit.`;
+            }
+        }
+
+        return null;
+    }
+
+    fileInput?.addEventListener('change', () => {
+        const files = Array.from(fileInput.files || []);
+        const validationError = validateFiles(files);
+
+        if (validationError) {
+            console.error('Invalid design file selection:', validationError);
+            fileInput.value = '';
+            showFeedback(fileFeedback, validationError, 'error');
+            return;
+        }
+
+        if (files.length) {
+            showFeedback(
+                fileFeedback,
+                `Selected: ${files.map(file => file.name).join(', ')}`,
+                'success'
+            );
+        } else {
+            clearFeedback(fileFeedback);
+        }
+    });
 
     form.addEventListener('submit', async function (e) {
         e.preventDefault();
@@ -384,7 +476,13 @@
             return;
         }
 
-        const fileInput = document.getElementById('design_files');
+        clearFeedback(submissionFeedback);
+
+        const fileValidationError = validateFiles(Array.from(fileInput?.files || []));
+        if (fileValidationError) {
+            showFeedback(fileFeedback, fileValidationError, 'error');
+            return;
+        }
 
         const companyName = document.getElementById('company_name').value.trim();
         const contactPerson = document.getElementById('contact_person').value.trim();
@@ -431,30 +529,18 @@
         button.disabled = true;
         button.textContent = 'Submitting…';
 
+        let requestId = null;
+        const uploadedFilePaths = [];
+
         try {
             if (!supabase) {
                 throw new Error('Supabase client is not configured.');
             }
 
-            /*
-             * ---------------------------------------------------------
-             * STEP 1 — Upload Tech Pack / Design Files
-             * ---------------------------------------------------------
-             */
-
             const uploadedDocuments = [];
 
             if (fileInput && fileInput.files && fileInput.files.length > 0) {
-
                 for (const file of fileInput.files) {
-
-                    // 20 MB limit
-                    if (file.size > 20 * 1024 * 1024) {
-                        throw new Error(
-                            `"${file.name}" exceeds the 20MB file size limit.`
-                        );
-                    }
-
                     const safeName = file.name.replace(
                         /[^a-zA-Z0-9._-]/g,
                         '_'
@@ -463,10 +549,13 @@
                     const filePath =
                         `designs/${Date.now()}-${crypto.randomUUID()}-${safeName}`;
 
-                    const { error: uploadError } =
+                    const { data: uploadData, error: uploadError } =
                         await supabase.storage
                             .from('techpacks')
-                            .upload(filePath, file);
+                            .upload(filePath, file, {
+                                contentType: file.type || undefined,
+                                upsert: false
+                            });
 
                     if (uploadError) {
                         console.error(
@@ -474,9 +563,7 @@
                             uploadError
                         );
 
-                        throw new Error(
-                            `Unable to upload "${file.name}".`
-                        );
+                        throw new Error(`Unable to upload “${file.name}”: ${uploadError.message || 'Storage rejected the file.'}`);
                     }
 
                     const { data: publicUrlData } =
@@ -484,30 +571,22 @@
                             .from('techpacks')
                             .getPublicUrl(filePath);
 
-                    if (!publicUrlData?.publicUrl) {
+                    if (!uploadData?.path || !publicUrlData?.publicUrl) {
                         throw new Error(
-                            `Unable to generate URL for "${file.name}".`
+                            `Unable to confirm the uploaded file “${file.name}”.`
                         );
                     }
 
                     uploadedDocuments.push({
                         file_name: file.name,
                         file_url: publicUrlData.publicUrl,
-                        file_type: file.type || 'application/octet-stream'
+                        file_path: uploadData.path,
+                        file_type: file.type || 'application/octet-stream',
+                        file_size: file.size
                     });
+                    uploadedFilePaths.push(uploadData.path);
                 }
             }
-
-            /*
-             * ---------------------------------------------------------
-             * STEP 2 — Create Manufacturing Request
-             * ---------------------------------------------------------
-             *
-             * IMPORTANT:
-             * We insert into manufacturing_requests instead of
-             * design_submissions because the client dashboard already
-             * reads manufacturing_requests.
-             */
 
             const submission = {
                 request_type: 'Quote',
@@ -550,18 +629,17 @@
                 production_timeline:
                     productionTimeline,
 
-                additional_notes:
-                    additionalNotes
+                additional_notes: additionalNotes
             };
 
             const {
                 data: requestData,
                 error: requestError
             } = await supabase
-                .from('manufacturing_requests')
-                .insert([submission])
-                .select('id')
-                .single();
+                .rpc('submit_manufacturing_request', {
+                    p_submission: submission,
+                    p_documents: uploadedDocuments
+                });
 
             if (requestError) {
                 console.error(
@@ -575,58 +653,18 @@
                 );
             }
 
-            if (!requestData?.id) {
+            requestId = requestData?.id || requestData;
+
+            if (!requestId) {
                 throw new Error(
                     'The manufacturing request was created, but no request ID was returned.'
                 );
             }
 
-            const requestId = requestData.id;
-
             console.log(
                 'Manufacturing request created:',
                 requestId
             );
-
-            /*
-             * ---------------------------------------------------------
-             * STEP 3 — Link Uploaded Files to Request
-             * ---------------------------------------------------------
-             */
-
-            if (uploadedDocuments.length > 0) {
-
-                const documentRows = uploadedDocuments.map(doc => ({
-                    request_id: requestId,
-                    file_name: doc.file_name,
-                    file_url: doc.file_url,
-                    file_type: doc.file_type
-                }));
-
-                const {
-                    error: documentError
-                } = await supabase
-                    .from('documents')
-                    .insert(documentRows);
-
-                if (documentError) {
-                    console.error(
-                        'Document record error:',
-                        documentError
-                    );
-
-                    /*
-                     * The request itself exists, so we don't pretend
-                     * the whole submission failed. However, we do
-                     * stop here because the Tech Pack files should be
-                     * properly associated with the request.
-                     */
-
-                    throw new Error(
-                        'Your request was created, but the uploaded files could not be linked to it. Please contact EAMA Garments.'
-                    );
-                }
-            }
 
             /*
              * ---------------------------------------------------------
@@ -672,26 +710,19 @@
                     'Brevo email function error:',
                     emailError
                 );
-
-                /*
-                 * IMPORTANT:
-                 * Do NOT delete the request here.
-                 *
-                 * The manufacturing request and uploaded documents
-                 * have already been successfully saved.
-                 *
-                 * The email can be retried separately.
-                 */
-
-                console.warn(
-                    'Request was saved successfully, but the notification email could not be sent.'
-                );
-            } else {
-                console.log(
-                    'Manufacturing request email sent:',
-                    emailResult
+                throw new Error(
+                    'Your request was saved, but we could not send the confirmation email. Please contact EAMA Garments and quote request #' + requestId + '.'
                 );
             }
+
+            if (!emailResult?.sent) {
+                console.error('Unexpected email function response:', emailResult);
+                throw new Error(
+                    'Your request was saved, but the email service did not confirm delivery. Please contact EAMA Garments and quote request #' + requestId + '.'
+                );
+            }
+
+            console.log('Manufacturing request email sent:', emailResult);
 
             /*
              * ---------------------------------------------------------
@@ -707,23 +738,12 @@
              * ---------------------------------------------------------
              */
 
-            if (emailError) {
-
-                alert(
-                    'Your design request has been successfully submitted. ' +
-                    'Our technical team has received your request. ' +
-                    'The confirmation email could not be sent at this time, ' +
-                    'but your submission is safely recorded.'
-                );
-
-            } else {
-
-                alert(
-                    'Your design request has been successfully submitted. ' +
-                    'A confirmation email with your request status link ' +
-                    'has been sent to your email address.'
-                );
-            }
+            clearFeedback(fileFeedback);
+            showFeedback(
+                submissionFeedback,
+                'Your request has been submitted successfully. A confirmation email has been sent to your email address.',
+                'success'
+            );
 
             console.log(
                 'Submission completed successfully. Request ID:',
@@ -737,9 +757,22 @@
                 error
             );
 
-            alert(
-                error?.message ||
-                'Unable to submit your request. Please try again.'
+            // If the database transaction never created a request, remove any
+            // files uploaded earlier in this attempt so they are not orphaned.
+            if (!requestId && uploadedFilePaths.length && supabase) {
+                const { error: cleanupError } = await supabase.storage
+                    .from('techpacks')
+                    .remove(uploadedFilePaths);
+
+                if (cleanupError) {
+                    console.error('Unable to clean up failed submission files:', cleanupError);
+                }
+            }
+
+            showFeedback(
+                submissionFeedback,
+                error?.message || 'Unable to submit your request. Please try again.',
+                'error'
             );
 
         } finally {

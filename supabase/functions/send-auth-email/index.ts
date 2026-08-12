@@ -153,14 +153,17 @@ serve(async (req) => {
         request_id
       );
 
-      /*
-       * IMPORTANT:
-       *
-       * Replace 4 below with the actual Brevo template ID
-       * for your manufacturing request email if it is different.
-       */
+      // Keep the currently deployed template as the compatibility default,
+      // but make the production template explicit and configurable by secret.
+      const configuredTemplateId = Number(
+        Deno.env.get("BREVO_MANUFACTURING_REQUEST_TEMPLATE_ID") || "4"
+      );
 
-      const MANUFACTURING_REQUEST_TEMPLATE_ID = 4;
+      if (!Number.isInteger(configuredTemplateId) || configuredTemplateId <= 0) {
+        throw new Error("BREVO_MANUFACTURING_REQUEST_TEMPLATE_ID must be a positive integer.");
+      }
+
+      const MANUFACTURING_REQUEST_TEMPLATE_ID = configuredTemplateId;
 
       console.log(
         "Sending manufacturing request Brevo template:",
