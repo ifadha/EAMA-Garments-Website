@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html class="dark" lang="en">
 <head>
+    <style>
+        html { scroll-behavior: smooth; }
+        #collections { scroll-margin-top: 80px; }
+        #production { scroll-margin-top: 80px; }
+        #quality { scroll-margin-top: 100px; }
+        #consultation { scroll-margin-top: 80px; }
+    </style>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>EAMA GARMENTS | Industrial Craftsmanship</title>
@@ -8,8 +15,6 @@
     <!-- Tailwind & Animation Libraries -->
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    
-    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
 
@@ -21,28 +26,84 @@
                     "colors": {
                         "on-surface-variant": "#e1bfb8",
                         "surface": "#121414",
-                        "background": "#0A0A0A",
-                        "primary": "#ffb4a3",
+                        "on-primary-fixed": "#3d0600",
+                        "surface-container-highest": "#343535",
+                        "secondary-container": "#4a4949",
+                        "tertiary-container": "#9c9a99",
+                        "secondary": "#c9c6c5",
+                        "on-secondary": "#313030",
+                        "on-tertiary": "#313030",
+                        "on-secondary-fixed": "#1c1b1b",
+                        "on-error-container": "#ffdad6",
+                        "error-container": "#93000a",
+                        "on-tertiary-fixed": "#1c1b1b",
+                        "primary-fixed-dim": "#ffb4a3",
+                        "tertiary": "#c8c6c5",
+                        "error": "#ffb4ab",
+                        "surface-container-lowest": "#0d0e0f",
+                        "on-secondary-fixed-variant": "#474646",
+                        "surface-variant": "#343535",
+                        "primary-fixed": "#ffdad2",
+                        "on-tertiary-container": "#323232",
+                        "background": "#121414",
                         "primary-container": "#ff6b4a",
-                        "on-primary-container": "#FFFFFF",
-                        "surface-container": "#1e2020",
+                        "surface-dim": "#121414",
+                        "on-error": "#690005",
+                        "outline-variant": "#59413c",
+                        "inverse-on-surface": "#2f3131",
+                        "on-background": "#e3e2e2",
+                        "secondary-fixed": "#e5e2e1",
+                        "surface-tint": "#ffb4a3",
+                        "on-primary-fixed-variant": "#8c1900",
+                        "tertiary-fixed": "#e5e2e1",
+                        "outline": "#a88a83",
+                        "inverse-surface": "#e3e2e2",
+                        "on-primary": "#630f00",
+                        "inverse-primary": "#ae3115",
+                        "on-primary-container": "#661000",
+                        "on-tertiary-fixed-variant": "#474646",
+                        "on-surface": "#e3e2e2",
+                        "surface-bright": "#383939",
+                        "primary": "#ffb4a3",
                         "surface-container-low": "#1a1c1c",
-                        "surface-container-lowest": "#0d0e0f"
+                        "on-secondary-container": "#bab8b7",
+                        "surface-container-high": "#292a2a",
+                        "tertiary-fixed-dim": "#c8c6c5",
+                        "surface-container": "#1e2020",
+                        "secondary-fixed-dim": "#c9c6c5"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
                     },
                     "spacing": {
                         "section-gap": "160px",
                         "margin-desktop": "80px",
-                        "margin-mobile": "20px",
-                        "gutter": "24px"
+                        "gutter": "24px",
+                        "base": "8px",
+                        "margin-mobile": "20px"
                     },
                     "fontFamily": {
-                        "headline": ["Playfair Display", "serif"],
-                        "body": ["Inter", "sans-serif"]
+                        "headline-lg": ["Playfair Display"],
+                        "headline-md": ["Playfair Display"],
+                        "label-caps": ["Inter"],
+                        "headline-lg-mobile": ["Playfair Display"],
+                        "headline-sm": ["Playfair Display"],
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "display-lg": ["Playfair Display"]
                     },
                     "fontSize": {
-                        "display-lg": ["72px", {"lineHeight": "1.1", "letterSpacing": "-0.02em"}],
-                        "headline-lg": ["48px", {"lineHeight": "1.2"}],
-                        "label-caps": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.15em", "fontWeight": "600"}]
+                        "headline-lg": ["48px", {"lineHeight": "1.2", "fontWeight": "400"}],
+                        "headline-md": ["32px", {"lineHeight": "1.3", "fontWeight": "400"}],
+                        "label-caps": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                        "headline-lg-mobile": ["36px", {"lineHeight": "1.2", "fontWeight": "400"}],
+                        "headline-sm": ["24px", {"lineHeight": "1.4", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "display-lg": ["72px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "400"}]
                     }
                 },
             },
@@ -50,38 +111,30 @@
     </script>
 
     <style>
-        html { scroll-behavior: smooth; }
-        body { background-color: #0A0A0A; color: #e3e2e2; font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
-        .cinematic-gradient { background: linear-gradient(to bottom, rgba(10,10,10,0.2) 0%, rgba(10,10,10,0.9) 100%); }
+        body { background-color: #0A0A0A; color: #e3e2e2; -webkit-font-smoothing: antialiased; }
+        .cinematic-gradient { background: linear-gradient(to bottom, rgba(10,10,10,0.4) 0%, rgba(10,10,10,0.8) 100%); }
         .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
-        
-        /* Reveal Animation Classes */
-        .reveal { opacity: 0; transform: translateY(30px); transition: all 1s ease-out; }
-        .reveal.active { opacity: 1; transform: translateY(0); }
-
-        #collections, #production, #quality, #consultation { scroll-margin-top: 100px; }
     </style>
 
-    <!-- Supabase Core (Preserved) -->
+    <!-- Supabase Logic: Flat File Structure -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-client.js"></script>
     <script src="supabase-fetch-adapter.js"></script>
 </head>
 
-<body>
-    <!-- TopNavBar -->
-    <nav class="fixed top-0 left-0 w-full h-20 px-margin-mobile md:px-margin-desktop bg-black/80 backdrop-blur-md z-50 flex justify-between items-center border-b border-white/10">
-        <div class="text-2xl font-headline tracking-tighter">EAMA GARMENTS</div>
+<body class="font-body-md overflow-x-hidden">
+    <!-- Navbar -->
+    <nav class="fixed top-0 left-0 w-full h-20 px-margin-mobile md:px-margin-desktop bg-background/80 backdrop-blur-md z-50 flex justify-between items-center border-b border-white/10">
+        <div class="font-headline-sm text-headline-sm tracking-tighter text-on-background uppercase">EAMA GARMENTS</div>
         <div class="hidden md:flex items-center space-x-8">
-            <a class="text-primary-container font-semibold border-b-2 border-primary-container pb-1 text-label-caps uppercase" href="#">Home</a>
-            <a class="text-on-surface-variant hover:text-white transition-colors text-label-caps uppercase" href="#collections">Collections</a>
-            <a class="text-on-surface-variant hover:text-white transition-colors text-label-caps uppercase" href="#production">Production</a>
-            <a class="text-on-surface-variant hover:text-white transition-colors text-label-caps uppercase" href="#quality">Quality</a>
+            <a class="text-primary font-semibold border-b-2 border-primary pb-1 font-label-caps text-label-caps" href="#">Home</a>
+            <a class="text-on-surface-variant font-medium hover:text-on-surface transition-colors font-label-caps text-label-caps" href="#collections">View Collections</a>
+            <a class="text-on-surface-variant font-medium hover:text-on-surface transition-colors font-label-caps text-label-caps" href="#production">Start Your Production</a>
+            <a class="text-on-surface-variant font-medium hover:text-on-surface transition-colors font-label-caps text-label-caps" href="#quality">Quality & Sustainability</a>
         </div>
-        <div class="flex items-center gap-6">
-            <a href="client-portal-sign-in.html" class="bg-primary-container text-white px-8 py-3 rounded-sm text-label-caps uppercase transition-transform active:scale-95 hover:brightness-110">
-                Login / Sign Up
-            </a>
+        <div class="flex items-center gap-4">
+            <button onclick="document.getElementById('consultation').scrollIntoView({ behavior: 'smooth' })" class="hidden lg:block text-on-surface hover:text-primary transition-colors font-label-caps text-label-caps">Consultation</button>
+            <a href="client-portal-sign-in.html" class="bg-primary-container text-on-primary-container px-8 py-3 rounded-DEFAULT font-label-caps text-label-caps transition-all active:scale-95 opacity-90 hover:opacity-100 inline-flex items-center justify-center">login / Sign Up</a>
         </div>
     </nav>
 
@@ -93,150 +146,136 @@
                 <source src="Black_fabric_ripples_gently_202607291554.mp4" type="video/mp4">
             </video>
         </div>
-        <div class="relative z-20 max-w-4xl reveal">
-            <p class="text-primary-container text-label-caps mb-6 tracking-[0.3em] uppercase">Sri Lanka Apparel Manufacturer</p>
-            <h1 class="font-headline text-5xl md:text-display-lg text-white mb-8 leading-tight">
-                YOUR TRUSTED PARTNER <br>FOR APPAREL PRODUCTION
-            </h1>
-            <p class="text-lg text-on-surface-variant max-w-xl mb-12 leading-relaxed">
-                We manufacture quality garments for brands and organizations worldwide. 
-                Combining industry expertise with careful quality control, EAMA Garments delivers 
-                solutions built around each client's requirements.
-            </p>
-            <button onclick="document.getElementById('factory-visit').scrollIntoView({behavior:'smooth'})" class="bg-primary-container text-white px-10 py-4 text-label-caps uppercase hover:brightness-110 transition-all">
-                Book Factory Visit
-            </button>
+        <div class="relative z-20 max-w-4xl section-reveal">
+            <p class="font-label-caps text-label-caps text-primary mb-6 tracking-widest uppercase">SRI LANKA APPAREL MANUFACTURER</p>
+            <h1 class="font-display-lg text-headline-lg-mobile md:text-display-lg text-on-background mb-8 leading-tight">YOUR TRUSTED PARTNER <br>FOR APPAREL PRODUCTION</h1>
+            <p class="font-body-lg text-body-lg text-on-surface-variant max-w-xl mb-12">We manufacture quality garments for brands, retailers, and organizations worldwide. EAMA Garments delivers solutions built around each client's requirements.</p>
+            <button onclick="document.getElementById('factory-visit').scrollIntoView({behavior:'smooth'})" class="bg-primary-container text-on-primary-container px-8 py-3 rounded-DEFAULT font-label-caps text-label-caps transition-all active:scale-95 opacity-90 hover:opacity-100">Book Factory Visit</button>
         </div>
     </section>
 
-    <!-- Curated Collections Section -->
-    <section id="collections" class="py-section-gap px-margin-mobile md:px-margin-desktop bg-surface-container-lowest">
-        <div class="reveal relative overflow-hidden rounded-[2rem] border border-white/10 bg-surface-container min-h-[600px] flex items-center p-8 md:p-20">
-            <!-- Video Background with specific overlays from Old Design -->
+    <!-- Collections Section -->
+    <section class="py-section-gap px-margin-mobile md:px-margin-desktop bg-surface-container-lowest border-t border-white/5 overflow-hidden">
+        <div class="relative overflow-hidden rounded-[2rem] border border-white/10 bg-surface-container px-8 py-16 md:px-16 md:py-20 section-reveal">
             <video autoplay muted loop playsinline class="absolute inset-0 h-full w-full object-cover">
                 <source src="Runway_walking_movement_seamless…_202607281323.mp4" type="video/mp4">
             </video>
-            <div class="absolute inset-0 bg-[linear-gradient(90deg,rgba(8,8,8,0.95)_0%,rgba(8,8,8,0.7)_45%,rgba(8,8,8,0.2)_100%)]"></div>
+            <div class="absolute inset-0 bg-[linear-gradient(90deg,rgba(8,8,8,0.9)_0%,rgba(8,8,8,0.65)_45%,rgba(8,8,8,0.3)_100%)]"></div>
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(255,107,74,0.18),_transparent_35%)] pointer-events-none"></div>
             
-            <div class="relative z-10 max-w-2xl">
-                <span class="text-primary-container text-label-caps block mb-6 uppercase tracking-[0.2em]">Curated Collections</span>
-                <h2 class="font-headline text-headline-lg text-white mb-6">EXPLORE OUR SAMPLE COLLECTIONS</h2>
-                <p class="text-lg text-white/80 mb-8">
-                    Our sample collection gives you an overview of the garments we manufacture 
-                    while protecting our clients' confidential designs. Request a sample today.
-                </p>
-                <a href="gallery.html" class="inline-flex bg-white text-black px-10 py-4 rounded-full text-label-caps uppercase hover:bg-primary-container hover:text-white transition-all">
-                    View Gallery
-                </a>
+            <div class="relative z-10">
+                <section id="collections">
+                    <div class="max-w-3xl">
+                        <span class="font-label-caps text-label-caps text-primary block mb-6 uppercase tracking-[0.2em]">Curated Collections</span>
+                        <h2 class="font-headline-lg text-headline-lg text-white mb-6 drop-shadow-[0_2px_20px_rgba(0,0,0,0.65)] uppercase">Explore our sample collections</h2>
+                        <p class="font-body-lg text-body-lg text-white/90 max-w-2xl mb-6">Our sample collection gives you an overview of our craftsmanship while protecting confidential designs.</p>
+                        <a href="gallery.html" class="inline-flex items-center justify-center rounded-full bg-primary px-10 py-4 text-on-primary font-label-caps text-label-caps uppercase tracking-[0.2em] transition-all hover:bg-primary-fixed active:scale-95">View Collections</a>
+                    </div>
+                </section>
             </div>
         </div>
     </section>
 
-    <!-- Manufacturing Workflow (Numbered Grid Restored) -->
-    <section id="quality" class="py-section-gap px-margin-mobile md:px-margin-desktop bg-surface border-t border-white/5">
-        <div class="reveal mb-24">
-            <span class="text-primary-container text-label-caps block mb-4 uppercase tracking-[0.2em]">Our Workflow</span>
-            <h2 class="font-headline text-headline-lg text-white">Manufacturing Process</h2>
+    <!-- Manufacturing Workflow Grid -->
+    <section id="quality" class="py-section-gap bg-surface px-margin-mobile md:px-margin-desktop border-t border-white/5">
+        <div class="mb-24 section-reveal">
+            <span class="font-label-caps text-label-caps text-primary block mb-4 uppercase tracking-[0.2em]">Our Workflow</span>
+            <h2 class="font-headline-lg text-headline-lg text-on-background mb-4">Manufacturing Process</h2>
         </div>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 reveal">
-            <!-- Step 01 -->
-            <div class="group p-8 border border-white/5 hover:border-primary-container/30 transition-all bg-surface-container-low">
-                <div class="flex justify-between items-start mb-8">
-                    <span class="font-headline text-4xl text-white/10 group-hover:text-primary-container/40 transition-colors">01</span>
-                    <span class="material-symbols-outlined text-primary-container text-4xl">forum</span>
+        <div class="relative section-reveal">
+            <div class="absolute top-12 left-0 w-full h-px bg-white/10 hidden lg:block z-0"></div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-12 relative z-10">
+                <div class="flex flex-col">
+                    <div class="w-24 h-24 bg-surface border border-white/10 flex items-center justify-center mb-8 relative">
+                        <span class="font-display-lg text-4xl text-on-background opacity-20 absolute -top-4 -left-4">01</span>
+                        <span class="material-symbols-outlined text-primary text-4xl">forum</span>
+                    </div>
+                    <h3 class="font-headline-sm text-headline-sm text-on-background mb-4">Discussion</h3>
                 </div>
-                <h3 class="text-xl font-headline text-white mb-4">Requirement Discussion</h3>
-                <p class="text-on-surface-variant">Deep dive into your brand's vision and specific production needs.</p>
-            </div>
-            <!-- Step 02 -->
-            <div class="group p-8 border border-white/5 hover:border-primary-container/30 transition-all bg-surface-container-low">
-                <div class="flex justify-between items-start mb-8">
-                    <span class="font-headline text-4xl text-white/10 group-hover:text-primary-container/40 transition-colors">02</span>
-                    <span class="material-symbols-outlined text-primary-container text-4xl">description</span>
+                <div class="flex flex-col">
+                    <div class="w-24 h-24 bg-surface border border-white/10 flex items-center justify-center mb-8 relative">
+                        <span class="font-display-lg text-4xl text-on-background opacity-20 absolute -top-4 -left-4">02</span>
+                        <span class="material-symbols-outlined text-primary text-4xl">description</span>
+                    </div>
+                    <h3 class="font-headline-sm text-headline-sm text-on-background mb-4">Review</h3>
                 </div>
-                <h3 class="text-xl font-headline text-white mb-4">Tech Pack Review</h3>
-                <p class="text-on-surface-variant">Reviewing measurements and materials to ensure technical accuracy.</p>
-            </div>
-            <!-- Step 03 -->
-            <div class="group p-8 border border-white/5 hover:border-primary-container/30 transition-all bg-surface-container-low">
-                <div class="flex justify-between items-start mb-8">
-                    <span class="font-headline text-4xl text-white/10 group-hover:text-primary-container/40 transition-colors">03</span>
-                    <span class="material-symbols-outlined text-primary-container text-4xl">verified</span>
+                <div class="flex flex-col">
+                    <div class="w-24 h-24 bg-surface border border-white/10 flex items-center justify-center mb-8 relative">
+                        <span class="font-display-lg text-4xl text-on-background opacity-20 absolute -top-4 -left-4">03</span>
+                        <span class="material-symbols-outlined text-primary text-4xl">payments</span>
+                    </div>
+                    <h3 class="font-headline-sm text-headline-sm text-on-background mb-4">Planning</h3>
                 </div>
-                <h3 class="text-xl font-headline text-white mb-4">Quality Inspection</h3>
-                <p class="text-on-surface-variant">Rigorous checks at every stage to maintain global standards.</p>
+                <div class="flex flex-col">
+                    <div class="w-24 h-24 bg-surface border border-white/10 flex items-center justify-center mb-8 relative">
+                        <span class="font-display-lg text-4xl text-on-background opacity-20 absolute -top-4 -left-4">04</span>
+                        <span class="material-symbols-outlined text-primary text-4xl">precision_manufacturing</span>
+                    </div>
+                    <h3 class="font-headline-sm text-headline-sm text-on-background mb-4">Production</h3>
+                </div>
+                <div class="flex flex-col">
+                    <div class="w-24 h-24 bg-surface border border-white/10 flex items-center justify-center mb-8 relative">
+                        <span class="font-display-lg text-4xl text-on-background opacity-20 absolute -top-4 -left-4">05</span>
+                        <span class="material-symbols-outlined text-primary text-4xl">verified</span>
+                    </div>
+                    <h3 class="font-headline-sm text-headline-sm text-on-background mb-4">Quality</h3>
+                </div>
+                <div class="flex flex-col">
+                    <div class="w-24 h-24 bg-surface border border-white/10 flex items-center justify-center mb-8 relative">
+                        <span class="font-display-lg text-4xl text-on-background opacity-20 absolute -top-4 -left-4">06</span>
+                        <span class="material-symbols-outlined text-primary text-4xl">local_shipping</span>
+                    </div>
+                    <h3 class="font-headline-sm text-headline-sm text-on-background mb-4">Dispatch</h3>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Factory Visit Image Grid -->
-    <section id="factory-visit" class="py-section-gap px-margin-mobile md:px-margin-desktop bg-background">
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-20 items-center reveal">
-            <div class="md:col-span-5 relative aspect-[4/5] overflow-hidden rounded-sm border border-white/10">
-                <img src="Top Tax Tips Every Expat Should Know Before Filing.jpg" alt="Factory" class="w-full h-full object-cover">
+    <!-- Factory Visit -->
+    <section id="factory-visit" class="py-section-gap bg-background px-margin-mobile md:px-margin-desktop border-t border-white/5">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-24 items-center section-reveal">
+            <div class="md:col-span-5 relative aspect-[4/5] overflow-hidden border border-white/10 rounded-DEFAULT">
+                <img alt="Factory" class="w-full h-full object-cover" src="Top Tax Tips Every Expat Should Know Before Filing.jpg">
             </div>
             <div class="md:col-span-7">
-                <span class="text-primary-container text-label-caps block mb-6 uppercase tracking-[0.2em]">The Facility</span>
-                <h2 class="font-headline text-4xl md:text-5xl text-white mb-8">Industrial Craftsmanship in Sri Lanka</h2>
-                <p class="text-lg text-on-surface-variant mb-12 leading-relaxed">
-                    Our facility combines modern machinery with a skilled workforce to deliver 
-                    bulk production capabilities without sacrificing attention to detail.
-                </p>
-                <a href="factory-visit.html" class="inline-block border border-white/20 px-10 py-4 text-label-caps uppercase hover:bg-white hover:text-black transition-all">
-                    Request Visit
-                </a>
+                <span class="font-label-caps text-label-caps text-primary block mb-8 uppercase tracking-[0.2em]">Partner With EAMA</span>
+                <h2 class="font-headline-lg text-headline-lg text-on-background mb-10">Turning Ideas Into Reliable Production</h2>
+                <a href="factory-visit.html" class="bg-primary-container text-on-primary-container px-10 py-4 rounded-DEFAULT font-label-caps text-label-caps transition-all active:scale-95 opacity-90 hover:opacity-100">Request Factory Visit</a>
             </div>
         </div>
     </section>
 
-    <!-- Inquiry Form (Database logic public.inquiries preserved) -->
-    <section id="consultation" class="py-section-gap px-margin-mobile md:px-margin-desktop bg-surface-container-lowest border-t border-white/5">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-px bg-white/5 border border-white/5 reveal overflow-hidden">
-            <div class="p-12 md:p-20 bg-surface">
-                <span class="text-primary-container text-label-caps block mb-6 uppercase tracking-[0.2em]">Contact Us</span>
-                <h2 class="font-headline text-4xl text-white mb-8">START YOUR PRODUCTION</h2>
-                <div class="space-y-6">
-                    <div class="flex items-center gap-4">
-                        <span class="material-symbols-outlined text-primary-container">mail</span>
-                        <span>partners@eama-garments.com</span>
-                    </div>
-                    <div class="flex items-center gap-4">
-                        <span class="material-symbols-outlined text-primary-container">location_on</span>
-                        <span>Colombo, Sri Lanka</span>
-                    </div>
+    <!-- Form Section -->
+    <section id="consultation" class="py-section-gap bg-surface-container-lowest px-margin-mobile md:px-margin-desktop">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-gutter overflow-hidden rounded-DEFAULT border border-white/10 section-reveal">
+            <div class="p-12 md:p-20 bg-surface flex flex-col justify-between min-h-[500px]" style="background-image: linear-gradient(rgba(13, 14, 15, 0.8), rgba(13, 14, 15, 0.8)), url('https://lh3.googleusercontent.com/aida-public/AB6AXuCDBI1bsZc18973mPB7QQZrjq1gTQ790yVsmj1GEImDqxEWVz3ya4zhGsv9RuOrQ3153YhdLBGvmKch1jeTKOY83u-Pp1tYhL4cltd5rYQt9RYy4M2Daq8KQgIb6PQdy8duT3rnGi1o5AHIQ-3uFUprHM2I5SHIc300Gwrz9EcA6t-VS8HOfzldX1AYIAwJU8x1veeqm6Ep109vj3PyGjNXAYQ0tqASnv9EeKphHPaPMgIO8iXOZ0bxJOhgJEzBf8CalHXUTJp2NoY'); background-size: cover;">
+                <div>
+                    <span class="font-label-caps text-label-caps text-primary block mb-4">GET IN TOUCH</span>
+                    <h2 class="font-headline-lg text-headline-lg text-white">Partner with Excellence</h2>
                 </div>
             </div>
-
-            <div class="p-12 md:p-20 bg-surface-container-low">
+            <div class="bg-surface-container-low p-12 md:p-20">
                 <form id="general-inquiry-form" class="space-y-8">
                     <div>
-                        <label class="text-label-caps text-xs text-white/40 block mb-2 uppercase">Your Name</label>
-                        <input name="name" required type="text" class="w-full bg-transparent border-b border-white/10 py-3 focus:border-primary-container outline-none transition-colors">
+                        <label class="font-label-caps text-on-surface-variant block mb-2 uppercase">Name</label>
+                        <input name="name" required class="w-full bg-transparent border-b border-white/20 py-3 focus:outline-none focus:border-primary transition-colors text-white" type="text">
                     </div>
                     <div>
-                        <label class="text-label-caps text-xs text-white/40 block mb-2 uppercase">Company</label>
-                        <input name="company" type="text" class="w-full bg-transparent border-b border-white/10 py-3 focus:border-primary-container outline-none transition-colors">
+                        <label class="font-label-caps text-on-surface-variant block mb-2 uppercase">Email</label>
+                        <input name="email" required class="w-full bg-transparent border-b border-white/20 py-3 focus:outline-none focus:border-primary transition-colors text-white" type="email">
                     </div>
                     <div>
-                        <label class="text-label-caps text-xs text-white/40 block mb-2 uppercase">Email Address</label>
-                        <input name="email" required type="email" class="w-full bg-transparent border-b border-white/10 py-3 focus:border-primary-container outline-none transition-colors">
+                        <label class="font-label-caps text-on-surface-variant block mb-2 uppercase">Message</label>
+                        <textarea name="message" required class="w-full bg-transparent border-b border-white/20 py-3 focus:outline-none focus:border-primary transition-colors text-white resize-none" rows="4"></textarea>
                     </div>
-                    <div>
-                        <label class="text-label-caps text-xs text-white/40 block mb-2 uppercase">Message</label>
-                        <textarea name="message" required rows="3" class="w-full bg-transparent border-b border-white/10 py-3 focus:border-primary-container outline-none transition-colors resize-none"></textarea>
-                    </div>
-                    <button type="submit" class="w-full bg-primary-container text-white py-5 text-label-caps uppercase hover:brightness-110 active:scale-[0.98] transition-all">
-                        Send Inquiry
-                    </button>
+                    <button class="w-full bg-primary-container text-white py-5 rounded-DEFAULT font-label-caps uppercase tracking-widest hover:brightness-110 active:scale-95 transition-all" type="submit">Send Inquiry</button>
                 </form>
             </div>
         </div>
     </section>
 
-    <!-- Scripts -->
+    <!-- Animations & Form Logic -->
     <script>
-        // Supabase Logic - PRESERVED (public.inquiries)
         const supabase = window.eamaSupabase;
 
         document.getElementById('general-inquiry-form').addEventListener('submit', async function (e) {
@@ -244,36 +283,28 @@
             const btn = e.target.querySelector('button');
             const data = Object.fromEntries(new FormData(e.target));
             btn.disabled = true;
-            btn.innerText = 'SENDING...';
-
             try {
                 const { error } = await supabase.from('inquiries').insert([{
-                    name: data.name,
-                    company: data.company,
-                    email: data.email,
-                    message: data.message,
-                    status: 'New'
+                    name: data.name, email: data.email, message: data.message, status: 'New'
                 }]);
                 if (error) throw error;
-                alert('Success! We will contact you shortly.');
-                e.target.reset();
-            } catch (err) {
-                alert('Error: ' + err.message);
-            } finally {
-                btn.disabled = false;
-                btn.innerText = 'SEND INQUIRY';
-            }
+                alert('Success!'); e.target.reset();
+            } catch (err) { alert(err.message); } finally { btn.disabled = false; }
         });
 
-        // Intersection Observer for Reveal Animations
-        const revealCallback = (entries) => {
+        // Reveal Animations
+        const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting) entry.target.classList.add('active');
+                if (entry.isIntersecting) {
+                    gsap.to(entry.target, { opacity: 1, y: 0, duration: 1, ease: "power4.out" });
+                }
             });
-        };
+        }, { threshold: 0.1 });
 
-        const observer = new IntersectionObserver(revealCallback, { threshold: 0.1 });
-        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        document.querySelectorAll('.section-reveal').forEach(el => {
+            gsap.set(el, { opacity: 0, y: 50 });
+            observer.observe(el);
+        });
     </script>
 </body>
 </html>
