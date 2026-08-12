@@ -242,34 +242,126 @@
             realtimeChannel: null,
 
             async init() {
-                try {
-                    const { data: { session } } = await eamaSupabase.auth.getSession();
-                    if (!session) {
-                        window.location.href = 'client-portal-sign-in.html';
-                        return;
-                    }
+    try {
+        // ---------------------------------------------------------
+        // 1. Check authentication
+        // ---------------------------------------------------------
 
-                    // 1. Identify Client Record
-                    const { data: clientData, error: clientErr } = await eamaSupabase
-                        .from('clients')
-                        .select('*')
-                        .eq('email', session.user.email)
-                        .single();
+        const {
+            data: { session }
+        } = await eamaSupabase.auth.getSession();
 
-                    if (clientErr || !clientData) throw new Error("Client record not found.");
-                    this.client = clientData;
+        if (!session) {
+            window.location.href = 'client-portal-sign-in.html';
+            return;
+        }
 
-                    // 2. Render Profile Header
-                    this.renderProfile();
+        // ---------------------------------------------------------
+        // 2. Identify Client Record
+        // ---------------------------------------------------------
 
-                    // 3. Load Unified Data
-                    await this.loadDashboardData();
+        const {
+            data: clientData,
+            error: clientErr
+        } = await eamaSupabase
+            .from('clients')
+            .select('*')
+            .eq('email', session.user.email)
+            .single();
 
-                } catch (err) {
-                    console.error("Initialization Error:", err);
-                    alert("Unable to load profile. Please contact support.");
-                }
-            },
+        if (clientErr || !clientData) {
+            throw new Error("Client record not found.");
+        }
+
+        this.client = clientData;
+
+        // ---------------------------------------------------------
+        // 3. Render Profile Header
+        // ---------------------------------------------------------
+
+        this.renderProfile();
+
+        // ---------------------------------------------------------
+        // 4. Load Dashboard Data
+        // ---------------------------------------------------------
+
+        await this.loadDashboardData();
+
+        // ---------------------------------------------------------
+        // 5. Check whether a specific request was requested
+        //    through the email link.
+        //
+        // Example:
+        //
+        // client-dashboard.html?request_id=xxxxxxxx
+        // ---------------------------------------------------------
+
+        const urlParams = new URLSearchParams(
+            window.location.search
+        );
+
+        const requestedId =
+            urlParams.get('request_id');
+
+        if (requestedId) {
+
+            console.log(
+                'Request ID received from URL:',
+                requestedId
+            );
+
+            // -----------------------------------------------------
+            // 6. Find the request inside THIS client's requests
+            //
+            // This is important for security.
+            //
+            // We do NOT simply open whatever ID is in the URL.
+            // The request must already exist in this client's
+            // loaded request list.
+            // -----------------------------------------------------
+
+            const requestedRequest =
+                this.requests.find(
+                    request => request.id === requestedId
+                );
+
+            if (requestedRequest) {
+
+                console.log(
+                    'Opening requested manufacturing request:',
+                    requestedRequest.id
+                );
+
+                // Automatically open the request details
+                await this.openDetails(
+                    requestedRequest.id
+                );
+
+            } else {
+
+                console.warn(
+                    'Requested request was not found in the authenticated client account:',
+                    requestedId
+                );
+
+                alert(
+                    'The requested request could not be found in your client portal.'
+                );
+            }
+        }
+
+    } catch (err) {
+
+        console.error(
+            "Initialization Error:",
+            err
+        );
+
+        alert(
+            "Unable to load profile. Please contact support."
+        );
+    }
+},
 
             renderProfile() {
                 const info = document.getElementById('client-info');

@@ -356,6 +356,7 @@
 <script>
     const supabase = window.eamaSupabase;
     const form = document.getElementById('design-inquiry-form');
+
     if (!form) {
         throw new Error('Design inquiry form not found.');
     }
@@ -364,6 +365,7 @@
         e.preventDefault();
 
         const button = form.querySelector('[type="submit"]');
+
         const requiredFields = [
             document.getElementById('company_name'),
             document.getElementById('contact_person'),
@@ -373,30 +375,58 @@
             document.getElementById('garment_category')
         ];
 
-        const isValid = requiredFields.every(field => field && field.value.trim() !== '');
+        const isValid = requiredFields.every(
+            field => field && field.value.trim() !== ''
+        );
+
         if (!isValid) {
             alert('Please complete all required fields.');
             return;
         }
 
         const fileInput = document.getElementById('design_files');
+
         const companyName = document.getElementById('company_name').value.trim();
         const contactPerson = document.getElementById('contact_person').value.trim();
         const email = document.getElementById('email').value.trim();
         const phone = document.getElementById('phone').value.trim();
         const country = document.getElementById('country').value.trim();
-        const garmentCategory = document.getElementById('garment_category').value;
-        const productType = document.getElementById('product_type').value.trim();
-        const numberOfStyles = document.getElementById('number_of_styles').value.trim();
-        const targetQuantity = document.getElementById('target_quantity').value.trim();
-        const preferredFabric = document.getElementById('preferred_fabric').value.trim();
-        const fabricGsm = document.getElementById('fabric_gsm').value.trim();
-        const colorRequirements = document.getElementById('color_requirements').value.trim();
-        const additionalMaterialRequirements = document.getElementById('additional_material_requirements').value.trim();
-        const customizationRequirements = document.getElementById('customization_requirements').value.trim();
-        const packagingRequirements = document.getElementById('packaging_requirements').value.trim();
-        const productionTimeline = document.getElementById('production_timeline').value.trim();
-        const additionalNotes = document.getElementById('additional_notes').value.trim();
+
+        const garmentCategory =
+            document.getElementById('garment_category').value;
+
+        const productType =
+            document.getElementById('product_type').value.trim();
+
+        const numberOfStyles =
+            document.getElementById('number_of_styles').value.trim();
+
+        const targetQuantity =
+            document.getElementById('target_quantity').value.trim();
+
+        const preferredFabric =
+            document.getElementById('preferred_fabric').value.trim();
+
+        const fabricGsm =
+            document.getElementById('fabric_gsm').value.trim();
+
+        const colorRequirements =
+            document.getElementById('color_requirements').value.trim();
+
+        const additionalMaterialRequirements =
+            document.getElementById('additional_material_requirements').value.trim();
+
+        const customizationRequirements =
+            document.getElementById('customization_requirements').value.trim();
+
+        const packagingRequirements =
+            document.getElementById('packaging_requirements').value.trim();
+
+        const productionTimeline =
+            document.getElementById('production_timeline').value.trim();
+
+        const additionalNotes =
+            document.getElementById('additional_notes').value.trim();
 
         button.disabled = true;
         button.textContent = 'Submitting…';
@@ -406,56 +436,314 @@
                 throw new Error('Supabase client is not configured.');
             }
 
-            let uploadedFiles = [];
+            /*
+             * ---------------------------------------------------------
+             * STEP 1 — Upload Tech Pack / Design Files
+             * ---------------------------------------------------------
+             */
+
+            const uploadedDocuments = [];
+
             if (fileInput && fileInput.files && fileInput.files.length > 0) {
+
                 for (const file of fileInput.files) {
-                    const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
-                    const filePath = `designs/${Date.now()}-${crypto.randomUUID()}-${safeName}`;
-                    const { error: uploadError } = await supabase.storage.from('techpacks').upload(filePath, file);
-                    if (uploadError) {
-                        throw uploadError;
+
+                    // 20 MB limit
+                    if (file.size > 20 * 1024 * 1024) {
+                        throw new Error(
+                            `"${file.name}" exceeds the 20MB file size limit.`
+                        );
                     }
-                    const { data: publicUrlData } = supabase.storage.from('techpacks').getPublicUrl(filePath);
-                    uploadedFiles.push(publicUrlData.publicUrl);
+
+                    const safeName = file.name.replace(
+                        /[^a-zA-Z0-9._-]/g,
+                        '_'
+                    );
+
+                    const filePath =
+                        `designs/${Date.now()}-${crypto.randomUUID()}-${safeName}`;
+
+                    const { error: uploadError } =
+                        await supabase.storage
+                            .from('techpacks')
+                            .upload(filePath, file);
+
+                    if (uploadError) {
+                        console.error(
+                            'File upload error:',
+                            uploadError
+                        );
+
+                        throw new Error(
+                            `Unable to upload "${file.name}".`
+                        );
+                    }
+
+                    const { data: publicUrlData } =
+                        supabase.storage
+                            .from('techpacks')
+                            .getPublicUrl(filePath);
+
+                    if (!publicUrlData?.publicUrl) {
+                        throw new Error(
+                            `Unable to generate URL for "${file.name}".`
+                        );
+                    }
+
+                    uploadedDocuments.push({
+                        file_name: file.name,
+                        file_url: publicUrlData.publicUrl,
+                        file_type: file.type || 'application/octet-stream'
+                    });
                 }
             }
 
+            /*
+             * ---------------------------------------------------------
+             * STEP 2 — Create Manufacturing Request
+             * ---------------------------------------------------------
+             *
+             * IMPORTANT:
+             * We insert into manufacturing_requests instead of
+             * design_submissions because the client dashboard already
+             * reads manufacturing_requests.
+             */
+
             const submission = {
+                request_type: 'Quote',
+                status: 'New',
+
                 company_name: companyName,
                 contact_person: contactPerson,
-                email,
-                phone,
-                country,
+                email: email,
+                phone: phone,
+                country: country,
+
                 garment_category: garmentCategory,
                 product_type: productType,
-                number_of_styles: numberOfStyles,
-                target_quantity: targetQuantity,
-                preferred_fabric: preferredFabric,
-                fabric_gsm: fabricGsm,
-                color_requirements: colorRequirements,
-                additional_material_requirements: additionalMaterialRequirements,
-                customization_requirements: customizationRequirements,
-                packaging_requirements: packagingRequirements,
-                production_timeline: productionTimeline,
-                additional_notes: additionalNotes,
-                uploaded_files: uploadedFiles,
-                status: 'New'
+
+                number_of_styles:
+                    numberOfStyles
+                        ? parseInt(numberOfStyles, 10)
+                        : null,
+
+                target_quantity:
+                    targetQuantity
+                        ? parseInt(targetQuantity, 10)
+                        : null,
+
+                fabric_preference: preferredFabric,
+                fabric_weight_gsm: fabricGsm,
+
+                color_requirements:
+                    colorRequirements,
+
+                additional_material_requirements:
+                    additionalMaterialRequirements,
+
+                customization_requirements:
+                    customizationRequirements,
+
+                packaging_requirements:
+                    packagingRequirements,
+
+                production_timeline:
+                    productionTimeline,
+
+                additional_notes:
+                    additionalNotes
             };
 
-            const { error } = await supabase
-                .from('design_submissions')
-                .insert([submission]);
+            const {
+                data: requestData,
+                error: requestError
+            } = await supabase
+                .from('manufacturing_requests')
+                .insert([submission])
+                .select('id')
+                .single();
 
-            if (error) {
-                throw error;
+            if (requestError) {
+                console.error(
+                    'Manufacturing request error:',
+                    requestError
+                );
+
+                throw new Error(
+                    requestError.message ||
+                    'Unable to create your manufacturing request.'
+                );
             }
 
+            if (!requestData?.id) {
+                throw new Error(
+                    'The manufacturing request was created, but no request ID was returned.'
+                );
+            }
+
+            const requestId = requestData.id;
+
+            console.log(
+                'Manufacturing request created:',
+                requestId
+            );
+
+            /*
+             * ---------------------------------------------------------
+             * STEP 3 — Link Uploaded Files to Request
+             * ---------------------------------------------------------
+             */
+
+            if (uploadedDocuments.length > 0) {
+
+                const documentRows = uploadedDocuments.map(doc => ({
+                    request_id: requestId,
+                    file_name: doc.file_name,
+                    file_url: doc.file_url,
+                    file_type: doc.file_type
+                }));
+
+                const {
+                    error: documentError
+                } = await supabase
+                    .from('documents')
+                    .insert(documentRows);
+
+                if (documentError) {
+                    console.error(
+                        'Document record error:',
+                        documentError
+                    );
+
+                    /*
+                     * The request itself exists, so we don't pretend
+                     * the whole submission failed. However, we do
+                     * stop here because the Tech Pack files should be
+                     * properly associated with the request.
+                     */
+
+                    throw new Error(
+                        'Your request was created, but the uploaded files could not be linked to it. Please contact EAMA Garments.'
+                    );
+                }
+            }
+
+            /*
+             * ---------------------------------------------------------
+             * STEP 4 — Send Brevo Manufacturing Request Email
+             * ---------------------------------------------------------
+             *
+             * The Edge Function will receive:
+             *
+             * email
+             * type
+             * request_id
+             * company_name
+             * contact_person
+             *
+             * It will then populate the Brevo template:
+             *
+             * {{request_id}}
+             * {{company_name}}
+             * {{portal_link}}
+             */
+
+            const {
+                data: emailResult,
+                error: emailError
+            } = await supabase.functions.invoke(
+                'send-auth-email',
+                {
+                    body: {
+                        email: email,
+                        type: 'manufacturing_request',
+
+                        request_id: requestId,
+
+                        company_name: companyName,
+
+                        contact_person: contactPerson
+                    }
+                }
+            );
+
+            if (emailError) {
+                console.error(
+                    'Brevo email function error:',
+                    emailError
+                );
+
+                /*
+                 * IMPORTANT:
+                 * Do NOT delete the request here.
+                 *
+                 * The manufacturing request and uploaded documents
+                 * have already been successfully saved.
+                 *
+                 * The email can be retried separately.
+                 */
+
+                console.warn(
+                    'Request was saved successfully, but the notification email could not be sent.'
+                );
+            } else {
+                console.log(
+                    'Manufacturing request email sent:',
+                    emailResult
+                );
+            }
+
+            /*
+             * ---------------------------------------------------------
+             * STEP 5 — Reset Form
+             * ---------------------------------------------------------
+             */
+
             form.reset();
-            alert('Your design submission has been received. Our technical team will review your requirements and contact you shortly.');
+
+            /*
+             * ---------------------------------------------------------
+             * STEP 6 — Success Message
+             * ---------------------------------------------------------
+             */
+
+            if (emailError) {
+
+                alert(
+                    'Your design request has been successfully submitted. ' +
+                    'Our technical team has received your request. ' +
+                    'The confirmation email could not be sent at this time, ' +
+                    'but your submission is safely recorded.'
+                );
+
+            } else {
+
+                alert(
+                    'Your design request has been successfully submitted. ' +
+                    'A confirmation email with your request status link ' +
+                    'has been sent to your email address.'
+                );
+            }
+
+            console.log(
+                'Submission completed successfully. Request ID:',
+                requestId
+            );
+
         } catch (error) {
-            console.error(error);
-            alert(error.message || 'Unable to submit your request.');
+
+            console.error(
+                'Design submission error:',
+                error
+            );
+
+            alert(
+                error?.message ||
+                'Unable to submit your request. Please try again.'
+            );
+
         } finally {
+
             button.disabled = false;
             button.textContent = 'Submit Design Request';
         }
