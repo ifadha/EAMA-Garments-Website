@@ -1,17 +1,11 @@
 <!DOCTYPE html>
 <html class="dark" lang="en">
 <head>
-    <style>
-        html { scroll-behavior: smooth; }
-        #collections { scroll-margin-top: 80px; }
-        #production { scroll-margin-top: 80px; }
-        #quality { scroll-margin-top: 100px; }
-        #consultation { scroll-margin-top: 80px; }
-    </style>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>EAMA GARMENTS | Industrial Craftsmanship</title>
-    
+
+    <!-- Essential Scripts & Fonts -->
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -23,110 +17,73 @@
             theme: {
                 extend: {
                     "colors": {
-                        "on-surface-variant": "#e1bfb8",
-                        "surface": "#121414",
-                        "on-primary-fixed": "#3d0600",
-                        "surface-container-highest": "#343535",
-                        "secondary-container": "#4a4949",
-                        "tertiary-container": "#9c9a99",
-                        "secondary": "#c9c6c5",
-                        "on-secondary": "#313030",
-                        "on-tertiary": "#313030",
-                        "on-secondary-fixed": "#1c1b1b",
-                        "on-error-container": "#ffdad6",
-                        "error-container": "#93000a",
-                        "on-tertiary-fixed": "#1c1b1b",
-                        "primary-fixed-dim": "#ffb4a3",
-                        "tertiary": "#c8c6c5",
-                        "error": "#ffb4ab",
-                        "surface-container-lowest": "#0d0e0f",
-                        "on-secondary-fixed-variant": "#474646",
-                        "surface-variant": "#343535",
-                        "primary-fixed": "#ffdad2",
-                        "on-tertiary-container": "#323232",
-                        "background": "#121414",
-                        "primary-container": "#ff6b4a",
-                        "surface-dim": "#121414",
-                        "on-error": "#690005",
-                        "outline-variant": "#59413c",
-                        "inverse-on-surface": "#2f3131",
-                        "on-background": "#e3e2e2",
-                        "secondary-fixed": "#e5e2e1",
-                        "surface-tint": "#ffb4a3",
-                        "on-primary-fixed-variant": "#8c1900",
-                        "tertiary-fixed": "#e5e2e1",
-                        "outline": "#a88a83",
-                        "inverse-surface": "#e3e2e2",
-                        "on-primary": "#630f00",
-                        "inverse-primary": "#ae3115",
-                        "on-primary-container": "#661000",
-                        "on-tertiary-fixed-variant": "#474646",
-                        "on-surface": "#e3e2e2",
-                        "surface-bright": "#383939",
                         "primary": "#ffb4a3",
-                        "surface-container-low": "#1a1c1c",
-                        "on-secondary-container": "#bab8b7",
-                        "surface-container-high": "#292a2a",
-                        "tertiary-fixed-dim": "#c8c6c5",
+                        "primary-container": "#ff6b4a",
+                        "on-primary-container": "#FFFFFF",
+                        "surface": "#121414",
+                        "background": "#0A0A0A",
+                        "on-surface-variant": "#e1bfb8",
                         "surface-container": "#1e2020",
-                        "secondary-fixed-dim": "#c9c6c5"
+                        "surface-container-low": "#1a1c1c",
+                        "surface-container-lowest": "#0d0e0f",
                     },
                     "spacing": {
                         "section-gap": "160px",
                         "margin-desktop": "80px",
-                        "gutter": "24px",
-                        "base": "8px",
-                        "margin-mobile": "20px"
+                        "margin-mobile": "20px",
                     },
                     "fontFamily": {
-                        "headline-lg": ["Playfair Display"],
-                        "headline-md": ["Playfair Display"],
-                        "label-caps": ["Inter"],
-                        "headline-sm": ["Playfair Display"],
-                        "body-lg": ["Inter"],
-                        "display-lg": ["Playfair Display"]
+                        "headline": ["Playfair Display", "serif"],
+                        "body": ["Inter", "sans-serif"]
                     },
                     "fontSize": {
-                        "headline-lg": ["48px", {"lineHeight": "1.2"}],
                         "display-lg": ["72px", {"lineHeight": "1.1", "letterSpacing": "-0.02em"}],
-                        "label-caps": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.1em", "fontWeight": "600"}]
+                        "headline-lg": ["48px", {"lineHeight": "1.2"}],
+                        "label-caps": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.15em", "fontWeight": "600"}]
                     }
                 },
             },
         }
     </script>
+
     <style>
-        body { background-color: #0A0A0A; color: #e3e2e2; -webkit-font-smoothing: antialiased; }
-        .cinematic-gradient { background: linear-gradient(to bottom, rgba(10,10,10,0.4) 0%, rgba(10,10,10,0.8) 100%); }
+        html { scroll-behavior: smooth; }
+        body { background-color: #0A0A0A; color: #e3e2e2; font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
+        .cinematic-gradient { background: linear-gradient(to bottom, rgba(10,10,10,0.4) 0%, rgba(10,10,10,0.9) 100%); }
         .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
-        .reveal { opacity: 0; transform: translateY(30px); transition: all 1s ease-out; }
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 1s cubic-bezier(0.22, 1, 0.36, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
     </style>
 
-    <!-- Supabase Logic: Flat Structure Paths -->
+    <!-- Supabase Core (Preserved Logic) -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-client.js"></script>
     <script src="supabase-fetch-adapter.js"></script>
 </head>
 
-<body class="font-label-caps overflow-x-hidden">
-    <!-- Navigation -->
-    <nav class="fixed top-0 left-0 w-full h-20 px-margin-mobile md:px-margin-desktop bg-background/80 backdrop-blur-md z-50 flex justify-between items-center border-b border-white/10">
-        <div class="font-headline-sm text-headline-sm tracking-tighter text-on-background uppercase">EAMA GARMENTS</div>
+<body>
+    <!-- 1. FIXED TOP NAVIGATION BAR -->
+    <nav class="fixed top-0 left-0 w-full h-20 px-margin-mobile md:px-margin-desktop bg-black/80 backdrop-blur-md z-50 flex justify-between items-center border-b border-white/10">
+        <div class="text-xl font-headline font-bold tracking-tighter">EAMA GARMENTS</div>
+        
+        <!-- Desktop Nav Links -->
         <div class="hidden md:flex items-center space-x-8">
-            <a class="text-primary font-semibold border-b-2 border-primary pb-1 text-label-caps uppercase" href="#">Home</a>
-            <a class="text-on-surface-variant hover:text-white transition-colors text-label-caps uppercase" href="#collections">View Collections</a>
-            <a class="text-on-surface-variant hover:text-white transition-colors text-label-caps uppercase" href="#production">Start Your Production</a>
-            <a class="text-on-surface-variant hover:text-white transition-colors text-label-caps uppercase" href="#quality">Quality & Sustainability</a>
+            <a href="#" class="text-primary-container font-semibold border-b-2 border-primary-container pb-1 text-label-caps uppercase">Home</a>
+            <a href="#collections" class="text-on-surface-variant hover:text-white transition-colors text-label-caps uppercase">View Collections</a>
+            <a href="#production" class="text-on-surface-variant hover:text-white transition-colors text-label-caps uppercase">Start Your Production</a>
+            <a href="#quality" class="text-on-surface-variant hover:text-white transition-colors text-label-caps uppercase">Quality & Sustainability</a>
         </div>
-        <div class="flex items-center gap-4">
-            <button onclick="document.getElementById('consultation').scrollIntoView({ behavior: 'smooth' })" class="hidden lg:block text-on-surface hover:text-primary transition-colors text-label-caps uppercase">Consultation</button>
-            <a href="client-portal-sign-in.html" class="bg-primary-container text-on-primary-container px-8 py-3 rounded-sm text-label-caps uppercase transition-all active:scale-95 opacity-90 hover:opacity-100">login / Sign Up</a>
+
+        <div class="flex items-center gap-6">
+            <button onclick="document.getElementById('consultation').scrollIntoView({behavior:'smooth'})" class="hidden lg:block text-on-surface-variant hover:text-white transition-colors text-label-caps uppercase">Consultation</button>
+            <a href="../client_portal_sign_in/code.html" class="bg-primary-container text-white px-8 py-3 rounded-sm text-label-caps uppercase transition-transform active:scale-95 hover:brightness-110 shadow-lg">
+                Login / Sign Up
+            </a>
         </div>
     </nav>
 
-    <!-- Hero -->
-    <section class="relative h-screen w-full flex items-center px-margin-mobile md:px-margin-desktop">
+    <!-- 2. HERO SECTION -->
+    <section class="relative h-screen w-full flex items-center px-margin-mobile md:px-margin-desktop overflow-hidden">
         <div class="absolute inset-0 z-0">
             <div class="absolute inset-0 cinematic-gradient z-10"></div>
             <video autoplay muted loop playsinline class="absolute inset-0 h-full w-full object-cover">
@@ -134,144 +91,361 @@
             </video>
         </div>
         <div class="relative z-20 max-w-4xl reveal">
-            <p class="text-primary text-label-caps mb-6 tracking-widest uppercase">SRI LANKA APPAREL MANUFACTURER</p>
-            <h1 class="font-display-lg text-headline-lg-mobile md:text-display-lg text-white mb-8 leading-tight">YOUR TRUSTED PARTNER <br>FOR APPAREL PRODUCTION</h1>
-            <p class="text-lg text-on-surface-variant max-w-xl mb-12 leading-relaxed">We manufacture quality garments for brands, retailers, and organizations worldwide. EAMA Garments delivers solutions built around each client's requirements.</p>
-            <button onclick="document.getElementById('factory-visit').scrollIntoView({behavior:'smooth'})" class="bg-primary-container text-on-primary-container px-10 py-4 rounded-sm text-label-caps uppercase transition-all hover:brightness-110 active:scale-95">Book Factory Visit</button>
+            <p class="text-primary-container text-label-caps mb-6 tracking-[0.3em] uppercase font-bold">Sri Lanka Apparel Manufacturer</p>
+            <h1 class="font-headline text-5xl md:text-display-lg text-white mb-8 leading-tight">
+                YOUR TRUSTED PARTNER <br>FOR APPAREL PRODUCTION
+            </h1>
+            <p class="text-lg md:text-xl text-on-surface-variant max-w-2xl mb-12 leading-relaxed">
+                We manufacture quality garments for brands, retailers, and organizations worldwide. Combining industry experience, skilled production teams, and careful quality control, EAMA Garments delivers solutions built around each client's requirements.
+            </p>
+            <button onclick="document.getElementById('factory-visit').scrollIntoView({behavior:'smooth'})" class="bg-primary-container text-white px-10 py-5 text-label-caps uppercase hover:brightness-110 transition-all shadow-xl">
+                Book Factory Visit
+            </button>
         </div>
     </section>
 
-    <!-- Curated Collections -->
-    <section class="py-section-gap px-margin-mobile md:px-margin-desktop bg-surface-container-lowest border-t border-white/5 overflow-hidden">
-        <div class="reveal relative overflow-hidden rounded-[2rem] border border-white/10 bg-surface-container px-8 py-16 md:px-16 md:py-20">
-            <video autoplay muted loop playsinline class="absolute inset-0 h-full w-full object-cover">
-                <source src="Runway_walking_movement_seamless…_202607281323.mp4" type="video/mp4">
+    <!-- 3. SAMPLE COLLECTIONS SECTION -->
+    <section id="collections" class="py-section-gap px-margin-mobile md:px-margin-desktop bg-surface-container-lowest">
+        <div class="reveal relative overflow-hidden rounded-[2.5rem] border border-white/10 bg-surface-container min-h-[650px] flex items-center p-8 md:p-20">
+            <video autoplay muted loop playsinline class="absolute inset-0 h-full w-full object-cover opacity-60">
+                <source src="Runway_walking_movement_seamless_202607281323.mp4" type="video/mp4">
             </video>
-            <div class="absolute inset-0 bg-[linear-gradient(90deg,rgba(8,8,8,0.9)_0%,rgba(8,8,8,0.65)_45%,rgba(8,8,8,0.3)_100%)]"></div>
-            <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(255,107,74,0.18),_transparent_35%)] pointer-events-none"></div>
-            <div class="relative z-10">
-                <section id="collections">
-                    <div class="max-w-3xl">
-                        <span class="text-primary text-label-caps block mb-6 uppercase tracking-[0.2em]">Curated Collections</span>
-                        <h2 class="font-headline-lg text-white mb-6 drop-shadow-[0_2px_20px_rgba(0,0,0,0.65)] uppercase">Explore our sample collections</h2>
-                        <p class="text-lg text-white/90 max-w-2xl mb-6">Our sample collection gives you an overview of the garments we manufacture while protecting confidential designs.</p>
-                        <a href="gallery.html" class="inline-flex items-center justify-center rounded-full bg-primary px-10 py-4 text-on-primary text-label-caps uppercase tracking-[0.2em] transition-all hover:brightness-110 active:scale-95">View Collections</a>
-                    </div>
-                </section>
+            <div class="absolute inset-0 bg-[linear-gradient(90deg,rgba(8,8,8,1)_0%,rgba(8,8,8,0.7)_45%,rgba(8,8,8,0.2)_100%)]"></div>
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(255,107,74,0.15),_transparent_40%)] pointer-events-none"></div>
+            
+            <div class="relative z-10 max-w-2xl">
+                <span class="text-primary-container text-label-caps block mb-6 uppercase tracking-[0.2em]">Curated Collections</span>
+                <h2 class="font-headline text-4xl md:text-headline-lg text-white mb-6">EXPLORE OUR SAMPLE COLLECTIONS</h2>
+                <p class="text-lg text-white/80 mb-10 leading-relaxed">
+                    Our sample collection gives you an overview of the garments we manufacture while protecting our clients' confidential designs. Request a sample or quotation for any style that matches your requirements.
+                </p>
+                <a href="../gallery.html" class="inline-flex bg-white text-black px-12 py-5 rounded-full text-label-caps uppercase hover:bg-primary-container hover:text-white transition-all font-bold">
+                    View Collections
+                </a>
             </div>
         </div>
     </section>
 
-    <!-- Own Design Callout -->
-    <section id="production" class="py-24 bg-surface-container-low px-margin-mobile md:px-margin-desktop border-t border-white/5">
+    <!-- 4. START YOUR PRODUCTION SECTION -->
+    <section id="production" class="py-24 bg-surface-container-low px-margin-mobile md:px-margin-desktop border-y border-white/5">
         <div class="max-w-4xl mx-auto text-center reveal">
-            <h2 class="font-headline-md text-headline-md text-on-background mb-6">Have Your Own Design?</h2>
-            <p class="text-lg text-on-surface-variant mb-10 leading-relaxed">Share your design idea, tech pack, or reference sample with our team, and we will help transform your concept into a production-ready garment.</p>
-            <a href="techpack.html" class="bg-primary-container text-on-primary-container px-10 py-4 rounded-sm text-label-caps uppercase transition-all hover:brightness-110 active:scale-95">Upload Tech Pack & Request Quote</a>
+            <h2 class="font-headline text-headline-md md:text-headline-lg text-white mb-6">Have Your Own Design?</h2>
+            <p class="text-lg text-on-surface-variant mb-12 leading-relaxed">
+                Have a design idea, tech pack, or reference sample? Share your requirements with our team, and we will help transform your concept into a production-ready garment through professional consultation and sample development.
+            </p>
+            <a href="../techpack.html" class="inline-block bg-primary-container text-white px-12 py-5 rounded-sm text-label-caps uppercase transition-all hover:brightness-110 active:scale-95 font-bold">
+                Upload Tech Pack & Request Quote
+            </a>
         </div>
     </section>
 
-    <!-- Manufacturing Workflow -->
-    <section id="quality" class="py-section-gap bg-surface px-margin-mobile md:px-margin-desktop border-t border-white/5">
-        <div class="mb-24 reveal"><span class="text-primary text-label-caps block mb-4 uppercase tracking-[0.2em]">Our Workflow</span><h2 class="font-headline-lg text-on-background mb-4">Manufacturing Process</h2><p class="text-on-surface-variant max-w-2xl">Our step-by-step approach from design review to final delivery</p></div>
+    <!-- 5. MANUFACTURING WORKFLOW SECTION -->
+    <section id="quality" class="py-section-gap px-margin-mobile md:px-margin-desktop bg-surface">
+        <div class="reveal mb-24 max-w-3xl">
+            <span class="text-primary-container text-label-caps block mb-4 uppercase tracking-[0.2em]">Our Workflow</span>
+            <h2 class="font-headline text-headline-lg text-white mb-6">Manufacturing Process</h2>
+            <p class="text-lg text-on-surface-variant">Our step-by-step approach from design review to final delivery</p>
+        </div>
+        
         <div class="relative reveal">
+            <!-- Decorative Line -->
             <div class="absolute top-12 left-0 w-full h-px bg-white/10 hidden lg:block z-0"></div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-12 relative z-10">
-                <div class="flex flex-col"><div class="w-24 h-24 bg-surface border border-white/10 flex items-center justify-center mb-8 relative"><span class="font-display-lg text-4xl text-on-background opacity-20 absolute -top-4 -left-4">01</span><span class="material-symbols-outlined text-primary text-4xl">forum</span></div><h3 class="font-headline-sm text-on-background mb-4">Discussion</h3></div>
-                <div class="flex flex-col"><div class="w-24 h-24 bg-surface border border-white/10 flex items-center justify-center mb-8 relative"><span class="font-display-lg text-4xl text-on-background opacity-20 absolute -top-4 -left-4">02</span><span class="material-symbols-outlined text-primary text-4xl">description</span></div><h3 class="font-headline-sm text-on-background mb-4">Tech Pack</h3></div>
-                <div class="flex flex-col"><div class="w-24 h-24 bg-surface border border-white/10 flex items-center justify-center mb-8 relative"><span class="font-display-lg text-4xl text-on-background opacity-20 absolute -top-4 -left-4">03</span><span class="material-symbols-outlined text-primary text-4xl">payments</span></div><h3 class="font-headline-sm text-on-background mb-4">Quotation</h3></div>
-                <div class="flex flex-col"><div class="w-24 h-24 bg-surface border border-white/10 flex items-center justify-center mb-8 relative"><span class="font-display-lg text-4xl text-on-background opacity-20 absolute -top-4 -left-4">04</span><span class="material-symbols-outlined text-primary text-4xl">precision_manufacturing</span></div><h3 class="font-headline-sm text-on-background mb-4">Production</h3></div>
-                <div class="flex flex-col"><div class="w-24 h-24 bg-surface border border-white/10 flex items-center justify-center mb-8 relative"><span class="font-display-lg text-4xl text-on-background opacity-20 absolute -top-4 -left-4">05</span><span class="material-symbols-outlined text-primary text-4xl">verified</span></div><h3 class="font-headline-sm text-on-background mb-4">Quality</h3></div>
-                <div class="flex flex-col"><div class="w-24 h-24 bg-surface border border-white/10 flex items-center justify-center mb-8 relative"><span class="font-display-lg text-4xl text-on-background opacity-20 absolute -top-4 -left-4">06</span><span class="material-symbols-outlined text-primary text-4xl">local_shipping</span></div><h3 class="font-headline-sm text-on-background mb-4">Dispatch</h3></div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8 relative z-10">
+                <!-- Steps 01 - 06 -->
+                <div class="flex flex-col group">
+                    <div class="w-24 h-24 bg-surface border border-white/10 flex items-center justify-center mb-8 relative transition-all group-hover:border-primary-container/50">
+                        <span class="font-headline text-4xl text-white/5 absolute -top-4 -left-4">01</span>
+                        <span class="material-symbols-outlined text-primary-container text-4xl">forum</span>
+                    </div>
+                    <h3 class="text-lg font-headline text-white mb-3">Requirement Discussion</h3>
+                    <p class="text-sm text-on-surface-variant leading-relaxed">Understanding client needs and production requirements</p>
+                </div>
+                <div class="flex flex-col group">
+                    <div class="w-24 h-24 bg-surface border border-white/10 flex items-center justify-center mb-8 relative transition-all group-hover:border-primary-container/50">
+                        <span class="font-headline text-4xl text-white/5 absolute -top-4 -left-4">02</span>
+                        <span class="material-symbols-outlined text-primary-container text-4xl">description</span>
+                    </div>
+                    <h3 class="text-lg font-headline text-white mb-3">Tech Pack & Review</h3>
+                    <p class="text-sm text-on-surface-variant leading-relaxed">Reviewing designs, measurements, and garment details</p>
+                </div>
+                <div class="flex flex-col group">
+                    <div class="w-24 h-24 bg-surface border border-white/10 flex items-center justify-center mb-8 relative transition-all group-hover:border-primary-container/50">
+                        <span class="font-headline text-4xl text-white/5 absolute -top-4 -left-4">03</span>
+                        <span class="material-symbols-outlined text-primary-container text-4xl">payments</span>
+                    </div>
+                    <h3 class="text-lg font-headline text-white mb-3">Quotation & Planning</h3>
+                    <p class="text-sm text-on-surface-variant leading-relaxed">Preparing costs, timelines, and production details</p>
+                </div>
+                <div class="flex flex-col group">
+                    <div class="w-24 h-24 bg-surface border border-white/10 flex items-center justify-center mb-8 relative transition-all group-hover:border-primary-container/50">
+                        <span class="font-headline text-4xl text-white/5 absolute -top-4 -left-4">04</span>
+                        <span class="material-symbols-outlined text-primary-container text-4xl">precision_manufacturing</span>
+                    </div>
+                    <h3 class="text-lg font-headline text-white mb-3">Production Prep</h3>
+                    <p class="text-sm text-on-surface-variant leading-relaxed">Planning materials, resources, and schedules</p>
+                </div>
+                <div class="flex flex-col group">
+                    <div class="w-24 h-24 bg-surface border border-white/10 flex items-center justify-center mb-8 relative transition-all group-hover:border-primary-container/50">
+                        <span class="font-headline text-4xl text-white/5 absolute -top-4 -left-4">05</span>
+                        <span class="material-symbols-outlined text-primary-container text-4xl">verified</span>
+                    </div>
+                    <h3 class="text-lg font-headline text-white mb-3">Quality Inspection</h3>
+                    <p class="text-sm text-on-surface-variant leading-relaxed">Monitoring quality throughout the production process</p>
+                </div>
+                <div class="flex flex-col group">
+                    <div class="w-24 h-24 bg-surface border border-white/10 flex items-center justify-center mb-8 relative transition-all group-hover:border-primary-container/50">
+                        <span class="font-headline text-4xl text-white/5 absolute -top-4 -left-4">06</span>
+                        <span class="material-symbols-outlined text-primary-container text-4xl">local_shipping</span>
+                    </div>
+                    <h3 class="text-lg font-headline text-white mb-3">Packaging & Dispatch</h3>
+                    <p class="text-sm text-on-surface-variant leading-relaxed">Final checks, packing, and shipment preparation</p>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Quality Assurance Video Section -->
+    <!-- 6. QUALITY ASSURANCE SECTION -->
     <section class="py-section-gap bg-background px-margin-mobile md:px-margin-desktop border-t border-white/5">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-24 items-center reveal">
-            <div class="relative aspect-[4/3] overflow-hidden border border-white/10 rounded-DEFAULT">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center reveal">
+            <!-- Video Column -->
+            <div class="relative aspect-[16/10] lg:aspect-square overflow-hidden border border-white/10 rounded-sm">
                 <video autoplay muted loop playsinline class="w-full h-full object-cover">
                     <source src="Herringbone_fabric_with_buttons_202607291611.mp4" type="video/mp4">
                 </video>
+                <div class="absolute inset-0 bg-black/20"></div>
             </div>
+            
+            <!-- Content Column -->
             <div>
-                <span class="text-primary text-label-caps block mb-8 uppercase tracking-[0.2em]">Quality Assurance</span>
-                <h2 class="font-headline-lg text-on-background mb-10">Quality Control at Every Stage</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div class="space-y-4"><div class="flex items-center gap-4"><span class="material-symbols-outlined text-primary">check_circle</span><h4 class="font-headline-sm text-on-background">Fabric Inspection</h4></div><p class="text-on-surface-variant">Quality checks on fabrics and materials before production.</p></div>
-                    <div class="space-y-4"><div class="flex items-center gap-4"><span class="material-symbols-outlined text-primary">verified</span><h4 class="font-headline-sm text-on-background">Final Inspection</h4></div><p class="text-on-surface-variant">Checking finished garments for quality and accuracy.</p></div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Factory Visit -->
-    <section id="factory-visit" class="py-section-gap bg-surface px-margin-mobile md:px-margin-desktop border-t border-white/5">
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-24 items-center reveal">
-            <div class="md:col-span-5 relative aspect-[4/5] overflow-hidden border border-white/10 rounded-sm">
-                <img src="Top Tax Tips Every Expat Should Know Before Filing.jpg" alt="Factory" class="w-full h-full object-cover">
-            </div>
-            <div class="md:col-span-7">
-                <span class="text-primary text-label-caps block mb-8 uppercase tracking-[0.2em]">Partner With EAMA Garments</span>
-                <h2 class="font-headline-lg text-on-background mb-10 uppercase">Turning Apparel Ideas Into Reliable Production</h2>
-                <p class="text-lg text-on-surface-variant leading-relaxed mb-12">Our team supports clients through consultation and manufacturing with a focus on clear communication and consistent quality.</p>
-                <a href="factory-visit.html" class="bg-primary-container text-on-primary-container px-10 py-4 rounded-sm text-label-caps uppercase transition-all hover:brightness-110 active:scale-95">Request Factory Visit</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Consultation Form Section -->
-    <section id="consultation" class="py-section-gap bg-background px-margin-mobile md:px-margin-desktop">
-        <div class="reveal grid grid-cols-1 lg:grid-cols-2 gap-px bg-white/5 border border-white/10 rounded-sm overflow-hidden">
-            <div class="p-12 md:p-20 bg-surface flex flex-col justify-between min-h-[500px]" style="background-image: linear-gradient(rgba(10,10,10,0.8), rgba(10,10,10,0.8)), url('https://lh3.googleusercontent.com/aida-public/AB6AXuCDBI1bsZc18973mPB7QQZrjq1gTQ790yVsmj1GEImDqxEWVz3ya4zhGsv9RuOrQ3153YhdLBGvmKch1jeTKOY83u-Pp1tYhL4cltd5rYQt9RYy4M2Daq8KQgIb6PQdy8duT3rnGi1o5AHIQ-3uFUprHM2I5SHIc300Gwrz9EcA6t-VS8HOfzldX1AYIAwJU8x1veeqm6Ep109vj3PyGjNXAYQ0tqASnv9EeKphHPaPMgIO8iXOZ0bxJOhgJEzBf8CalHXUTJp2NoY'); background-size: cover;">
-                <div>
-                    <span class="text-primary text-label-caps block mb-6 tracking-widest uppercase">Get in Touch</span>
-                    <h2 class="font-headline-lg text-white mb-10">Partner with Excellence</h2>
-                    <div class="space-y-6">
-                        <div class="flex items-center gap-4"><span class="material-symbols-outlined text-primary">mail</span><span class="text-white">partners@eama-garments.com</span></div>
-                        <div class="flex items-center gap-4"><span class="material-symbols-outlined text-primary">location_on</span><span class="text-white">Colombo, Sri Lanka</span></div>
+                <span class="text-primary-container text-label-caps block mb-8 uppercase tracking-[0.2em]">Quality Assurance</span>
+                <h2 class="font-headline text-4xl md:text-headline-lg text-white mb-8">Quality Control at Every Stage of Production</h2>
+                <p class="text-lg text-on-surface-variant leading-relaxed mb-16">
+                    Our production process focuses on maintaining consistent quality, accurate workmanship, and attention to every client specification from fabric selection to final inspection.
+                </p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-4 text-white">
+                            <span class="material-symbols-outlined text-primary-container">check_circle</span>
+                            <h4 class="font-headline text-xl">Fabric Inspection</h4>
+                        </div>
+                        <p class="text-sm text-on-surface-variant">Quality checks on fabrics and materials before production</p>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-4 text-white">
+                            <span class="material-symbols-outlined text-primary-container">monitoring</span>
+                            <h4 class="font-headline text-xl">Production QC</h4>
+                        </div>
+                        <p class="text-sm text-on-surface-variant">Monitoring workmanship and quality during production</p>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-4 text-white">
+                            <span class="material-symbols-outlined text-primary-container">verified</span>
+                            <h4 class="font-headline text-xl">Final Inspection</h4>
+                        </div>
+                        <p class="text-sm text-on-surface-variant">Checking finished garments for quality and accuracy</p>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-4 text-white">
+                            <span class="material-symbols-outlined text-primary-container">precision_manufacturing</span>
+                            <h4 class="font-headline text-xl">Client Spec Check</h4>
+                        </div>
+                        <p class="text-sm text-on-surface-variant">Ensuring garments meet approved requirements</p>
                     </div>
                 </div>
             </div>
-            <div class="p-12 md:p-20 bg-surface-container-low">
+        </div>
+    </section>
+
+    <!-- 7. PARTNER WITH EAMA / FACTORY VISIT SECTION -->
+    <section id="factory-visit" class="py-section-gap bg-surface px-margin-mobile md:px-margin-desktop border-t border-white/5">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-24 items-center reveal">
+            <!-- Image Column -->
+            <div class="lg:col-span-5 relative aspect-[4/5] overflow-hidden rounded-sm border border-white/10 group">
+                <div class="absolute inset-0 bg-black/30 z-10 group-hover:bg-black/10 transition-colors duration-700"></div>
+                <img src="factory_image_placeholder.jpg" alt="EAMA Factory Interior" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110">
+                <div class="absolute bottom-10 left-10 z-20">
+                    <span class="text-white text-4xl font-headline opacity-50">EAMA Garments</span>
+                </div>
+            </div>
+            
+            <!-- Trust Content Column -->
+            <div class="lg:col-span-7">
+                <span class="text-primary-container text-label-caps block mb-8 uppercase tracking-[0.2em]">Partner With EAMA Garments</span>
+                <h2 class="font-headline text-4xl md:text-headline-lg text-white mb-10 leading-tight">Turning Apparel Ideas Into Reliable Production</h2>
+                <p class="text-lg text-on-surface-variant leading-relaxed mb-12">
+                    EAMA Garments works with brands, retailers, and organizations worldwide to develop and manufacture quality apparel. Our team supports clients through consultation, production planning, and manufacturing with a focus on clear communication, consistent quality, and dependable partnerships.
+                </p>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-6 gap-x-12 mb-16">
+                    <div class="flex items-center gap-4 text-white/90">
+                        <span class="material-symbols-outlined text-primary-container text-2xl">location_on</span>
+                        <span class="text-sm font-label-caps tracking-widest">Sri Lanka-based</span>
+                    </div>
+                    <div class="flex items-center gap-4 text-white/90">
+                        <span class="material-symbols-outlined text-primary-container text-2xl">business_center</span>
+                        <span class="text-sm font-label-caps tracking-widest">Custom Production</span>
+                    </div>
+                    <div class="flex items-center gap-4 text-white/90">
+                        <span class="material-symbols-outlined text-primary-container text-2xl">settings_suggest</span>
+                        <span class="text-sm font-label-caps tracking-widest">Bulk Capability</span>
+                    </div>
+                    <div class="flex items-center gap-4 text-white/90">
+                        <span class="material-symbols-outlined text-primary-container text-2xl">chat</span>
+                        <span class="text-sm font-label-caps tracking-widest">Direct Communication</span>
+                    </div>
+                    <div class="flex items-center gap-4 text-white/90">
+                        <span class="material-symbols-outlined text-primary-container text-2xl">account_tree</span>
+                        <span class="text-sm font-label-caps tracking-widest">Quality Workflow</span>
+                    </div>
+                </div>
+
+                <a href="../factory-visit.html" class="inline-block bg-primary-container text-white px-12 py-5 rounded-sm text-label-caps uppercase transition-all hover:brightness-110 font-bold active:scale-95 shadow-xl">
+                    Request Factory Visit
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. FINAL CONTACT / CONSULTATION SECTION -->
+    <section id="consultation" class="py-section-gap bg-surface-container-lowest px-margin-mobile md:px-margin-desktop border-t border-white/5">
+        <div class="reveal grid grid-cols-1 lg:grid-cols-2 gap-px bg-white/10 border border-white/10 rounded-sm overflow-hidden">
+            <!-- Left: Contact Info -->
+            <div class="p-12 md:p-24 bg-surface flex flex-col justify-between min-h-[600px] relative">
+                <div class="absolute inset-0 z-0 opacity-40">
+                    <img src="contact_bg_texture.jpg" class="w-full h-full object-cover grayscale" alt="">
+                    <div class="absolute inset-0 bg-gradient-to-t from-background to-transparent"></div>
+                </div>
+                
+                <div class="relative z-10">
+                    <span class="text-primary-container text-label-caps block mb-6 tracking-widest uppercase">Get in Touch</span>
+                    <h2 class="font-headline text-4xl md:text-5xl text-white mb-16">Partner with Excellence</h2>
+                    
+                    <div class="space-y-12">
+                        <div class="flex items-start gap-6">
+                            <span class="material-symbols-outlined text-primary-container text-3xl">location_on</span>
+                            <div>
+                                <p class="text-xs text-white/40 mb-2 uppercase tracking-[0.2em]">Location</p>
+                                <p class="text-xl text-white font-headline">Colombo, Sri Lanka</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-6">
+                            <span class="material-symbols-outlined text-primary-container text-3xl">mail</span>
+                            <div>
+                                <p class="text-xs text-white/40 mb-2 uppercase tracking-[0.2em]">Email</p>
+                                <p class="text-xl text-white font-headline">partners@eama-garments.com</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-6">
+                            <span class="material-symbols-outlined text-primary-container text-3xl">call</span>
+                            <div>
+                                <p class="text-xs text-white/40 mb-2 uppercase tracking-[0.2em]">Phone</p>
+                                <p class="text-xl text-white font-headline">+94 11 234 5678</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative z-10 flex gap-8">
+                    <a href="https://linkedin.com" target="_blank" class="text-white/50 hover:text-primary-container transition-colors text-label-caps text-xs tracking-widest uppercase">Linkedin</a>
+                    <a href="https://instagram.com" target="_blank" class="text-white/50 hover:text-primary-container transition-colors text-label-caps text-xs tracking-widest uppercase">Instagram</a>
+                </div>
+            </div>
+
+            <!-- 9. GENERAL INQUIRY FORM -->
+            <div class="p-12 md:p-24 bg-surface-container-low">
+                <div class="mb-12">
+                    <h3 class="text-2xl font-headline text-white mb-2">General Inquiry</h3>
+                    <p class="text-on-surface-variant">Send us your requirements and we will get back to you shortly.</p>
+                </div>
+
                 <form id="general-inquiry-form" class="space-y-8">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <div><label class="text-xs text-white/40 block mb-2 uppercase tracking-widest">Name</label><input name="name" required class="w-full bg-transparent border-b border-white/20 py-3 focus:border-primary outline-none text-white transition-all"></div>
-                        <div><label class="text-xs text-white/40 block mb-2 uppercase tracking-widest">Company Name</label><input name="company" class="w-full bg-transparent border-b border-white/20 py-3 focus:border-primary outline-none text-white transition-all"></div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] text-white/30 uppercase tracking-[0.3em]">Name</label>
+                            <input name="name" required type="text" placeholder="Your Name" class="w-full bg-transparent border-b border-white/20 py-3 text-white focus:outline-none focus:border-primary-container transition-colors placeholder:text-white/10">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] text-white/30 uppercase tracking-[0.3em]">Company Name</label>
+                            <input name="company" type="text" placeholder="Company Ltd." class="w-full bg-transparent border-b border-white/20 py-3 text-white focus:outline-none focus:border-primary-container transition-colors placeholder:text-white/10">
+                        </div>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <div><label class="text-xs text-white/40 block mb-2 uppercase tracking-widest">Email</label><input name="email" required type="email" class="w-full bg-transparent border-b border-white/20 py-3 focus:border-primary outline-none text-white transition-all"></div>
-                        <div><label class="text-xs text-white/40 block mb-2 uppercase tracking-widest">Country</label><input name="country" class="w-full bg-transparent border-b border-white/20 py-3 focus:border-primary outline-none text-white transition-all"></div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] text-white/30 uppercase tracking-[0.3em]">Email</label>
+                            <input name="email" required type="email" placeholder="email@company.com" class="w-full bg-transparent border-b border-white/20 py-3 text-white focus:outline-none focus:border-primary-container transition-colors placeholder:text-white/10">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] text-white/30 uppercase tracking-[0.3em]">Country</label>
+                            <input name="country" type="text" placeholder="Select Country" class="w-full bg-transparent border-b border-white/20 py-3 text-white focus:outline-none focus:border-primary-container transition-colors placeholder:text-white/10">
+                        </div>
                     </div>
-                    <div><label class="text-xs text-white/40 block mb-2 uppercase tracking-widest">Message</label><textarea name="message" required rows="3" class="w-full bg-transparent border-b border-white/20 py-3 focus:border-primary outline-none text-white transition-all resize-none"></textarea></div>
-                    <button type="submit" class="w-full bg-primary-container text-white py-5 text-label-caps uppercase hover:brightness-110 transition-all active:scale-95">Send Inquiry</button>
+                    <div class="space-y-2">
+                        <label class="text-[10px] text-white/30 uppercase tracking-[0.3em]">Message</label>
+                        <textarea name="message" required rows="4" placeholder="How can we help you?" class="w-full bg-transparent border-b border-white/20 py-3 text-white focus:outline-none focus:border-primary-container transition-colors resize-none placeholder:text-white/10"></textarea>
+                    </div>
+                    <button type="submit" class="w-full bg-on-background text-background py-5 text-label-caps uppercase tracking-[0.2em] font-bold hover:bg-primary-container hover:text-white transition-all active:scale-[0.98] mt-4">
+                        Send Inquiry
+                    </button>
                 </form>
             </div>
         </div>
     </section>
 
+    <!-- Footer -->
+    <footer class="py-12 px-margin-mobile md:px-margin-desktop bg-background border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8">
+        <div class="text-white/30 text-[10px] tracking-widest uppercase">© 2026 EAMA Garments. Sri Lanka.</div>
+        <div class="flex gap-8">
+            <a href="#" class="text-white/30 hover:text-white transition-colors text-[10px] tracking-widest uppercase">Privacy Policy</a>
+            <a href="#" class="text-white/30 hover:text-white transition-colors text-[10px] tracking-widest uppercase">Terms of Service</a>
+        </div>
+    </footer>
+
     <!-- Logic -->
     <script>
         const supabase = window.eamaSupabase;
+
+        // Form Submission Logic
         document.getElementById('general-inquiry-form').addEventListener('submit', async function (e) {
             e.preventDefault();
             const btn = e.target.querySelector('button');
+            const originalText = btn.innerText;
             const data = Object.fromEntries(new FormData(e.target));
+            
             btn.disabled = true;
+            btn.innerText = 'SENDING...';
+
             try {
-                const { error } = await supabase.from('inquiries').insert([{
-                    name: data.name, company: data.company, email: data.email, 
-                    country: data.country, message: data.message, status: 'New'
+                const { error } = await supabase.from('contact_messages').insert([{
+                    name: data.name || null,
+                    company: data.company || null,
+                    email: data.email || null,
+                    country: data.country || null,
+                    message: data.message || null,
+                    status: 'New'
                 }]);
+                
                 if (error) throw error;
-                alert('Success! We will contact you shortly.'); e.target.reset();
-            } catch (err) { alert(err.message); } finally { btn.disabled = false; }
+                
+                alert('Inquiry sent successfully. Our team will contact you shortly.');
+                e.target.reset();
+            } catch (err) {
+                console.error('Submission Error:', err);
+                alert('Unable to send inquiry: ' + (err.message || 'Unknown error occurred.'));
+            } finally {
+                btn.disabled = false;
+                btn.innerText = originalText;
+            }
         });
 
-        // Reveal effect
+        // Intersection Observer for Animations
         const revealCallback = (entries) => {
-            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
         };
         const observer = new IntersectionObserver(revealCallback, { threshold: 0.1 });
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
