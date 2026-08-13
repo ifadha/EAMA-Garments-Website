@@ -464,12 +464,16 @@
                 body.innerHTML = `<div class="skeleton" style="height: 400px; width: 100%;"></div>`;
 
                 // Fetch documents and messages
-                const [{data: docs}, {data: msgs}] = await Promise.all([
+                const [{data: docs}, {data: msgs, error: messagesError}] = await Promise.all([
                     eamaSupabase.from('documents').select('*').eq('manufacturing_request_id', r.id),
                     eamaSupabase.from('request_messages').select('*').eq('request_id', r.id).order('created_at', {ascending: true})
                 ]);
 
-                this.renderDetailView(r, docs, msgs);
+                if (messagesError) {
+                    console.error('Unable to load request messages:', messagesError);
+                }
+
+                this.renderDetailView(r, docs, Array.isArray(msgs) ? msgs : []);
                 this.initRealtime(r.id);
             },
 
@@ -477,6 +481,7 @@
                 const body = document.getElementById('overlay-body');
                 const statusMap = ['New', 'Technical Review', 'Sampling', 'Production', 'Completed'];
                 const currentIndex = statusMap.indexOf(r.status);
+                const safeMsgs = Array.isArray(msgs) ? msgs : [];
 
                 body.innerHTML = `
                     <span class="close-overlay" onclick="App.closeDetails()">← Back to Dashboard</span>
@@ -516,7 +521,7 @@
                     <div class="message-thread">
                         <h4 style="margin: 0 0 15px 0; font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;">Direct Communication</h4>
                         <div class="message-list" id="msg-list">
-                            ${msgs.length > 0 ? msgs.map(m => this.createMessageHTML(m)).join('') : '<p id="no-msgs" style="font-size: 0.85rem; color: var(--text-muted); text-align: center; padding: 20px;">No messages yet. Start the conversation below.</p>'}
+                            ${safeMsgs.length > 0 ? safeMsgs.map(m => this.createMessageHTML(m)).join('') : '<p id="no-msgs" style="font-size: 0.85rem; color: var(--text-muted); text-align: center; padding: 20px;">No messages yet. Start the conversation below.</p>'}
                         </div>
                         <div class="reply-box">
                             <input type="text" id="reply-input" placeholder="Inquire about this project...">

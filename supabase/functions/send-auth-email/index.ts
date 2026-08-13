@@ -264,7 +264,89 @@ serve(async (req) => {
     }
 
     // =========================================================
-    // 2. EXISTING VERIFICATION / PASSWORD RESET EMAILS
+    // 2. FACTORY VISIT EMAIL
+    // =========================================================
+
+    if (type === "factory_visit") {
+      const {
+        name,
+        company,
+        visit_date,
+        visit_time,
+      } = body;
+
+      const FACTORY_VISIT_TEMPLATE_ID = 6;
+
+      const brevoResponse = await fetch(
+        "https://api.brevo.com/v3/smtp/email",
+        {
+          method: "POST",
+
+          headers: {
+            accept: "application/json",
+            "api-key": BREVO_API_KEY,
+            "content-type": "application/json",
+          },
+
+          body: JSON.stringify({
+            to: [
+              {
+                email: email,
+                name: name || undefined,
+              },
+            ],
+
+            templateId: FACTORY_VISIT_TEMPLATE_ID,
+
+            params: {
+              name: name || "",
+              company: company || "",
+              visit_date: visit_date || "",
+              visit_time: visit_time || "",
+            },
+          }),
+        }
+      );
+
+      const brevoText = await brevoResponse.text();
+
+      console.log("Factory visit Brevo status:", brevoResponse.status);
+      console.log("Factory visit Brevo response:", brevoText);
+
+      if (!brevoResponse.ok) {
+        return new Response(
+          JSON.stringify({
+            error: "Unable to send the factory visit confirmation email.",
+          }),
+          {
+            status: 502,
+
+            headers: {
+              ...corsHeaders,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+      }
+
+      return new Response(
+        JSON.stringify({
+          sent: true,
+          type: "factory_visit",
+        }),
+        {
+          status: 200,
+
+          headers: {
+            ...corsHeaders,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+    }
+
+    // =========================================================
+    // 3. EXISTING VERIFICATION / PASSWORD RESET EMAILS
     // =========================================================
 
     const isVerification =
