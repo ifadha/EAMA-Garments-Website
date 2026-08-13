@@ -377,7 +377,6 @@
 
 <script src="./supabase-client.js"></script>
 <script>
-    const supabase = window.eamaSupabase;
     const form = document.getElementById('design-inquiry-form');
     const fileInput = document.getElementById('design_files');
     const fileFeedback = document.getElementById('file-feedback');
@@ -533,7 +532,7 @@
         const uploadedFilePaths = [];
 
         try {
-            if (!supabase) {
+            if (!window.eamaSupabase) {
                 throw new Error('Supabase client is not configured.');
             }
 
@@ -550,7 +549,7 @@
                         `designs/${Date.now()}-${crypto.randomUUID()}-${safeName}`;
 
                     const { data: uploadData, error: uploadError } =
-                        await supabase.storage
+                        await window.eamaSupabase.storage
                             .from('techpacks')
                             .upload(filePath, file, {
                                 contentType: file.type || undefined,
@@ -567,7 +566,7 @@
                     }
 
                     const { data: publicUrlData } =
-                        supabase.storage
+                        window.eamaSupabase.storage
                             .from('techpacks')
                             .getPublicUrl(filePath);
 
@@ -635,7 +634,7 @@
             const {
                 data: requestData,
                 error: requestError
-            } = await supabase
+            } = await window.eamaSupabase
                 .rpc('submit_manufacturing_request', {
                     p_submission: submission,
                     p_documents: uploadedDocuments
@@ -689,7 +688,7 @@
             const {
                 data: emailResult,
                 error: emailError
-            } = await supabase.functions.invoke(
+            } = await window.eamaSupabase.functions.invoke(
                 'send-auth-email',
                 {
                     body: {
@@ -759,8 +758,8 @@
 
             // If the database transaction never created a request, remove any
             // files uploaded earlier in this attempt so they are not orphaned.
-            if (!requestId && uploadedFilePaths.length && supabase) {
-                const { error: cleanupError } = await supabase.storage
+            if (!requestId && uploadedFilePaths.length && window.eamaSupabase) {
+                const { error: cleanupError } = await window.eamaSupabase.storage
                     .from('techpacks')
                     .remove(uploadedFilePaths);
 
