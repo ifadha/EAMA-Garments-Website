@@ -227,7 +227,7 @@
                     <div class="flex items-center gap-3"><span class="material-symbols-outlined text-primary-container">chat</span> Direct Client Communication</div>
                     <div class="flex items-center gap-3"><span class="material-symbols-outlined text-primary-container">account_tree</span> Quality-focused workflow</div>
                 </div>
-                <a href="../factory-visit.html" class="inline-block bg-primary-container text-white px-12 py-5 rounded-sm text-[12px] font-bold uppercase transition-all hover:brightness-110">Request Factory Visit</a>
+                <a href="https://ifadha.github.io/EAMA-Garments-Website/factory-visit.html" class="inline-block bg-primary-container text-white px-12 py-5 rounded-sm text-[12px] font-bold uppercase transition-all hover:brightness-110">Request Factory Visit</a>
             </div>
         </div>
     </section>
@@ -277,162 +277,164 @@
 
     <!-- Scripts -->
     <script>
+document.addEventListener("DOMContentLoaded", () => {
+
     const supabase = window.eamaSupabase;
+    const inquiryForm = document.getElementById("general-inquiry-form");
 
-    const inquiryForm =
-        document.getElementById("general-inquiry-form");
-
-    if (inquiryForm) {
-        inquiryForm.addEventListener(
-            "submit",
-            async function (e) {
-                e.preventDefault();
-
-                const btn =
-                    inquiryForm.querySelector(
-                        'button[type="submit"]'
-                    );
-
-                const originalButtonText =
-                    btn.innerText;
-
-                const formData =
-                    Object.fromEntries(
-                        new FormData(inquiryForm)
-                    );
-
-                // -------------------------------------------------
-                // BASIC VALIDATION
-                // -------------------------------------------------
-
-                if (!formData.name) {
-                    alert("Please enter your name.");
-                    return;
-                }
-
-                if (!formData.email) {
-                    alert("Please enter your email address.");
-                    return;
-                }
-
-                if (!formData.message) {
-                    alert("Please enter your message.");
-                    return;
-                }
-
-                // -------------------------------------------------
-                // DISABLE BUTTON
-                // -------------------------------------------------
-
-                btn.disabled = true;
-                btn.innerText = "SENDING...";
-
-                try {
-                    // -------------------------------------------------
-                    // CALL SUPABASE EDGE FUNCTION
-                    // -------------------------------------------------
-
-                    const { data, error } =
-                        await supabase.functions.invoke(
-                            "send-auth-email",
-                            {
-                                body: {
-                                    type: "general_inquiry",
-
-                                    name:
-                                        String(
-                                            formData.name || ""
-                                        ).trim(),
-
-                                    company:
-                                        String(
-                                            formData.company || ""
-                                        ).trim(),
-
-                                    email:
-                                        String(
-                                            formData.email || ""
-                                        ).trim(),
-
-                                    country:
-                                        String(
-                                            formData.country || ""
-                                        ).trim(),
-
-                                    message:
-                                        String(
-                                            formData.message || ""
-                                        ).trim(),
-                                },
-                            }
-                        );
-
-                    // -------------------------------------------------
-                    // HANDLE EDGE FUNCTION ERROR
-                    // -------------------------------------------------
-
-                    if (error) {
-                        console.error(
-                            "Edge Function error:",
-                            error
-                        );
-
-                        throw new Error(
-                            error.message ||
-                            "Unable to send your inquiry."
-                        );
-                    }
-
-                    // The Edge Function can also return an
-                    // application-level error.
-
-                    if (
-                        !data ||
-                        data.sent !== true
-                    ) {
-                        console.error(
-                            "Unexpected Edge Function response:",
-                            data
-                        );
-
-                        throw new Error(
-                            data?.error ||
-                            "Your inquiry could not be sent."
-                        );
-                    }
-
-                    // -------------------------------------------------
-                    // SUCCESS
-                    // -------------------------------------------------
-
-                    alert(
-                        "Thank you! Your inquiry has been received. A confirmation email has been sent to your email address."
-                    );
-
-                    inquiryForm.reset();
-
-                } catch (err) {
-                    console.error(
-                        "General inquiry error:",
-                        err
-                    );
-
-                    alert(
-                        "We couldn't send your inquiry. Please try again.\n\n" +
-                        (
-                            err?.message ||
-                            "Unknown error"
-                        )
-                    );
-
-                } finally {
-                    btn.disabled = false;
-                    btn.innerText =
-                        originalButtonText;
-                }
-            }
-        );
+    if (!inquiryForm) {
+        console.error("General inquiry form not found.");
+        return;
     }
+
+    if (!supabase) {
+        console.error("Supabase client was not initialized.");
+        alert("The inquiry service is currently unavailable. Please try again later.");
+        return;
+    }
+
+    inquiryForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const btn = inquiryForm.querySelector('button[type="submit"]');
+
+        if (!btn) {
+            console.error("Submit button not found.");
+            return;
+        }
+
+        const originalText = btn.textContent;
+
+        const formData = new FormData(inquiryForm);
+
+        const name = String(formData.get("name") || "").trim();
+        const company = String(formData.get("company") || "").trim();
+        const email = String(formData.get("email") || "").trim();
+        const country = String(formData.get("country") || "").trim();
+        const message = String(formData.get("message") || "").trim();
+
+        // -----------------------------
+        // VALIDATION
+        // -----------------------------
+
+        if (!name) {
+            alert("Please enter your name.");
+            return;
+        }
+
+        if (!email) {
+            alert("Please enter your email address.");
+            return;
+        }
+
+        if (!message) {
+            alert("Please enter your message.");
+            return;
+        }
+
+        // Basic email validation
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!emailPattern.test(email)) {
+            alert("Please enter a valid email address.");
+            return;
+        }
+
+        // -----------------------------
+        // SUBMITTING STATE
+        // -----------------------------
+
+        btn.disabled = true;
+        btn.textContent = "SENDING...";
+        btn.style.opacity = "0.6";
+        btn.style.cursor = "not-allowed";
+
+        try {
+
+            console.log("Submitting general inquiry...");
+
+            const { data, error } =
+                await supabase.functions.invoke(
+                    "send-auth-email",
+                    {
+                        body: {
+                            type: "general_inquiry",
+                            name,
+                            company,
+                            email,
+                            country,
+                            message
+                        }
+                    }
+                );
+
+            console.log("Edge Function response:", data);
+            console.log("Edge Function error:", error);
+
+            // -----------------------------
+            // EDGE FUNCTION ERROR
+            // -----------------------------
+
+            if (error) {
+                console.error("Supabase Edge Function error:", error);
+
+                throw new Error(
+                    error.message ||
+                    "The inquiry service could not be reached."
+                );
+            }
+
+            // -----------------------------
+            // APPLICATION ERROR
+            // -----------------------------
+
+            if (!data) {
+                throw new Error(
+                    "The server returned an empty response."
+                );
+            }
+
+            if (data.success === false || data.sent === false) {
+                throw new Error(
+                    data.error ||
+                    "Your inquiry could not be submitted."
+                );
+            }
+
+            // -----------------------------
+            // SUCCESS
+            // -----------------------------
+
+            alert(
+                "Thank you! Your inquiry has been submitted successfully. We will get back to you shortly."
+            );
+
+            inquiryForm.reset();
+
+        } catch (err) {
+
+            console.error(
+                "GENERAL INQUIRY SUBMISSION FAILED:",
+                err
+            );
+
+            alert(
+                "We couldn't submit your inquiry.\n\n" +
+                (err?.message || "Please try again later.")
+            );
+
+        } finally {
+
+            btn.disabled = false;
+            btn.textContent = originalText;
+            btn.style.opacity = "";
+            btn.style.cursor = "";
+
+        }
+
+    });
+
+});
 </script>
 </body>
 </html>
