@@ -119,241 +119,90 @@ serve(async (req) => {
     // =========================================================
 
     if (type === "general_inquiry") {
-
-      // -------------------------------------------------------
-      // VALIDATION
-      // -------------------------------------------------------
-
       if (!name || !String(name).trim()) {
-        throw new Error(
-          "Name is required."
-        );
+        throw new Error("Name is required.");
       }
-
       if (!message || !String(message).trim()) {
-        throw new Error(
-          "Message is required."
-        );
+        throw new Error("Message is required.");
       }
 
-      const inquiryName =
-        String(name).trim();
+      const inquiryName = String(name).trim();
+      const inquiryCompany = company ? String(company).trim() : "";
+      const inquiryCountry = country ? String(country).trim() : "";
+      const inquiryMessage = String(message).trim();
 
-      const inquiryCompany =
-        company
-          ? String(company).trim()
-          : "";
-
-      const inquiryCountry =
-        country
-          ? String(country).trim()
-          : "";
-
-      const inquiryMessage =
-        String(message).trim();
-
-      // -------------------------------------------------------
-      // SAVE INQUIRY
-      // -------------------------------------------------------
-
-      const {
-        data: inquiry,
-        error: inquiryError,
-      } = await supabaseAdmin
+      // SAVE TO DATABASE
+      const { data: inquiry, error: inquiryError } = await supabaseAdmin
         .from("inquiries")
-        .insert([
-          {
-            name: inquiryName,
-            company_name:
-              inquiryCompany || null,
-            email: normalizedEmail,
-            country:
-              inquiryCountry || null,
-            message: inquiryMessage,
-            status: "New",
-          },
-        ])
-        .select(
-          "id, created_at, name, company_name, email, country, message, status"
-        )
+        .insert([{
+          name: inquiryName,
+          company_name: inquiryCompany || null,
+          email: normalizedEmail,
+          country: inquiryCountry || null,
+          message: inquiryMessage,
+          status: "New",
+        }])
+        .select()
         .single();
 
       if (inquiryError || !inquiry) {
-
-        console.error(
-          "Inquiry database error:",
-          inquiryError
-        );
-
-        throw new Error(
-          inquiryError?.message ||
-          "Unable to save your inquiry."
-        );
+        console.error("Inquiry database error:", inquiryError);
+        throw new Error(inquiryError?.message || "Unable to save your inquiry.");
       }
 
-      console.log(
-        "Inquiry saved successfully:",
-        inquiry.id
-      );
-
-      // -------------------------------------------------------
-      // SEND BREVO CONFIRMATION
-      // -------------------------------------------------------
-
+      // SEND EMAIL VIA BREVO
       const GENERAL_INQUIRY_TEMPLATE_ID = 7;
-
-      console.log(
-        "Sending Brevo inquiry template:",
-        GENERAL_INQUIRY_TEMPLATE_ID
-      );
-
-      const brevoPayload = {
-        sender: {
-          email:
-            Deno.env.get(
-              "BREVO_SENDER_EMAIL"
-            ) || "partners@eama-garments.com",
-
-          name:
-            Deno.env.get(
-              "BREVO_SENDER_NAME"
-            ) || "EAMA Garments",
-        },
-
-        to: [
-          {
-            email: normalizedEmail,
-            name: inquiryName,
-          },
-        ],
-
-        templateId:
-          GENERAL_INQUIRY_TEMPLATE_ID,
-
-        params: {
-          customer_name:
-            inquiryName,
-
-          status:
-            inquiry.status || "New",
-
-          admin_message:
-            inquiryMessage,
-
-          company_name:
-            inquiryCompany,
-
-          country:
-            inquiryCountry,
-
-          inquiry_id:
-            inquiry.id,
-
-          created_at:
-            inquiry.created_at || "",
-        },
-      };
-
       let emailSent = false;
-      let emailError = null;
 
       try {
+        const brevoResponse = await fetch("https://api.brevo.com/v3/smtp/email", {
+          method: "POST",
+          headers: {
+            "accept": "application/json",
+            "api-key": BREVO_API_KEY,
+            "content-type": "application/json",
+          },
+          body: JSON.stringify({
+            sender: {
+              email: Deno.env.get("BREVO_SENDER_EMAIL") || "partners@eama-garments.com",
+              name: Deno.env.get("BREVO_SENDER_NAME") || "EAMA Garments",
+            },
+            to: [{ email: normalizedEmail, name: inquiryName }],
+            templateId: GENERAL_INQUIRY_TEMPLATE_ID,
+            params: {
+              customer_name: inquiryName,
+              status: inquiry.status || "New",
+              admin_message: inquiryMessage,
+              company_name: inquiryCompany,
+              country: inquiryCountry,
+              inquiry_id: inquiry.id,
+              created_at: inquiry.created_at || "",
+            },
+          }),
+        });
 
-        const brevoResponse =
-          await fetch(
-            "https://api.brevo.com/v3/smtp/email",
-            {
-              method: "POST",
-
-              headers: {
-                accept:
-                  "application/json",
-
-                "api-key":
-                  BREVO_API_KEY,
-
-                "content-type":
-                  "application/json",
-              },
-
-              body:
-                JSON.stringify(
-                  brevoPayload
-                ),
-            }
-          );
-
-        const brevoText =
-          await brevoResponse.text();
-
-        console.log(
-          "Brevo status:",
-          brevoResponse.status
-        );
-
-        console.log(
-          "Brevo response:",
-          brevoText
-        );
-
-        if (!brevoResponse.ok) {
-
-          emailError =
-            `Brevo returned ${brevoResponse.status}: ${brevoText}`;
-
-          console.error(
-            "Brevo email failed:",
-            emailError
-          );
-
-        } else {
-
+        if (brevoResponse.ok) {
           emailSent = true;
-
-          console.log(
-            "General inquiry email sent successfully."
-          );
+          console.log("General inquiry email sent successfully.");
+        } else {
+          const errorText = await brevoResponse.text();
+          console.error("Brevo API error:", errorText);
         }
-
       } catch (brevoErr) {
-
-        emailError =
-          brevoErr instanceof Error
-            ? brevoErr.message
-            : String(brevoErr);
-
-        console.error(
-          "Brevo request failed:",
-          emailError
-        );
+        console.error("Brevo fetch error:", brevoErr);
       }
-
-      // -------------------------------------------------------
-      // RETURN RESULT
-      // -------------------------------------------------------
 
       return new Response(
         JSON.stringify({
           success: true,
-          saved: true,
-          email_sent: emailSent,
+          sent: emailSent, 
           type: "general_inquiry",
           inquiry_id: inquiry.id,
-
-          // Do not expose API keys.
-          email_error:
-            emailSent
-              ? null
-              : "Confirmation email could not be sent.",
+          error: emailSent ? null : "Inquiry saved, but confirmation email failed."
         }),
         {
           status: 200,
-
-          headers: {
-            ...corsHeaders,
-            "Content-Type":
-              "application/json",
-          },
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
         }
       );
     }

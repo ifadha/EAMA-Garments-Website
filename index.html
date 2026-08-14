@@ -350,86 +350,52 @@ document.addEventListener("DOMContentLoaded", () => {
         btn.style.cursor = "not-allowed";
 
         try {
-
             console.log("Submitting general inquiry...");
 
-            const { data, error } =
-                await supabase.functions.invoke(
-                    "send-auth-email",
-                    {
-                        body: {
-                            type: "general_inquiry",
-                            name,
-                            company,
-                            email,
-                            country,
-                            message
-                        }
+            const { data, error } = await supabase.functions.invoke(
+                "send-auth-email",
+                {
+                    body: {
+                        type: "general_inquiry",
+                        name,
+                        company,
+                        email,
+                        country,
+                        message
                     }
-                );
-
-            console.log("Edge Function response:", data);
-            console.log("Edge Function error:", error);
-
-            // -----------------------------
-            // EDGE FUNCTION ERROR
-            // -----------------------------
-
-            if (error) {
-                console.error("Supabase Edge Function error:", error);
-
-                throw new Error(
-                    error.message ||
-                    "The inquiry service could not be reached."
-                );
-            }
-
-            // -----------------------------
-            // APPLICATION ERROR
-            // -----------------------------
-
-            if (!data) {
-                throw new Error(
-                    "The server returned an empty response."
-                );
-            }
-
-            if (data.success === false || data.sent === false) {
-                throw new Error(
-                    data.error ||
-                    "Your inquiry could not be submitted."
-                );
-            }
-
-            // -----------------------------
-            // SUCCESS
-            // -----------------------------
-
-            alert(
-                "Thank you! Your inquiry has been submitted successfully. We will get back to you shortly."
+                }
             );
 
+            // 1. Check for connection/system errors
+            if (error) {
+                console.error("Supabase Edge Function error:", error);
+                throw new Error(error.message || "The inquiry service could not be reached.");
+            }
+
+            // 2. Check if the backend failed to save the data
+            if (!data || data.success === false) {
+                throw new Error(data.error || "Your inquiry could not be processed.");
+            }
+
+            // 3. Check if data was saved but email failed (Naming sync fix)
+            if (data.sent === false) {
+                alert("Thank you! Your inquiry was received and saved, but we had trouble sending the confirmation email. Our team will contact you shortly.");
+                inquiryForm.reset();
+                return;
+            }
+
+            // 4. Success Case
+            alert("Thank you! Your inquiry has been submitted successfully. Please check your inbox for a confirmation email.");
             inquiryForm.reset();
 
         } catch (err) {
-
-            console.error(
-                "GENERAL INQUIRY SUBMISSION FAILED:",
-                err
-            );
-
-            alert(
-                "We couldn't submit your inquiry.\n\n" +
-                (err?.message || "Please try again later.")
-            );
-
+            console.error("GENERAL INQUIRY SUBMISSION FAILED:", err);
+            alert("We couldn't submit your inquiry.\n\n" + (err?.message || "Please try again later."));
         } finally {
-
             btn.disabled = false;
             btn.textContent = originalText;
             btn.style.opacity = "";
             btn.style.cursor = "";
-
         }
 
     });
