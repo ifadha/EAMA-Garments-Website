@@ -164,7 +164,7 @@ serve(async (req) => {
           },
           body: JSON.stringify({
             sender: {
-              email: Deno.env.get("BREVO_SENDER_EMAIL") || "partners@eama-garments.com",
+              email: Deno.env.get("BREVO_SENDER_EMAIL") || "info@eamagarments.com",
               name: Deno.env.get("BREVO_SENDER_NAME") || "EAMA Garments",
             },
             to: [{ email: normalizedEmail, name: inquiryName }],
