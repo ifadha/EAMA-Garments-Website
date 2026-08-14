@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Book a Factory Visit | EAMA Garments</title>
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:wght@400;500&display=swap');
 
@@ -69,7 +70,6 @@
             border-bottom: 1px solid var(--bg-elevated);
         }
 
-        /* Form Grid */
         .form-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -93,8 +93,9 @@
             color: var(--text-muted);
         }
 
-        /* Input Styling */
-        input, select, textarea {
+        input,
+        select,
+        textarea {
             background-color: var(--bg-surface);
             border: 1px solid var(--bg-elevated);
             color: var(--text-primary);
@@ -106,13 +107,14 @@
             transition: all 0.2s ease;
         }
 
-        input:focus, select:focus, textarea:focus {
+        input:focus,
+        select:focus,
+        textarea:focus {
             outline: none;
             border-color: var(--accent);
             background-color: var(--bg-elevated);
         }
 
-        /* Customizing the date/time icons for dark theme */
         input::-webkit-calendar-picker-indicator {
             filter: invert(1);
             opacity: 0.5;
@@ -124,7 +126,6 @@
             min-height: 100px;
         }
 
-        /* Button Styling */
         .btn-primary {
             background-color: var(--accent);
             color: #FFFFFF;
@@ -150,7 +151,6 @@
             cursor: not-allowed;
         }
 
-        /* Confirmation State */
         #success-message {
             display: none;
             text-align: center;
@@ -171,66 +171,148 @@
             line-height: 1.6;
         }
 
+        .error-message {
+            display: none;
+            margin-top: 20px;
+            padding: 14px 16px;
+            background: #2a1717;
+            border: 1px solid #5c2929;
+            border-radius: 4px;
+            color: #ffb3a7;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
         @media (max-width: 600px) {
             .form-grid {
                 grid-template-columns: 1fr;
             }
+
             .full-width {
                 grid-column: span 1;
             }
         }
     </style>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-client.js"></script><script src="supabase-fetch-adapter.js"></script></head>
+
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-client.js"></script>
+    <script src="supabase-fetch-adapter.js"></script>
+</head>
+
 <body>
 
 <div class="form-wrapper">
+
     <div id="booking-container">
+
         <header>
             <h1>Book a Factory Visit</h1>
-            <p class="description">Schedule a visit to our manufacturing facility. Submit your details and our team will contact you to confirm availability and arrange your visit.</p>
+
+            <p class="description">
+                Schedule a visit to our manufacturing facility.
+                Submit your details and our team will contact you
+                to confirm availability and arrange your visit.
+            </p>
         </header>
 
         <form id="visit-form">
-            <div class="section-title">Visitor Information</div>
-            <div class="form-grid">
-                <div class="field">
-                    <label for="full_name">Full Name *</label>
-                    <input type="text" id="full_name" required placeholder="John Doe">
-                </div>
-                <div class="field">
-                    <label for="company_name">Company Name</label>
-                    <input type="text" id="company_name" placeholder="Brand or Company Ltd.">
-                </div>
-                <div class="field">
-                    <label for="email">Email Address *</label>
-                    <input type="email" id="email" required placeholder="name@company.com">
-                </div>
-                <div class="field">
-                    <label for="phone">WhatsApp / Phone Number *</label>
-                    <input type="tel" id="phone" required placeholder="+1 234 567 890">
-                </div>
-                <div class="field full-width">
-                    <label for="country">Country *</label>
-                    <input type="text" id="country" required placeholder="Operating Country">
-                </div>
+
+            <div class="section-title">
+                Visitor Information
             </div>
 
-            <div class="section-title">Visit Details</div>
             <div class="form-grid">
+
+                <div class="field">
+                    <label for="full_name">Full Name *</label>
+                    <input
+                        type="text"
+                        id="full_name"
+                        required
+                        placeholder="John Doe"
+                    >
+                </div>
+
+                <div class="field">
+                    <label for="company_name">Company Name</label>
+                    <input
+                        type="text"
+                        id="company_name"
+                        placeholder="Brand or Company Ltd."
+                    >
+                </div>
+
+                <div class="field">
+                    <label for="email">Email Address *</label>
+                    <input
+                        type="email"
+                        id="email"
+                        required
+                        placeholder="name@company.com"
+                    >
+                </div>
+
+                <div class="field">
+                    <label for="phone">WhatsApp / Phone Number *</label>
+                    <input
+                        type="tel"
+                        id="phone"
+                        required
+                        placeholder="+94 76 705 3001"
+                    >
+                </div>
+
+                <div class="field full-width">
+                    <label for="country">Country *</label>
+                    <input
+                        type="text"
+                        id="country"
+                        required
+                        placeholder="Operating Country"
+                    >
+                </div>
+
+            </div>
+
+            <div class="section-title">
+                Visit Details
+            </div>
+
+            <div class="form-grid">
+
                 <div class="field">
                     <label for="visit_date">Preferred Visit Date *</label>
-                    <input type="date" id="visit_date" required>
+                    <input
+                        type="date"
+                        id="visit_date"
+                        required
+                    >
                 </div>
+
                 <div class="field">
                     <label for="visit_time">Preferred Time *</label>
+
                     <select id="visit_time" required>
-                        <option value="" disabled selected>Select time</option>
-                        <option value="Morning (09:00 - 12:00)">Morning (09:00 - 12:00)</option>
-                        <option value="Afternoon (13:00 - 17:00)">Afternoon (13:00 - 17:00)</option>
+                        <option value="" disabled selected>
+                            Select time
+                        </option>
+
+                        <option value="Morning (09:00 - 12:00)">
+                            Morning (09:00 - 12:00)
+                        </option>
+
+                        <option value="Afternoon (13:00 - 17:00)">
+                            Afternoon (13:00 - 17:00)
+                        </option>
                     </select>
                 </div>
+
                 <div class="field">
-                    <label for="visitor_count">Number of Visitors *</label>
+                    <label for="visitor_count">
+                        Number of Visitors *
+                    </label>
+
                     <select id="visitor_count" required>
                         <option value="1">1 Person</option>
                         <option value="2">2 People</option>
@@ -238,124 +320,373 @@
                         <option value="5+">More than 5</option>
                     </select>
                 </div>
+
                 <div class="field">
-                    <label for="purpose">Purpose of Visit *</label>
+                    <label for="purpose">
+                        Purpose of Visit *
+                    </label>
+
                     <select id="purpose" required>
-                        <option value="" disabled selected>Select purpose</option>
-                        <option value="Production Facility Tour">Production Facility Tour</option>
-                        <option value="Quality Inspection">Quality Inspection</option>
-                        <option value="Business Meeting">Business Meeting</option>
-                        <option value="Discuss Manufacturing Partnership">Discuss Manufacturing Partnership</option>
-                        <option value="Other">Other</option>
+                        <option value="" disabled selected>
+                            Select purpose
+                        </option>
+
+                        <option value="Production Facility Tour">
+                            Production Facility Tour
+                        </option>
+
+                        <option value="Quality Inspection">
+                            Quality Inspection
+                        </option>
+
+                        <option value="Business Meeting">
+                            Business Meeting
+                        </option>
+
+                        <option value="Discuss Manufacturing Partnership">
+                            Discuss Manufacturing Partnership
+                        </option>
+
+                        <option value="Other">
+                            Other
+                        </option>
                     </select>
                 </div>
+
                 <div class="field full-width">
-                    <label for="message">Any specific requirements or questions before your visit?</label>
-                    <textarea id="message" placeholder="Optional notes for our team..."></textarea>
+                    <label for="message">
+                        Any specific requirements or questions before your visit?
+                    </label>
+
+                    <textarea
+                        id="message"
+                        placeholder="Optional notes for our team..."
+                    ></textarea>
                 </div>
+
             </div>
 
-            <button type="submit" class="btn-primary" id="submit-btn">Request Factory Visit</button>
+            <div
+                id="error-message"
+                class="error-message"
+            ></div>
+
+            <button
+                type="submit"
+                class="btn-primary"
+                id="submit-btn"
+            >
+                Request Factory Visit
+            </button>
+
         </form>
     </div>
 
-    <!-- Success Message Container -->
+
+    <!-- Success Message -->
+
     <div id="success-message">
+
         <h2>Request Sent</h2>
-        <p>Thank you for your request. Our team has received your factory visit inquiry and will contact you through email or WhatsApp to confirm the schedule.</p>
-        <button class="btn-primary" style="margin-top: 20px; width: auto;" onclick="window.location.reload()">Back to Form</button>
+
+        <p>
+            Thank you for your request. Our team has received
+            your factory visit inquiry and will contact you
+            through email or WhatsApp to confirm the schedule.
+        </p>
+
+        <button
+            class="btn-primary"
+            style="margin-top: 20px; width: auto;"
+            onclick="window.location.reload()"
+        >
+            Back to Form
+        </button>
+
     </div>
+
 </div>
 
+
 <script>
-    const visitForm = document.getElementById('visit-form');
-    const bookingContainer = document.getElementById('booking-container');
-    const successMessage = document.getElementById('success-message');
-    const submitBtn = document.getElementById('submit-btn');
-    visitForm.addEventListener('submit', async function(e) {
-        e.preventDefault();
 
-        // Validate form
-        if (!visitForm.checkValidity()) {
-            return;
-        }
+    const visitForm =
+        document.getElementById('visit-form');
 
-        const visitorCount = document.getElementById('visitor_count').value;
-        const visitorCountMap = {
-            '1': 1,
-            '2': 2,
-            '3-5': 3,
-            '5+': 6
-        };
+    const bookingContainer =
+        document.getElementById('booking-container');
 
-        // Prepare data
-        const formData = {
-            full_name: document.getElementById('full_name').value,
-            company_name: document.getElementById('company_name').value,
-            email: document.getElementById('email').value,
-            phone: document.getElementById('phone').value,
-            country: document.getElementById('country').value,
-            preferred_visit_date: document.getElementById('visit_date').value,
-            preferred_time: document.getElementById('visit_time').value,
-            number_of_visitors: visitorCountMap[visitorCount],
-            purpose_of_visit: document.getElementById('purpose').value,
-            notes: document.getElementById('message').value
-        };
+    const successMessage =
+        document.getElementById('success-message');
 
-        // UI State Change
-        submitBtn.disabled = true;
-        submitBtn.innerText = "Processing...";
+    const submitBtn =
+        document.getElementById('submit-btn');
 
-        try {
-            const {
-                data: { user }
-            } = await eamaSupabase.auth.getUser();
+    const errorMessage =
+        document.getElementById('error-message');
 
-            const { error: insertError } = await eamaSupabase
-                .from('factory_visits')
-                .insert({
-                    ...formData,
-                    client_id: user ? user.id : null
-                });
+    const dateInput =
+        document.getElementById('visit_date');
 
-            if (insertError) {
-                throw new Error(insertError.message || 'Unable to save your factory visit request.');
+
+    // Prevent selecting a date in the past.
+    const today =
+        new Date().toISOString().split('T')[0];
+
+    dateInput.min = today;
+
+
+    visitForm.addEventListener(
+        'submit',
+        async function (e) {
+
+            e.preventDefault();
+
+            errorMessage.style.display = 'none';
+            errorMessage.textContent = '';
+
+
+            // Browser validation
+            if (!visitForm.checkValidity()) {
+
+                visitForm.reportValidity();
+
+                return;
             }
 
-            const { error: emailError } = await eamaSupabase.functions.invoke('send-auth-email', {
-                body: {
-                    type: 'factory_visit',
-                    email: formData.email,
-                    name: formData.full_name,
-                    company: formData.company_name,
-                    visit_date: formData.preferred_visit_date,
-                    visit_time: formData.preferred_time,
-                    visitor_count: visitorCount
-                }
-            });
 
-            if (emailError) {
-                let errorMessage = 'Your request was saved, but we could not send the confirmation email.';
+            const visitorCount =
+                document.getElementById('visitor_count').value;
 
-                try {
-                    const errorData = await emailError.context.json();
-                    errorMessage = errorData.error || errorMessage;
-                } catch (_) {
-                    // Use the safe fallback message when no JSON error body is available.
-                }
 
-                throw new Error(errorMessage);
+            /*
+             * The database column number_of_visitors
+             * is INTEGER.
+             *
+             * For ranges we store the lower/minimum
+             * representative value:
+             *
+             * 3-5 -> 3
+             * 5+  -> 6
+             */
+            const visitorCountMap = {
+
+                '1': 1,
+                '2': 2,
+                '3-5': 3,
+                '5+': 6
+
+            };
+
+
+            const numberOfVisitors =
+                visitorCountMap[visitorCount];
+
+
+            if (!numberOfVisitors) {
+
+                showError(
+                    'Please select the number of visitors.'
+                );
+
+                return;
             }
 
-            bookingContainer.style.display = 'none';
-            successMessage.style.display = 'block';
-            window.scrollTo(0, 0);
-        } catch (error) {
-            alert(error.message || 'Unable to submit your request. Please try again.');
-            submitBtn.disabled = false;
-            submitBtn.innerText = 'Request Factory Visit';
+
+            /*
+             * These names intentionally match the
+             * actual public.factory_visits schema.
+             */
+            const formData = {
+
+                full_name:
+                    document.getElementById('full_name').value.trim(),
+
+                company_name:
+                    document.getElementById('company_name').value.trim(),
+
+                email:
+                    document.getElementById('email').value.trim(),
+
+                phone:
+                    document.getElementById('phone').value.trim(),
+
+                country:
+                    document.getElementById('country').value.trim(),
+
+                preferred_visit_date:
+                    document.getElementById('visit_date').value,
+
+                preferred_time:
+                    document.getElementById('visit_time').value,
+
+                number_of_visitors:
+                    numberOfVisitors,
+
+                purpose_of_visit:
+                    document.getElementById('purpose').value,
+
+                notes:
+                    document.getElementById('message').value.trim()
+
+            };
+
+
+            submitBtn.disabled = true;
+            submitBtn.innerText = 'Processing...';
+
+
+            try {
+
+                /*
+                 * 1. SAVE FACTORY VISIT TO SUPABASE
+                 *
+                 * client_id is intentionally NOT inserted.
+                 * It is nullable in the database and the
+                 * public form must work for unauthenticated
+                 * visitors.
+                 */
+                const {
+                    error: insertError
+                } = await eamaSupabase
+                    .from('factory_visits')
+                    .insert(formData);
+
+
+                if (insertError) {
+
+                    console.error(
+                        'Factory visit insert error:',
+                        insertError
+                    );
+
+                    throw new Error(
+                        insertError.message ||
+                        'Unable to save your factory visit request.'
+                    );
+                }
+
+
+                /*
+                 * 2. SEND CONFIRMATION EMAIL THROUGH
+                 *    THE SUPABASE EDGE FUNCTION.
+                 *
+                 * Brevo template #6 expects:
+                 *
+                 * {{name}}
+                 * {{company}}
+                 * {{visit_date}}
+                 * {{visit_time}}
+                 */
+                const {
+                    error: emailError
+                } = await eamaSupabase.functions.invoke(
+                    'send-auth-email',
+                    {
+                        body: {
+
+                            type: 'factory_visit',
+
+                            email:
+                                formData.email,
+
+                            name:
+                                formData.full_name,
+
+                            company:
+                                formData.company_name,
+
+                            visit_date:
+                                formData.preferred_visit_date,
+
+                            visit_time:
+                                formData.preferred_time
+
+                        }
+                    }
+                );
+
+
+                if (emailError) {
+
+                    console.error(
+                        'Factory visit email error:',
+                        emailError
+                    );
+
+                    let message =
+                        'Your request was saved, but we could not send the confirmation email.';
+
+                    try {
+
+                        if (
+                            emailError.context &&
+                            typeof emailError.context.json === 'function'
+                        ) {
+
+                            const errorData =
+                                await emailError.context.json();
+
+                            if (errorData?.error) {
+                                message = errorData.error;
+                            }
+                        }
+
+                    } catch (_) {
+                        // Keep the safe fallback message.
+                    }
+
+                    throw new Error(message);
+                }
+
+
+                /*
+                 * 3. SHOW SUCCESS STATE
+                 */
+                bookingContainer.style.display =
+                    'none';
+
+                successMessage.style.display =
+                    'block';
+
+                window.scrollTo(0, 0);
+
+
+            } catch (error) {
+
+                console.error(
+                    'Factory visit submission error:',
+                    error
+                );
+
+                showError(
+                    error.message ||
+                    'Unable to submit your request. Please try again.'
+                );
+
+                submitBtn.disabled =
+                    false;
+
+                submitBtn.innerText =
+                    'Request Factory Visit';
+            }
+
         }
-    });
+    );
+
+
+    function showError(message) {
+
+        errorMessage.textContent = message;
+
+        errorMessage.style.display = 'block';
+
+        errorMessage.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center'
+        });
+    }
+
 </script>
 
 </body>
