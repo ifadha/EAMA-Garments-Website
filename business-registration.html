@@ -10,29 +10,111 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1" rel="stylesheet"/>
     <style>
-        body { background-color: #0A0A0A; color: #e3e2e2; font-family: 'Inter', sans-serif; }
-        .glass-input { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.3s ease; }
-        .glass-input:focus { background: rgba(255, 255, 255, 0.07); border-color: #ffb4a3; outline: none; }
-        #country-list { position: absolute; width: 100%; max-height: 200px; overflow-y: auto; background: #1e2020; border: 1px solid #343535; z-index: 50; display: none; }
-        .country-option { padding: 10px 15px; cursor: pointer; font-size: 14px; }
-        .country-option:hover { background: #343535; color: #ffb4a3; }
+        body {
+            background-color: #0A0A0A;
+            color: #e3e2e2;
+            font-family: 'Inter', sans-serif;
+        }
+    
+        .glass-input {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+    
+        .glass-input:focus {
+            background: rgba(255, 255, 255, 0.07);
+            border-color: #ffb4a3;
+            outline: none;
+        }
+    
+        #country-list {
+            position: absolute;
+            width: 100%;
+            max-height: 200px;
+            overflow-y: auto;
+            background: #1e2020;
+            border: 1px solid #343535;
+            z-index: 50;
+            display: none;
+        }
+    
+        .country-option {
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+    
+        .country-option:hover {
+            background: #343535;
+            color: #ffb4a3;
+        }
+    
+        @keyframes registerGlow {
+            from {
+                transform: translate3d(0, 0, 0) scale(1);
+            }
+    
+            to {
+                transform: translate3d(80px, 50px, 0) scale(1.12);
+            }
+        }
+    
+        @keyframes registerGlowReverse {
+            from {
+                transform: translate3d(0, 0, 0) scale(1);
+            }
+    
+            to {
+                transform: translate3d(-60px, -40px, 0) scale(1.1);
+            }
+        }
     </style>
 </head>
 <body class="overflow-x-hidden">
-<main class="min-h-screen flex flex-col md:flex-row">
-    <!-- Visual Section -->
-    <section class="hidden md:flex md:w-5/12 lg:w-1/2 relative flex-col justify-between p-20 border-r border-white/10 overflow-hidden">
-        <div class="absolute inset-0 z-0">
-            <div class="w-full h-full bg-cover bg-center opacity-30" style="background-image: url('https://images.unsplash.com/photo-1558769132-cb1aea458c5e?q=80&w=2000')"></div>
-            <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black"></div>
-        </div>
-        <div class="relative z-10"><h2 class="text-2xl font-serif text-[#ffb4a3]">EAMA Garments</h2></div>
-        <div class="relative z-10">
-            <h1 class="text-6xl font-serif leading-tight mb-6">Partner with<br>Industrial Excellence.</h1>
-            <p class="text-gray-400 max-w-sm">Access our supply chain infrastructure and manage your production lifecycle from one secure portal.</p>
-        </div>
-        <div class="relative z-10 text-[10px] tracking-[0.3em] uppercase opacity-40">ISO 9001:2015 CERTIFIED</div>
-    </section>
+    <main class="min-h-screen flex flex-col md:flex-row">
+        <!-- Visual Section -->
+
+        <section
+            class="hidden md:flex md:w-5/12 lg:w-1/2 relative flex-col justify-between p-20 border-r border-white/10 overflow-hidden bg-[#0A0A0A]">
+
+            <!-- Abstract professional background -->
+            <div class="absolute inset-0">
+
+                <div class="absolute w-[700px] h-[700px] -top-[300px] -left-[250px] rounded-full blur-[120px] opacity-30"
+                    style="background: radial-gradient(circle, rgba(255,180,163,0.12), transparent 65%); animation: registerGlow 14s ease-in-out infinite alternate;">
+                </div>
+
+                <div class="absolute w-[600px] h-[600px] -bottom-[300px] -right-[250px] rounded-full blur-[130px] opacity-20"
+                    style="background: radial-gradient(circle, rgba(255,255,255,0.08), transparent 65%); animation: registerGlowReverse 18s ease-in-out infinite alternate;">
+                </div>
+
+                <div class="absolute inset-0 bg-gradient-to-br from-white/[0.015] via-transparent to-black/60"></div>
+
+            </div>
+
+            <div class="relative z-10">
+                <h2 class="text-2xl font-serif text-[#ffb4a3]">
+                    EAMA Garments
+                </h2>
+            </div>
+
+            <div class="relative z-10">
+                <h1 class="text-6xl font-serif leading-tight mb-6">
+                    Partner with<br>
+                    Industrial Excellence.
+                </h1>
+
+                <p class="text-gray-400 max-w-sm">
+                    Access our supply chain infrastructure and manage your production lifecycle from one secure portal.
+                </p>
+            </div>
+
+            <div class="relative z-10 text-[10px] tracking-[0.3em] uppercase opacity-40">
+                ISO 9001:2015 CERTIFIED
+            </div>
+
+        </section>
 
     <!-- Form Section -->
     <section class="flex-1 bg-[#121414] flex items-center justify-center p-8 md:p-20">
