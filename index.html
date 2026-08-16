@@ -8,7 +8,9 @@
     <!-- Essential Scripts -->
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap" rel="stylesheet">
 
     <script id="tailwind-config">
@@ -16,24 +18,26 @@
             darkMode: "class",
             theme: {
                 extend: {
-                    "colors": {
-                        "primary": "#ffb4a3",
+                    colors: {
+                        primary: "#ffb4a3",
                         "primary-container": "#ff6b4a",
                         "on-primary-container": "#FFFFFF",
-                        "surface": "#121414",
-                        "background": "#0A0A0A",
+                        surface: "#121414",
+                        background: "#0A0A0A",
                         "on-surface-variant": "#e1bfb8",
                         "surface-container-low": "#1a1c1c",
                         "surface-container-lowest": "#0d0e0f",
                     },
-                    "spacing": {
+
+                    spacing: {
                         "section-gap": "120px",
                         "margin-desktop": "80px",
                         "margin-mobile": "20px",
                     },
-                    "fontFamily": {
-                        "headline": ["Playfair Display", "serif"],
-                        "body": ["Inter", "sans-serif"]
+
+                    fontFamily: {
+                        headline: ["Playfair Display", "serif"],
+                        body: ["Inter", "sans-serif"]
                     }
                 }
             }
@@ -41,8 +45,20 @@
     </script>
 
     <style>
+
+        /* =========================================================
+           GLOBAL
+        ========================================================= */
+
         html {
             scroll-behavior: smooth;
+        }
+
+        html,
+        body {
+            width: 100%;
+            max-width: 100%;
+            overflow-x: hidden;
         }
 
         body {
@@ -52,19 +68,27 @@
             overflow-x: hidden;
         }
 
+        nav {
+            max-width: 100vw;
+        }
+
         .cinematic-overlay {
             background: linear-gradient(
                 to bottom,
-                rgba(10,10,10,0.3) 0%,
-                rgba(10,10,10,0.8) 100%
+                rgba(10, 10, 10, 0.3) 0%,
+                rgba(10, 10, 10, 0.8) 100%
             );
         }
 
         .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            font-variation-settings:
+                'FILL' 0,
+                'wght' 400,
+                'GRAD' 0,
+                'opsz' 24;
         }
 
-        /* Fix: Elements are visible by default, animation adds the flair */
+        /* Elements visible by default */
         .reveal {
             opacity: 1;
             transform: none;
@@ -78,14 +102,17 @@
             scroll-margin-top: 80px;
         }
 
-        /* ---------------------------------------------------------
-           MOBILE RESPONSIVE FIXES
-           Only affects smaller screens.
-        --------------------------------------------------------- */
+
+        /* =========================================================
+           MOBILE RESPONSIVE
+           ========================================================= */
 
         @media (max-width: 767px) {
 
-            /* Header / Navigation */
+            /* -----------------------------------------------------
+               NAVIGATION
+            ----------------------------------------------------- */
+
             nav {
                 height: 68px !important;
                 padding-left: 20px !important;
@@ -98,28 +125,35 @@
             }
 
             nav .flex.items-center.gap-6 {
-                gap: 0 !important;
+                gap: 8px !important;
             }
 
             nav a[href*="client-portal"] {
-                padding: 10px 13px !important;
-                font-size: 9px !important;
+                padding: 10px 14px !important;
+                font-size: 10px !important;
                 letter-spacing: 0.04em !important;
                 white-space: nowrap;
             }
 
-            /* Hero */
+
+            /* -----------------------------------------------------
+               HERO
+            ----------------------------------------------------- */
+
             section.relative.h-screen {
                 min-height: 100svh;
-                height: auto !important;
-                padding-top: 110px !important;
+                height: 100svh !important;
+                padding-top: 90px !important;
                 padding-bottom: 70px !important;
+                padding-left: 20px !important;
+                padding-right: 20px !important;
                 align-items: center !important;
             }
 
             section.relative.h-screen > div.relative.z-20 {
                 width: 100%;
                 max-width: 100%;
+                padding-top: 30px;
             }
 
             section.relative.h-screen p.text-primary-container {
@@ -141,29 +175,29 @@
             }
 
             section.relative.h-screen button {
-                width: 100%;
-                padding: 17px 20px !important;
+                width: auto;
+                max-width: 100%;
+                padding: 16px 24px !important;
             }
 
-            /* General section spacing */
-            #collections,
-            #production,
-            #quality,
-            #factory-visit,
-            #consultation {
+
+            /* -----------------------------------------------------
+               COLLECTIONS
+            ----------------------------------------------------- */
+
+            #collections {
                 padding-top: 70px !important;
                 padding-bottom: 70px !important;
             }
 
-            /* Collections banner */
             #collections > div {
-                min-height: 560px !important;
-                padding: 35px 24px !important;
+                min-height: 520px !important;
+                padding: 40px 24px !important;
                 border-radius: 1.25rem !important;
             }
 
             #collections h2 {
-                font-size: 2rem !important;
+                font-size: 2.2rem !important;
                 line-height: 1.15 !important;
             }
 
@@ -178,66 +212,119 @@
                 padding: 16px 20px !important;
             }
 
-            /* Upload Tech Pack / Production banner */
+
+            /* =====================================================
+               TECH PACK / PRODUCTION SECTION
+               MOBILE BACKGROUND FIX
+            ===================================================== */
+
             #production {
                 position: relative !important;
+
+                min-height: 520px !important;
+
+                padding-top: 90px !important;
+                padding-bottom: 90px !important;
+
+                margin-top: 0 !important;
+                margin-bottom: 0 !important;
+
                 overflow: hidden !important;
+
+                /*
+                 * Explicitly load the image again on mobile.
+                 * This prevents the mobile browser from failing
+                 * to display the desktop inline background.
+                 */
+                background-image: url('Gemini_Generated_Image_a32cmma32cmma32c.jpg') !important;
+
                 background-color: #0A0A0A !important;
                 background-size: cover !important;
-                background-position: center !important;
+                background-position: center center !important;
+                background-repeat: no-repeat !important;
+
+                border-top: 0 !important;
+                border-bottom: 0 !important;
+
                 isolation: isolate;
             }
 
+            /*
+             * DO NOT use a ::before background layer here.
+             * The actual section background handles the image.
+             */
+
             #production::before {
-                content: "";
-                position: absolute;
-                inset: 0;
-                background: #0A0A0A;
-                z-index: -2;
+                content: none !important;
+                display: none !important;
             }
 
+            /*
+             * Dark overlay
+             */
             #production > .absolute.inset-0 {
                 position: absolute !important;
-                inset: -2px !important;
-                width: calc(100% + 4px) !important;
-                height: calc(100% + 4px) !important;
-                background: rgba(0,0,0,0.68) !important;
-                z-index: 0 !important;
+                inset: 0 !important;
+
+                width: 100% !important;
+                height: 100% !important;
+
+                background: rgba(0, 0, 0, 0.60) !important;
+
+                z-index: 1 !important;
+
+                pointer-events: none;
             }
 
+            /*
+             * Production content
+             */
             #production > .relative.z-10 {
+                position: relative !important;
+
+                z-index: 2 !important;
+
                 width: 100%;
                 max-width: 100%;
             }
 
             #production h2 {
-                font-size: 2rem !important;
-                line-height: 1.2 !important;
-                margin-bottom: 22px !important;
+                font-size: 2.2rem !important;
+                line-height: 1.15 !important;
+                margin-bottom: 24px !important;
             }
 
             #production p {
                 font-size: 15px !important;
                 line-height: 1.7 !important;
-                margin-bottom: 30px !important;
+                margin-bottom: 32px !important;
             }
 
             #production a {
-                display: block;
+                display: inline-block;
                 width: 100%;
-                text-align: center;
-                padding: 16px 18px !important;
+                max-width: 320px;
+                padding: 16px 20px !important;
                 line-height: 1.4;
             }
 
-            /* Manufacturing workflow */
+
+            /* -----------------------------------------------------
+               MANUFACTURING WORKFLOW
+            ----------------------------------------------------- */
+
+            #quality {
+                padding-top: 70px !important;
+                padding-bottom: 70px !important;
+            }
+
             #quality > div:first-child {
-                margin-bottom: 55px !important;
+                margin-bottom: 50px !important;
             }
 
             #quality h2 {
-                font-size: 2rem !important;
-                line-height: 1.2 !important;
+                font-size: 2.2rem !important;
+                line-height: 1.15 !important;
             }
 
             #quality > div:first-child p {
@@ -245,57 +332,89 @@
                 line-height: 1.6 !important;
             }
 
-            #quality .grid.grid-cols-1.md\\:grid-cols-2.lg\\:grid-cols-6 {
+            #quality .grid.grid-cols-1.md\:grid-cols-2.lg\:grid-cols-6 {
                 grid-template-columns: 1fr !important;
-                gap: 42px !important;
+                gap: 40px !important;
             }
 
-            /* Quality assurance */
-            .aspect-video.lg\\:aspect-square {
+            #quality .w-20 {
+                width: 60px !important;
+                height: 60px !important;
+                margin-bottom: 20px !important;
+            }
+
+            #quality .w-20 .material-symbols-outlined {
+                font-size: 30px !important;
+            }
+
+
+            /* -----------------------------------------------------
+               QUALITY ASSURANCE
+            ----------------------------------------------------- */
+
+            .aspect-video.lg\:aspect-square {
                 aspect-ratio: 16 / 10 !important;
             }
 
-            #quality h2.font-headline {
-                font-size: 2rem !important;
-                line-height: 1.2 !important;
+            #quality + section {
+                padding-top: 70px !important;
+                padding-bottom: 70px !important;
             }
 
-            #quality p.text-lg {
+            #quality + section .grid {
+                gap: 45px !important;
+            }
+
+            #quality + section h2 {
+                font-size: 2.2rem !important;
+                line-height: 1.15 !important;
+            }
+
+            #quality + section p {
                 font-size: 15px !important;
                 line-height: 1.7 !important;
             }
 
-            #quality .grid.grid-cols-1.md\\:grid-cols-2 {
+            #quality + section .grid.grid-cols-1.md\:grid-cols-2 {
                 grid-template-columns: 1fr !important;
                 gap: 30px !important;
             }
 
-            /* Factory visit */
+
+            /* -----------------------------------------------------
+               FACTORY VISIT
+            ----------------------------------------------------- */
+
+            #factory-visit {
+                padding-top: 70px !important;
+                padding-bottom: 70px !important;
+            }
+
             #factory-visit .grid {
                 gap: 45px !important;
             }
 
-            #factory-visit .aspect-\\[4\\/5\\] {
+            #factory-visit .aspect-\[4\/5\] {
                 aspect-ratio: 4 / 5 !important;
                 width: 100%;
             }
 
             #factory-visit h2 {
-                font-size: 2rem !important;
-                line-height: 1.2 !important;
+                font-size: 2.2rem !important;
+                line-height: 1.15 !important;
                 margin-bottom: 24px !important;
             }
 
             #factory-visit p.text-lg {
                 font-size: 15px !important;
                 line-height: 1.7 !important;
-                margin-bottom: 30px !important;
+                margin-bottom: 32px !important;
             }
 
-            #factory-visit .grid.grid-cols-1.sm\\:grid-cols-2 {
+            #factory-visit .grid.grid-cols-1.sm\:grid-cols-2 {
                 grid-template-columns: 1fr !important;
                 gap: 20px !important;
-                margin-bottom: 35px !important;
+                margin-bottom: 40px !important;
                 letter-spacing: 0.08em !important;
                 font-size: 10px !important;
             }
@@ -303,27 +422,41 @@
             #factory-visit a {
                 width: 100%;
                 text-align: center;
-                padding: 16px 18px !important;
+                padding: 16px 20px !important;
             }
 
-            /* Contact / Consultation */
-            #consultation .grid.grid-cols-1.lg\\:grid-cols-2 {
+
+            /* -----------------------------------------------------
+               CONSULTATION
+            ----------------------------------------------------- */
+
+            #consultation {
+                padding-top: 70px !important;
+                padding-bottom: 70px !important;
+            }
+
+            #consultation > div {
+                border-radius: 14px !important;
+            }
+
+            #consultation .grid.grid-cols-1.lg\:grid-cols-2 {
                 display: grid;
                 grid-template-columns: 1fr !important;
                 gap: 1px !important;
             }
 
-            #consultation .p-12.md\\:p-24 {
-                padding: 35px 24px !important;
+            #consultation .p-12,
+            #consultation .md\:p-24 {
+                padding: 40px 24px !important;
             }
 
-            #consultation .min-h-\\[600px\\] {
+            #consultation .min-h-\[600px\] {
                 min-height: auto !important;
             }
 
             #consultation h2 {
                 font-size: 2.5rem !important;
-                line-height: 1.15 !important;
+                line-height: 1.1 !important;
                 margin-bottom: 45px !important;
             }
 
@@ -366,7 +499,11 @@
                 padding: 17px 15px !important;
             }
 
-            /* Footer */
+
+            /* -----------------------------------------------------
+               FOOTER
+            ----------------------------------------------------- */
+
             footer {
                 text-align: center;
                 padding-top: 30px !important;
@@ -378,7 +515,11 @@
             }
         }
 
-        /* Smaller phones */
+
+        /* =========================================================
+           VERY SMALL PHONES
+        ========================================================= */
+
         @media (max-width: 380px) {
 
             nav > div:first-child {
@@ -387,403 +528,1060 @@
 
             nav a[href*="client-portal"] {
                 padding: 9px 10px !important;
-                font-size: 8px !important;
+                font-size: 9px !important;
             }
 
             section.relative.h-screen h1 {
-                font-size: 2.15rem !important;
+                font-size: 2.2rem !important;
             }
 
-            #collections h2,
             #production h2,
+            #collections h2,
             #quality h2,
+            #quality + section h2,
             #factory-visit h2 {
-                font-size: 1.8rem !important;
+                font-size: 2rem !important;
             }
 
             #consultation h2 {
                 font-size: 2.2rem !important;
             }
         }
+
     </style>
 
-    <!-- Supabase Logic (Preserved) -->
+    <!-- Supabase Logic -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-client.js"></script>
     <script src="supabase-fetch-adapter.js"></script>
+
 </head>
 
 <body>
-    <!-- 1. FIXED TOP NAVIGATION BAR -->
+
+    <!-- =========================================================
+         1. FIXED TOP NAVIGATION BAR
+    ========================================================= -->
+
     <nav class="fixed top-0 left-0 w-full h-20 px-margin-mobile md:px-margin-desktop bg-black/90 backdrop-blur-md z-50 flex justify-between items-center border-b border-white/10">
-        <div class="text-xl font-headline font-bold tracking-tighter">EAMA GARMENTS</div>
-        
+
+        <div class="text-xl font-headline font-bold tracking-tighter">
+            EAMA GARMENTS
+        </div>
+
         <div class="hidden md:flex items-center space-x-8">
-            <a href="#" class="text-primary-container font-semibold border-b-2 border-primary-container pb-1 text-[12px] uppercase tracking-widest">Home</a>
-            <a href="#collections" class="text-on-surface-variant hover:text-white transition-colors text-[12px] uppercase tracking-widest">View Collections</a>
-            <a href="#production" class="text-on-surface-variant hover:text-white transition-colors text-[12px] uppercase tracking-widest">Start Your Production</a>
-            <a href="#quality" class="text-on-surface-variant hover:text-white transition-colors text-[12px] uppercase tracking-widest">Quality & Sustainability</a>
+
+            <a href="#"
+                class="text-primary-container font-semibold border-b-2 border-primary-container pb-1 text-[12px] uppercase tracking-widest">
+                Home
+            </a>
+
+            <a href="#collections"
+                class="text-on-surface-variant hover:text-white transition-colors text-[12px] uppercase tracking-widest">
+                View Collections
+            </a>
+
+            <a href="#production"
+                class="text-on-surface-variant hover:text-white transition-colors text-[12px] uppercase tracking-widest">
+                Start Your Production
+            </a>
+
+            <a href="#quality"
+                class="text-on-surface-variant hover:text-white transition-colors text-[12px] uppercase tracking-widest">
+                Quality & Sustainability
+            </a>
+
         </div>
 
         <div class="flex items-center gap-6">
-            <button onclick="document.getElementById('consultation').scrollIntoView({behavior:'smooth'})" class="hidden lg:block text-on-surface-variant hover:text-white transition-colors text-[12px] uppercase tracking-widest">Consultation</button>
-            <a href="https://ifadha.github.io/EAMA-Garments-Website/client-portal-sign-in.html" class="bg-primary-container text-white px-8 py-3 rounded-sm text-[12px] font-bold uppercase transition-transform active:scale-95 hover:brightness-110">
-            Login / Sign Up
-           </a>
+
+            <button
+                onclick="document.getElementById('consultation').scrollIntoView({behavior:'smooth'})"
+                class="hidden lg:block text-on-surface-variant hover:text-white transition-colors text-[12px] uppercase tracking-widest">
+                Consultation
+            </button>
+
+            <a
+                href="https://ifadha.github.io/EAMA-Garments-Website/client-portal-sign-in.html"
+                class="bg-primary-container text-white px-8 py-3 rounded-sm text-[12px] font-bold uppercase transition-transform active:scale-95 hover:brightness-110">
+                Login / Sign Up
+            </a>
+
         </div>
+
     </nav>
 
-    <!-- 2. HERO SECTION -->
+
+    <!-- =========================================================
+         2. HERO SECTION
+    ========================================================= -->
+
     <section class="relative h-screen w-full flex items-center px-margin-mobile md:px-margin-desktop">
+
         <div class="absolute inset-0 z-0">
+
             <div class="absolute inset-0 cinematic-overlay z-10"></div>
-            <video autoplay muted loop playsinline class="absolute inset-0 h-full w-full object-cover">
-                <source src="Black_fabric_ripples_gently_202607291554.mp4" type="video/mp4">
+
+            <video
+                autoplay
+                muted
+                loop
+                playsinline
+                class="absolute inset-0 h-full w-full object-cover">
+
+                <source
+                    src="Black_fabric_ripples_gently_202607291554.mp4"
+                    type="video/mp4">
+
             </video>
+
         </div>
+
         <div class="relative z-20 max-w-4xl">
-            <p class="text-primary-container text-[12px] mb-6 tracking-[0.3em] uppercase font-bold">Sri Lanka Apparel Manufacturer</p>
+
+            <p class="text-primary-container text-[12px] mb-6 tracking-[0.3em] uppercase font-bold">
+                Sri Lanka Apparel Manufacturer
+            </p>
+
             <h1 class="font-headline text-5xl md:text-7xl text-white mb-8 leading-tight uppercase">
-                Your Trusted <br> Apparel Manufacturer
+                Your Trusted <br>
+                Apparel Manufacturer
             </h1>
+
             <p class="text-lg md:text-xl text-on-surface-variant max-w-2xl mb-12 leading-relaxed">
                 We manufacture garments for brands, retailers, and organizations, with experienced workers, careful quality control, and reliable production.
             </p>
-            <button onclick="document.getElementById('factory-visit').scrollIntoView({behavior:'smooth'})" class="bg-primary-container text-white px-10 py-5 text-[12px] font-bold uppercase hover:brightness-110 transition-all">
+
+            <button
+                onclick="document.getElementById('factory-visit').scrollIntoView({behavior:'smooth'})"
+                class="bg-primary-container text-white px-10 py-5 text-[12px] font-bold uppercase hover:brightness-110 transition-all">
                 Book Factory Visit
             </button>
+
         </div>
+
     </section>
 
-    <!-- 3. SAMPLE COLLECTIONS SECTION -->
-    <section id="collections" class="py-section-gap px-margin-mobile md:px-margin-desktop bg-surface-container-lowest">
+
+    <!-- =========================================================
+         3. SAMPLE COLLECTIONS SECTION
+    ========================================================= -->
+
+    <section
+        id="collections"
+        class="py-section-gap px-margin-mobile md:px-margin-desktop bg-surface-container-lowest">
+
         <div class="relative overflow-hidden rounded-[2rem] border border-white/10 min-h-[600px] flex items-center p-8 md:p-20">
-            <video autoplay muted loop playsinline class="absolute inset-0 h-full w-full object-cover opacity-50">
-                <source src="Runway_walking_movement_seamless…_202607281323.mp4" type="video/mp4">
+
+            <video
+                autoplay
+                muted
+                loop
+                playsinline
+                class="absolute inset-0 h-full w-full object-cover opacity-50">
+
+                <source
+                    src="Runway_walking_movement_seamless…_202607281323.mp4"
+                    type="video/mp4">
+
             </video>
+
             <div class="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-transparent"></div>
-            
+
             <div class="relative z-10 max-w-2xl">
-                <span class="text-primary-container text-[12px] block mb-6 uppercase tracking-[0.2em] font-bold">Curated Collections</span>
-                <h2 class="font-headline text-4xl md:text-5xl text-white mb-6 uppercase">Explore Our Sample Collections</h2>
+
+                <span class="text-primary-container text-[12px] block mb-6 uppercase tracking-[0.2em] font-bold">
+                    Curated Collections
+                </span>
+
+                <h2 class="font-headline text-4xl md:text-5xl text-white mb-6 uppercase">
+                    Explore Our Sample Collections
+                </h2>
+
                 <p class="text-lg text-white/80 mb-10 leading-relaxed">
                     Our sample collection gives you an overview of the garments we manufacture while protecting our clients' confidential designs. Request a sample or quotation for any style that matches your requirements.
                 </p>
-                <a href="https://ifadha.github.io/EAMA-Garments-Website/gallery.html" class="inline-block bg-white text-black px-12 py-5 rounded-full text-[12px] font-bold uppercase hover:bg-primary-container hover:text-white transition-all">
+
+                <a
+                    href="https://ifadha.github.io/EAMA-Garments-Website/gallery.html"
+                    class="inline-block bg-white text-black px-12 py-5 rounded-full text-[12px] font-bold uppercase hover:bg-primary-container hover:text-white transition-all">
                     View Collections
                 </a>
+
             </div>
+
         </div>
+
     </section>
 
-    <!-- 4. START YOUR PRODUCTION SECTION -->
-    <section id="production" 
-    class="relative py-32 bg-cover bg-center bg-no-repeat px-margin-mobile md:px-margin-desktop border-y border-white/5 overflow-hidden"
-    style="background-image: url('Gemini_Generated_Image_a32cmma32cmma32c.jpg');">
 
-    <!-- Dark overlay -->
-    <div class="absolute inset-0 bg-black/60"></div>
+    <!-- =========================================================
+         4. START YOUR PRODUCTION / TECH PACK SECTION
+    ========================================================= -->
 
-    <div class="relative z-10 max-w-4xl mx-auto text-center">
-        <h2 class="font-headline text-4xl md:text-5xl text-white mb-8">
-            Have Your Own Design?
-        </h2>
+    <section
+        id="production"
+        class="relative py-32 bg-cover bg-center bg-no-repeat px-margin-mobile md:px-margin-desktop border-y border-white/5"
+        style="
+            background-image: url('Gemini_Generated_Image_a32cmma32cmma32c.jpg');
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+        ">
 
-        <p class="text-lg text-on-surface-variant mb-12 leading-relaxed">
-            Share your design, tech pack, or reference sample with us. We’ll turn your requirements into quality garments, produced in bulk to your specifications.
-        </p>
+        <!-- Dark overlay -->
+        <div class="absolute inset-0 bg-black/60"></div>
 
-        <a href="https://ifadha.github.io/EAMA-Garments-Website/techpack.html"
-            class="inline-block bg-primary-container text-white px-12 py-5 rounded-sm text-[12px] font-bold uppercase transition-all hover:brightness-110">
-            Upload Tech Pack & Request Quote
-        </a>
-    </div>
+        <!-- Content -->
+        <div class="relative z-10 max-w-4xl mx-auto text-center">
+
+            <h2 class="font-headline text-4xl md:text-5xl text-white mb-8">
+                Have Your Own Design?
+            </h2>
+
+            <p class="text-lg text-on-surface-variant mb-12 leading-relaxed">
+                Share your design, tech pack, or reference sample with us. We’ll turn your requirements into quality garments, produced in bulk to your specifications.
+            </p>
+
+            <a
+                href="https://ifadha.github.io/EAMA-Garments-Website/techpack.html"
+                class="inline-block bg-primary-container text-white px-12 py-5 rounded-sm text-[12px] font-bold uppercase transition-all hover:brightness-110">
+                Upload Tech Pack & Request Quote
+            </a>
+
+        </div>
+
     </section>
 
-    <!-- 5. MANUFACTURING WORKFLOW SECTION -->
-    <section id="quality" class="py-section-gap bg-surface px-margin-mobile md:px-margin-desktop">
+
+    <!-- =========================================================
+         5. MANUFACTURING WORKFLOW SECTION
+    ========================================================= -->
+
+    <section
+        id="quality"
+        class="py-section-gap bg-surface px-margin-mobile md:px-margin-desktop">
+
         <div class="mb-24">
-            <span class="text-primary-container text-[12px] block mb-4 uppercase tracking-[0.2em] font-bold">Our Workflow</span>
-            <h2 class="font-headline text-4xl md:text-5xl text-white mb-6">Manufacturing Process</h2>
-            <p class="text-lg text-on-surface-variant max-w-2xl">Our step-by-step approach from design review to final delivery</p>
+
+            <span class="text-primary-container text-[12px] block mb-4 uppercase tracking-[0.2em] font-bold">
+                Our Workflow
+            </span>
+
+            <h2 class="font-headline text-4xl md:text-5xl text-white mb-6">
+                Manufacturing Process
+            </h2>
+
+            <p class="text-lg text-on-surface-variant max-w-2xl">
+                Our step-by-step approach from design review to final delivery
+            </p>
+
         </div>
-        
+
+
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8">
-            <!-- Step Items -->
+
             <div class="flex flex-col">
-                <div class="w-20 h-20 bg-surface border border-white/10 flex items-center justify-center mb-8"><span class="material-symbols-outlined text-primary-container text-4xl">forum</span></div>
-                <h3 class="text-lg font-headline text-white mb-3">01. Requirement Discussion</h3>
-                <p class="text-sm text-on-surface-variant">Understanding client needs and production requirements</p>
+                <div class="w-20 h-20 bg-surface border border-white/10 flex items-center justify-center mb-8">
+                    <span class="material-symbols-outlined text-primary-container text-4xl">
+                        forum
+                    </span>
+                </div>
+
+                <h3 class="text-lg font-headline text-white mb-3">
+                    01. Requirement Discussion
+                </h3>
+
+                <p class="text-sm text-on-surface-variant">
+                    Understanding client needs and production requirements
+                </p>
             </div>
+
+
             <div class="flex flex-col">
-                <div class="w-20 h-20 bg-surface border border-white/10 flex items-center justify-center mb-8"><span class="material-symbols-outlined text-primary-container text-4xl">description</span></div>
-                <h3 class="text-lg font-headline text-white mb-3">02. Tech Pack & Review</h3>
-                <p class="text-sm text-on-surface-variant">Reviewing designs, measurements, and garment details</p>
+
+                <div class="w-20 h-20 bg-surface border border-white/10 flex items-center justify-center mb-8">
+                    <span class="material-symbols-outlined text-primary-container text-4xl">
+                        description
+                    </span>
+                </div>
+
+                <h3 class="text-lg font-headline text-white mb-3">
+                    02. Tech Pack & Review
+                </h3>
+
+                <p class="text-sm text-on-surface-variant">
+                    Reviewing designs, measurements, and garment details
+                </p>
+
             </div>
+
+
             <div class="flex flex-col">
-                <div class="w-20 h-20 bg-surface border border-white/10 flex items-center justify-center mb-8"><span class="material-symbols-outlined text-primary-container text-4xl">payments</span></div>
-                <h3 class="text-lg font-headline text-white mb-3">03. Quotation & Planning</h3>
-                <p class="text-sm text-on-surface-variant">Preparing costs, timelines, and production details</p>
+
+                <div class="w-20 h-20 bg-surface border border-white/10 flex items-center justify-center mb-8">
+                    <span class="material-symbols-outlined text-primary-container text-4xl">
+                        payments
+                    </span>
+                </div>
+
+                <h3 class="text-lg font-headline text-white mb-3">
+                    03. Quotation & Planning
+                </h3>
+
+                <p class="text-sm text-on-surface-variant">
+                    Preparing costs, timelines, and production details
+                </p>
+
             </div>
+
+
             <div class="flex flex-col">
-                <div class="w-20 h-20 bg-surface border border-white/10 flex items-center justify-center mb-8"><span class="material-symbols-outlined text-primary-container text-4xl">precision_manufacturing</span></div>
-                <h3 class="text-lg font-headline text-white mb-3">04. Production Prep</h3>
-                <p class="text-sm text-on-surface-variant">Planning materials, resources, and schedules</p>
+
+                <div class="w-20 h-20 bg-surface border border-white/10 flex items-center justify-center mb-8">
+                    <span class="material-symbols-outlined text-primary-container text-4xl">
+                        precision_manufacturing
+                    </span>
+                </div>
+
+                <h3 class="text-lg font-headline text-white mb-3">
+                    04. Production Prep
+                </h3>
+
+                <p class="text-sm text-on-surface-variant">
+                    Planning materials, resources, and schedules
+                </p>
+
             </div>
+
+
             <div class="flex flex-col">
-                <div class="w-20 h-20 bg-surface border border-white/10 flex items-center justify-center mb-8"><span class="material-symbols-outlined text-primary-container text-4xl">verified</span></div>
-                <h3 class="text-lg font-headline text-white mb-3">05. Quality Inspection</h3>
-                <p class="text-sm text-on-surface-variant">Monitoring quality throughout the production process</p>
+
+                <div class="w-20 h-20 bg-surface border border-white/10 flex items-center justify-center mb-8">
+                    <span class="material-symbols-outlined text-primary-container text-4xl">
+                        verified
+                    </span>
+                </div>
+
+                <h3 class="text-lg font-headline text-white mb-3">
+                    05. Quality Inspection
+                </h3>
+
+                <p class="text-sm text-on-surface-variant">
+                    Monitoring quality throughout the production process
+                </p>
+
             </div>
+
+
             <div class="flex flex-col">
-                <div class="w-20 h-20 bg-surface border border-white/10 flex items-center justify-center mb-8"><span class="material-symbols-outlined text-primary-container text-4xl">local_shipping</span></div>
-                <h3 class="text-lg font-headline text-white mb-3">06. Packaging & Dispatch</h3>
-                <p class="text-sm text-on-surface-variant">Final checks, packing, and shipment preparation</p>
+
+                <div class="w-20 h-20 bg-surface border border-white/10 flex items-center justify-center mb-8">
+                    <span class="material-symbols-outlined text-primary-container text-4xl">
+                        local_shipping
+                    </span>
+                </div>
+
+                <h3 class="text-lg font-headline text-white mb-3">
+                    06. Packaging & Dispatch
+                </h3>
+
+                <p class="text-sm text-on-surface-variant">
+                    Final checks, packing, and shipment preparation
+                </p>
+
             </div>
+
         </div>
+
     </section>
 
-    <!-- 6. QUALITY ASSURANCE SECTION -->
-    <section class="py-section-gap bg-surface-container-lowest px-margin-mobile md:px-margin-desktop border-t border-white/5">
+
+    <!-- =========================================================
+         6. QUALITY ASSURANCE SECTION
+    ========================================================= -->
+
+    <section
+        class="py-section-gap bg-surface-container-lowest px-margin-mobile md:px-margin-desktop border-t border-white/5">
+
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
+
             <div class="relative aspect-video lg:aspect-square overflow-hidden rounded-lg border border-white/10">
-                <video autoplay muted loop playsinline class="w-full h-full object-cover">
-                    <source src="Fabric_moving_smoothly_and_slowly_202608151203.mp4" type="video/mp4" type="video/mp4">
+
+                <video
+                    autoplay
+                    muted
+                    loop
+                    playsinline
+                    class="w-full h-full object-cover">
+
+                    <source
+                        src="Fabric_moving_smoothly_and_slowly_202608151203.mp4"
+                        type="video/mp4">
+
                 </video>
+
             </div>
+
+
             <div>
-                <span class="text-primary-container text-[12px] block mb-8 uppercase tracking-[0.2em] font-bold">Quality Assurance</span>
-                <h2 class="font-headline text-4xl md:text-5xl text-white mb-8">Quality Control at Every Stage of Production</h2>
-                <p class="text-lg text-on-surface-variant mb-12">Our production process focuses on consistent quality and attention to detail.</p>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-                    <div class="flex gap-4">
-                        <span class="material-symbols-outlined text-primary-container text-3xl">check_circle</span>
-                        <div><h4 class="text-white font-bold mb-2">Fabric Inspection</h4><p class="text-sm text-on-surface-variant">Quality checks on materials before production</p></div>
-                    </div>
-                    <div class="flex gap-4">
-                        <span class="material-symbols-outlined text-primary-container text-3xl">monitoring</span>
-                        <div><h4 class="text-white font-bold mb-2">Production QC</h4><p class="text-sm text-on-surface-variant">Quality Monitoring During Production</p></div>
-                    </div>
-                    <div class="flex gap-4">
-                        <span class="material-symbols-outlined text-primary-container text-3xl">verified</span>
-                        <div><h4 class="text-white font-bold mb-2">Final Inspection</h4><p class="text-sm text-on-surface-variant">Checking finished garments for accuracy</p></div>
-                    </div>
-                    <div class="flex gap-4">
-                        <span class="material-symbols-outlined text-primary-container text-3xl">precision_manufacturing</span>
-                        <div><h4 class="text-white font-bold mb-2">Spec Check</h4><p class="text-sm text-on-surface-variant">Ensuring garments meet approved standards</p></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- 7. PARTNER WITH EAMA / FACTORY VISIT SECTION -->
-    <section id="factory-visit"
-        class="py-section-gap bg-surface px-margin-mobile md:px-margin-desktop border-t border-white/5">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-24 items-center">
-            <div class="lg:col-span-5 aspect-[4/5] overflow-hidden rounded-lg border border-white/10 relative">
-                <img src="factory visit.jpg" alt="EAMA Garments Factory" class="w-full h-full object-cover">
-                <div class="absolute inset-0 bg-black/15 pointer-events-none"></div>
-            </div>
-            <div class="lg:col-span-7">
-                <span class="text-primary-container text-[12px] block mb-8 uppercase tracking-[0.2em] font-bold">Visit EAMA
+                <span class="text-primary-container text-[12px] block mb-8 uppercase tracking-[0.2em] font-bold">
+                    Quality Assurance
                 </span>
-                <h2 class="font-headline text-4xl md:text-5xl text-white mb-10">Turning Apparel Ideas Into Reliable
-                    Production</h2>
-                <p class="text-lg text-on-surface-variant mb-12">Visit our factory to connect with us, explore your requirements, and get a closer look at our production.</p>
+
+                <h2 class="font-headline text-4xl md:text-5xl text-white mb-8">
+                    Quality Control at Every Stage of Production
+                </h2>
+
+                <p class="text-lg text-on-surface-variant mb-12">
+                    Our production process focuses on consistent quality and attention to detail.
+                </p>
+
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+
+                    <div class="flex gap-4">
+
+                        <span class="material-symbols-outlined text-primary-container text-3xl">
+                            check_circle
+                        </span>
+
+                        <div>
+                            <h4 class="text-white font-bold mb-2">
+                                Fabric Inspection
+                            </h4>
+
+                            <p class="text-sm text-on-surface-variant">
+                                Quality checks on materials before production
+                            </p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="flex gap-4">
+
+                        <span class="material-symbols-outlined text-primary-container text-3xl">
+                            monitoring
+                        </span>
+
+                        <div>
+
+                            <h4 class="text-white font-bold mb-2">
+                                Production QC
+                            </h4>
+
+                            <p class="text-sm text-on-surface-variant">
+                                Quality Monitoring During Production
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="flex gap-4">
+
+                        <span class="material-symbols-outlined text-primary-container text-3xl">
+                            verified
+                        </span>
+
+                        <div>
+
+                            <h4 class="text-white font-bold mb-2">
+                                Final Inspection
+                            </h4>
+
+                            <p class="text-sm text-on-surface-variant">
+                                Checking finished garments for accuracy
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="flex gap-4">
+
+                        <span class="material-symbols-outlined text-primary-container text-3xl">
+                            precision_manufacturing
+                        </span>
+
+                        <div>
+
+                            <h4 class="text-white font-bold mb-2">
+                                Spec Check
+                            </h4>
+
+                            <p class="text-sm text-on-surface-variant">
+                                Ensuring garments meet approved standards
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================================
+         7. FACTORY VISIT SECTION
+    ========================================================= -->
+
+    <section
+        id="factory-visit"
+        class="py-section-gap bg-surface px-margin-mobile md:px-margin-desktop border-t border-white/5">
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-24 items-center">
+
+            <div class="lg:col-span-5 aspect-[4/5] overflow-hidden rounded-lg border border-white/10 relative">
+
+                <img
+                    src="factory visit.jpg"
+                    alt="EAMA Garments Factory"
+                    class="w-full h-full object-cover">
+
+                <div class="absolute inset-0 bg-black/15 pointer-events-none"></div>
+
+            </div>
+
+
+            <div class="lg:col-span-7">
+
+                <span class="text-primary-container text-[12px] block mb-8 uppercase tracking-[0.2em] font-bold">
+                    Visit EAMA
+                </span>
+
+                <h2 class="font-headline text-4xl md:text-5xl text-white mb-10">
+                    Turning Apparel Ideas Into Reliable Production
+                </h2>
+
+                <p class="text-lg text-on-surface-variant mb-12">
+                    Visit our factory to connect with us, explore your requirements, and get a closer look at our production.
+                </p>
+
+
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-16 text-sm text-white/80 tracking-widest uppercase">
-                    <div class="flex items-center gap-3"><span
-                            class="material-symbols-outlined text-primary-container">location_on</span> Sri Lanka-based
-                        manufacturer</div>
-                    <div class="flex items-center gap-3"><span
-                            class="material-symbols-outlined text-primary-container">business_center</span> Custom Apparel
-                        Production</div>
-                    <div class="flex items-center gap-3"><span
-                            class="material-symbols-outlined text-primary-container">settings_suggest</span> Bulk Production
-                        Capability</div>
-                    <div class="flex items-center gap-3"><span
-                            class="material-symbols-outlined text-primary-container">chat</span> Direct Client Communication
+
+                    <div class="flex items-center gap-3">
+                        <span class="material-symbols-outlined text-primary-container">
+                            location_on
+                        </span>
+                        Sri Lanka-based manufacturer
                     </div>
-                    <div class="flex items-center gap-3"><span
-                            class="material-symbols-outlined text-primary-container">account_tree</span> Quality-focused
-                        workflow</div>
+
+
+                    <div class="flex items-center gap-3">
+                        <span class="material-symbols-outlined text-primary-container">
+                            business_center
+                        </span>
+                        Custom Apparel Production
+                    </div>
+
+
+                    <div class="flex items-center gap-3">
+                        <span class="material-symbols-outlined text-primary-container">
+                            settings_suggest
+                        </span>
+                        Bulk Production Capability
+                    </div>
+
+
+                    <div class="flex items-center gap-3">
+                        <span class="material-symbols-outlined text-primary-container">
+                            chat
+                        </span>
+                        Direct Client Communication
+                    </div>
+
+
+                    <div class="flex items-center gap-3">
+                        <span class="material-symbols-outlined text-primary-container">
+                            account_tree
+                        </span>
+                        Quality-focused workflow
+                    </div>
+
                 </div>
-                <a href="https://ifadha.github.io/EAMA-Garments-Website/factory-visit.html"
-                    class="inline-block bg-primary-container text-white px-12 py-5 rounded-sm text-[12px] font-bold uppercase transition-all hover:brightness-110">Request
-                    Factory Visit</a>
+
+
+                <a
+                    href="https://ifadha.github.io/EAMA-Garments-Website/factory-visit.html"
+                    class="inline-block bg-primary-container text-white px-12 py-5 rounded-sm text-[12px] font-bold uppercase transition-all hover:brightness-110">
+                    Request Factory Visit
+                </a>
+
             </div>
+
         </div>
+
     </section>
 
-    <!-- 8. FINAL CONTACT / CONSULTATION SECTION -->
-    <section id="consultation" class="py-section-gap bg-surface-container-lowest px-margin-mobile md:px-margin-desktop">
+
+    <!-- =========================================================
+         8. FINAL CONSULTATION SECTION
+    ========================================================= -->
+
+    <section
+        id="consultation"
+        class="py-section-gap bg-surface-container-lowest px-margin-mobile md:px-margin-desktop">
+
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-px bg-white/10 border border-white/10 rounded-xl overflow-hidden shadow-2xl">
-            <!-- Left: Info -->
+
+
+            <!-- LEFT: CONTACT INFORMATION -->
+
             <div class="p-12 md:p-24 bg-surface relative flex flex-col justify-between min-h-[600px]">
+
                 <div class="relative z-10">
-                    <span class="text-primary-container text-[12px] block mb-8 uppercase tracking-[0.3em] font-bold">Get in Touch</span>
-                    <h2 class="font-headline text-5xl md:text-6xl text-white mb-16">Connect with EAMA</h2>
+
+                    <span class="text-primary-container text-[12px] block mb-8 uppercase tracking-[0.3em] font-bold">
+                        Get in Touch
+                    </span>
+
+                    <h2 class="font-headline text-5xl md:text-6xl text-white mb-16">
+                        Connect with EAMA
+                    </h2>
+
+
                     <div class="space-y-12">
-                        <div class="flex items-start gap-6"><span class="material-symbols-outlined text-primary-container text-3xl">location_on</span> <div><p class="text-[10px] text-white/30 uppercase mb-2">Location</p><p class="text-xl">Colombo, Sri Lanka</p></div></div>
-                        <div class="flex items-start gap-6"><span class="material-symbols-outlined text-primary-container text-3xl">mail</span> <div><p class="text-[10px] text-white/30 uppercase mb-2">Email</p><p class="text-xl">info@eamagarments.com</p></div></div>
-                        <div class="flex items-start gap-6"><span class="material-symbols-outlined text-primary-container text-3xl">call</span> <div><p class="text-[10px] text-white/30 uppercase mb-2">Phone</p><p class="text-xl">0768050495</p></div></div>
+
+                        <div class="flex items-start gap-6">
+
+                            <span class="material-symbols-outlined text-primary-container text-3xl">
+                                location_on
+                            </span>
+
+                            <div>
+
+                                <p class="text-[10px] text-white/30 uppercase mb-2">
+                                    Location
+                                </p>
+
+                                <p class="text-xl">
+                                    Colombo, Sri Lanka
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="flex items-start gap-6">
+
+                            <span class="material-symbols-outlined text-primary-container text-3xl">
+                                mail
+                            </span>
+
+                            <div>
+
+                                <p class="text-[10px] text-white/30 uppercase mb-2">
+                                    Email
+                                </p>
+
+                                <p class="text-xl">
+                                    info@eamagarments.com
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="flex items-start gap-6">
+
+                            <span class="material-symbols-outlined text-primary-container text-3xl">
+                                call
+                            </span>
+
+                            <div>
+
+                                <p class="text-[10px] text-white/30 uppercase mb-2">
+                                    Phone
+                                </p>
+
+                                <p class="text-xl">
+                                    0768050495
+                                </p>
+
+                            </div>
+
+                        </div>
+
                     </div>
+
                 </div>
+
+
                 <div class="relative z-10 flex gap-10 text-[10px] tracking-[0.2em] font-bold text-white/40 uppercase">
-                    <a href="#" class="hover:text-primary-container transition-colors">Linkedin</a>
-                    <a href="#" class="hover:text-primary-container transition-colors">Instagram</a>
+
+                    <a href="#" class="hover:text-primary-container transition-colors">
+                        Linkedin
+                    </a>
+
+                    <a href="#" class="hover:text-primary-container transition-colors">
+                        Instagram
+                    </a>
+
                 </div>
+
             </div>
 
-            <!-- 9. GENERAL INQUIRY FORM -->
+
+            <!-- RIGHT: GENERAL INQUIRY FORM -->
+
             <div class="p-12 md:p-24 bg-surface-container-low">
+
                 <form id="general-inquiry-form" class="space-y-10">
+
+
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-                        <div class="space-y-2"><label class="text-[10px] text-white/30 uppercase">Name *</label><input name="name" required placeholder="Your Name" class="w-full bg-transparent border-b border-white/20 py-3 text-white focus:outline-none focus:border-primary-container transition-all"></div>
-                        <div class="space-y-2"><label class="text-[10px] text-white/30 uppercase">Company</label><input name="company" placeholder="Company Ltd." class="w-full bg-transparent border-b border-white/20 py-3 text-white focus:outline-none focus:border-primary-container transition-all"></div>
+
+                        <div class="space-y-2">
+
+                            <label class="text-[10px] text-white/30 uppercase">
+                                Name *
+                            </label>
+
+                            <input
+                                name="name"
+                                required
+                                placeholder="Your Name"
+                                class="w-full bg-transparent border-b border-white/20 py-3 text-white focus:outline-none focus:border-primary-container transition-all">
+
+                        </div>
+
+
+                        <div class="space-y-2">
+
+                            <label class="text-[10px] text-white/30 uppercase">
+                                Company
+                            </label>
+
+                            <input
+                                name="company"
+                                placeholder="Company Ltd."
+                                class="w-full bg-transparent border-b border-white/20 py-3 text-white focus:outline-none focus:border-primary-container transition-all">
+
+                        </div>
+
                     </div>
+
+
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-                        <div class="space-y-2"><label class="text-[10px] text-white/30 uppercase">Email *</label><input name="email" required type="email" placeholder="email@company.com" class="w-full bg-transparent border-b border-white/20 py-3 text-white focus:outline-none focus:border-primary-container transition-all"></div>
-                        <div class="space-y-2"><label class="text-[10px] text-white/30 uppercase">Country</label><input name="country" placeholder="Select Country" class="w-full bg-transparent border-b border-white/20 py-3 text-white focus:outline-none focus:border-primary-container transition-all"></div>
+
+                        <div class="space-y-2">
+
+                            <label class="text-[10px] text-white/30 uppercase">
+                                Email *
+                            </label>
+
+                            <input
+                                name="email"
+                                required
+                                type="email"
+                                placeholder="email@company.com"
+                                class="w-full bg-transparent border-b border-white/20 py-3 text-white focus:outline-none focus:border-primary-container transition-all">
+
+                        </div>
+
+
+                        <div class="space-y-2">
+
+                            <label class="text-[10px] text-white/30 uppercase">
+                                Country
+                            </label>
+
+                            <input
+                                name="country"
+                                placeholder="Select Country"
+                                class="w-full bg-transparent border-b border-white/20 py-3 text-white focus:outline-none focus:border-primary-container transition-all">
+
+                        </div>
+
                     </div>
-                    <div class="space-y-2"><label class="text-[10px] text-white/30 uppercase">Message *</label><textarea name="message" required rows="4" placeholder="How can we help you?" class="w-full bg-transparent border-b border-white/20 py-3 text-white focus:outline-none focus:border-primary-container transition-all resize-none"></textarea></div>
-                    <button type="submit" class="w-full bg-white text-black py-5 text-[12px] font-bold uppercase tracking-[0.2em] hover:bg-primary-container hover:text-white transition-all active:scale-[0.98]">Send Inquiry</button>
+
+
+                    <div class="space-y-2">
+
+                        <label class="text-[10px] text-white/30 uppercase">
+                            Message *
+                        </label>
+
+                        <textarea
+                            name="message"
+                            required
+                            rows="4"
+                            placeholder="How can we help you?"
+                            class="w-full bg-transparent border-b border-white/20 py-3 text-white focus:outline-none focus:border-primary-container transition-all resize-none"></textarea>
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="w-full bg-white text-black py-5 text-[12px] font-bold uppercase tracking-[0.2em] hover:bg-primary-container hover:text-white transition-all active:scale-[0.98]">
+                        Send Inquiry
+                    </button>
+
                 </form>
+
             </div>
+
         </div>
+
     </section>
 
-    <!-- Footer -->
-    <footer class="py-12 px-margin-mobile md:px-margin-desktop bg-background border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
-        <div class="text-white/20 text-[10px] tracking-widest uppercase">© 2026 EAMA Garments. Colombo , Sri Lanka.</div>
+
+    <!-- =========================================================
+         FOOTER
+    ========================================================= -->
+
+    <footer
+        class="py-12 px-margin-mobile md:px-margin-desktop bg-background border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
+
+        <div class="text-white/20 text-[10px] tracking-widest uppercase">
+            © 2026 EAMA Garments. Colombo, Sri Lanka.
+        </div>
+
     </footer>
 
-    <!-- Scripts -->
+
+    <!-- =========================================================
+         SUPABASE / GENERAL INQUIRY SCRIPT
+    ========================================================= -->
+
     <script>
-document.addEventListener("DOMContentLoaded", () => {
 
-    const supabase = window.eamaSupabase;
-    const inquiryForm = document.getElementById("general-inquiry-form");
+        document.addEventListener("DOMContentLoaded", () => {
 
-    if (!inquiryForm) {
-        console.error("General inquiry form not found.");
-        return;
-    }
+            const supabase = window.eamaSupabase;
+            const inquiryForm = document.getElementById("general-inquiry-form");
 
-    if (!supabase) {
-        console.error("Supabase client was not initialized.");
-        alert("The inquiry service is currently unavailable. Please try again later.");
-        return;
-    }
-
-    inquiryForm.addEventListener("submit", async (e) => {
-        e.preventDefault();
-
-        const btn = inquiryForm.querySelector('button[type="submit"]');
-
-        if (!btn) {
-            console.error("Submit button not found.");
-            return;
-        }
-
-        const originalText = btn.textContent;
-
-        const formData = new FormData(inquiryForm);
-
-        const name = String(formData.get("name") || "").trim();
-        const company = String(formData.get("company") || "").trim();
-        const email = String(formData.get("email") || "").trim();
-        const country = String(formData.get("country") || "").trim();
-        const message = String(formData.get("message") || "").trim();
-
-        // -----------------------------
-        // VALIDATION
-        // -----------------------------
-
-        if (!name) {
-            alert("Please enter your name.");
-            return;
-        }
-
-        if (!email) {
-            alert("Please enter your email address.");
-            return;
-        }
-
-        if (!message) {
-            alert("Please enter your message.");
-            return;
-        }
-
-        // Basic email validation
-        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-        if (!emailPattern.test(email)) {
-            alert("Please enter a valid email address.");
-            return;
-        }
-
-        // -----------------------------
-        // SUBMITTING STATE
-        // -----------------------------
-
-        btn.disabled = true;
-        btn.textContent = "SENDING...";
-        btn.style.opacity = "0.6";
-        btn.style.cursor = "not-allowed";
-
-        try {
-            console.log("Submitting general inquiry...");
-
-            const { data, error } = await supabase.functions.invoke(
-                "send-auth-email",
-                {
-                    body: {
-                        type: "general_inquiry",
-                        name,
-                        company,
-                        email,
-                        country,
-                        message
-                    }
-                }
-            );
-
-            // 1. Check for connection/system errors
-            if (error) {
-                console.error("Supabase Edge Function error:", error);
-                throw new Error(error.message || "The inquiry service could not be reached.");
-            }
-
-            // 2. Check if the backend failed to save the data
-            if (!data || data.success === false) {
-                throw new Error(data.error || "Your inquiry could not be processed.");
-            }
-
-            // 3. Check if data was saved but email failed (Naming sync fix)
-            if (data.sent === false) {
-                alert("Thank you! Your inquiry was received and saved, but we had trouble sending the confirmation email. Our team will contact you shortly.");
-                inquiryForm.reset();
+            if (!inquiryForm) {
+                console.error("General inquiry form not found.");
                 return;
             }
 
-            // 4. Success Case
-            alert("Thank you! Your inquiry has been submitted successfully. Please check your inbox for a confirmation email.");
-            inquiryForm.reset();
+            if (!supabase) {
+                console.error("Supabase client was not initialized.");
 
-        } catch (err) {
-            console.error("GENERAL INQUIRY SUBMISSION FAILED:", err);
-            alert("We couldn't submit your inquiry.\n\n" + (err?.message || "Please try again later."));
-        } finally {
-            btn.disabled = false;
-            btn.textContent = originalText;
-            btn.style.opacity = "";
-            btn.style.cursor = "";
-        }
+                alert(
+                    "The inquiry service is currently unavailable. Please try again later."
+                );
 
-    });
+                return;
+            }
 
-});
-</script>
+
+            inquiryForm.addEventListener("submit", async (e) => {
+
+                e.preventDefault();
+
+
+                const btn = inquiryForm.querySelector(
+                    'button[type="submit"]'
+                );
+
+                if (!btn) {
+                    console.error("Submit button not found.");
+                    return;
+                }
+
+
+                const originalText = btn.textContent;
+
+                const formData = new FormData(inquiryForm);
+
+
+                const name = String(
+                    formData.get("name") || ""
+                ).trim();
+
+                const company = String(
+                    formData.get("company") || ""
+                ).trim();
+
+                const email = String(
+                    formData.get("email") || ""
+                ).trim();
+
+                const country = String(
+                    formData.get("country") || ""
+                ).trim();
+
+                const message = String(
+                    formData.get("message") || ""
+                ).trim();
+
+
+                /* -------------------------------------------------
+                   VALIDATION
+                ------------------------------------------------- */
+
+                if (!name) {
+                    alert("Please enter your name.");
+                    return;
+                }
+
+
+                if (!email) {
+                    alert("Please enter your email address.");
+                    return;
+                }
+
+
+                if (!message) {
+                    alert("Please enter your message.");
+                    return;
+                }
+
+
+                const emailPattern =
+                    /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+
+                if (!emailPattern.test(email)) {
+
+                    alert(
+                        "Please enter a valid email address."
+                    );
+
+                    return;
+                }
+
+
+                /* -------------------------------------------------
+                   SUBMITTING STATE
+                ------------------------------------------------- */
+
+                btn.disabled = true;
+                btn.textContent = "SENDING...";
+                btn.style.opacity = "0.6";
+                btn.style.cursor = "not-allowed";
+
+
+                try {
+
+                    console.log(
+                        "Submitting general inquiry..."
+                    );
+
+
+                    const {
+                        data,
+                        error
+                    } = await supabase.functions.invoke(
+                        "send-auth-email",
+                        {
+                            body: {
+                                type: "general_inquiry",
+                                name,
+                                company,
+                                email,
+                                country,
+                                message
+                            }
+                        }
+                    );
+
+
+                    /* ---------------------------------------------
+                       CONNECTION / SYSTEM ERROR
+                    --------------------------------------------- */
+
+                    if (error) {
+
+                        console.error(
+                            "Supabase Edge Function error:",
+                            error
+                        );
+
+                        throw new Error(
+                            error.message ||
+                            "The inquiry service could not be reached."
+                        );
+
+                    }
+
+
+                    /* ---------------------------------------------
+                       BACKEND PROCESSING ERROR
+                    --------------------------------------------- */
+
+                    if (!data || data.success === false) {
+
+                        throw new Error(
+                            data?.error ||
+                            "Your inquiry could not be processed."
+                        );
+
+                    }
+
+
+                    /* ---------------------------------------------
+                       SAVED BUT EMAIL FAILED
+                    --------------------------------------------- */
+
+                    if (data.sent === false) {
+
+                        alert(
+                            "Thank you! Your inquiry was received and saved, but we had trouble sending the confirmation email. Our team will contact you shortly."
+                        );
+
+                        inquiryForm.reset();
+
+                        return;
+                    }
+
+
+                    /* ---------------------------------------------
+                       SUCCESS
+                    --------------------------------------------- */
+
+                    alert(
+                        "Thank you! Your inquiry has been submitted successfully. Please check your inbox for a confirmation email."
+                    );
+
+                    inquiryForm.reset();
+
+
+                } catch (err) {
+
+                    console.error(
+                        "GENERAL INQUIRY SUBMISSION FAILED:",
+                        err
+                    );
+
+                    alert(
+                        "We couldn't submit your inquiry.\n\n" +
+                        (
+                            err?.message ||
+                            "Please try again later."
+                        )
+                    );
+
+                } finally {
+
+                    btn.disabled = false;
+                    btn.textContent = originalText;
+                    btn.style.opacity = "";
+                    btn.style.cursor = "";
+
+                }
+
+            });
+
+        });
+
+    </script>
+
 </body>
 </html>
