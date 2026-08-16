@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -94,6 +95,286 @@
         .btn:hover:not(:disabled) { background: var(--gold); color: #fff; border-color: var(--gold); }
         .request-actions { margin-top: 18px; display: flex; justify-content: flex-end; }
         .confidential-note { margin-top: 60px; font-size: 10px; color: #444; text-transform: uppercase; letter-spacing: 1px; max-width: 450px; text-align: center; line-height: 1.5; }
+
+
+        /* ==========================================================
+           FULL IMAGE PREVIEW
+           Added only for viewing the complete product image.
+           ========================================================== */
+
+        .image-viewer {
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            background: rgba(0, 0, 0, 0.78);
+            backdrop-filter: blur(6px);
+        }
+
+        .image-viewer.open {
+            display: flex;
+        }
+
+        .image-viewer-panel {
+            position: relative;
+            width: min(520px, 90vw);
+            max-height: 88vh;
+            padding: 12px;
+            border-radius: 18px;
+            background: #111;
+            border: 1px solid rgba(255,255,255,0.12);
+            box-shadow: 0 25px 80px rgba(0,0,0,0.65);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .image-viewer-panel img {
+            display: block;
+            width: auto;
+            height: auto;
+            max-width: 100%;
+            max-height: 82vh;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+
+        .image-viewer-close {
+            position: absolute;
+            top: -14px;
+            right: -14px;
+            width: 38px;
+            height: 38px;
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 50%;
+            background: #111;
+            color: #fff;
+            font-size: 23px;
+            line-height: 1;
+            cursor: pointer;
+            z-index: 2;
+        }
+
+        .image-viewer-close:hover {
+            background: #fff;
+            color: #000;
+        }
+
+
+        /* ==========================================================
+           MOBILE RESPONSIVENESS
+           Keeps the existing carousel design, only adapts sizing.
+           ========================================================== */
+
+        @media (max-width: 768px) {
+
+            .header {
+                padding: 75px 15px 15px;
+            }
+
+            .brand-tag {
+                font-size: 8px;
+                letter-spacing: 3px;
+            }
+
+            .title {
+                font-size: 2.2rem;
+                margin-bottom: 25px;
+            }
+
+            .filter-nav {
+                gap: 14px;
+                flex-wrap: wrap;
+                margin-bottom: 25px;
+                padding: 0 10px;
+            }
+
+            .filter-btn {
+                font-size: 9px;
+                letter-spacing: 1.3px;
+            }
+
+            .stage {
+                height: 470px;
+                overflow: hidden;
+            }
+
+            .card {
+                width: min(78vw, 300px);
+                height: min(110vw, 430px);
+                max-height: 430px;
+            }
+
+            .card-content {
+                padding: 20px 16px 16px;
+            }
+
+            .card-title {
+                font-size: 1.15rem;
+            }
+
+            .card-meta {
+                font-size: 10px;
+                letter-spacing: 1px;
+                margin-bottom: 12px;
+            }
+
+            .card-action-btn {
+                padding: 11px 12px;
+                font-size: 10px;
+            }
+
+            .controls {
+                width: calc(100% - 24px);
+                max-width: none;
+                padding: 0;
+                pointer-events: none;
+            }
+
+            .arrow {
+                width: 42px;
+                height: 42px;
+                font-size: 17px;
+                pointer-events: auto;
+                background: rgba(0,0,0,0.35);
+            }
+
+            .details-panel {
+                margin-top: 25px;
+                padding: 0 18px;
+                max-width: 100%;
+            }
+
+            .details-panel h2 {
+                font-size: 1.8rem;
+            }
+
+            .details-panel p {
+                font-size: 13px;
+                line-height: 1.6;
+            }
+
+            .meta-info {
+                font-size: 10px;
+                letter-spacing: 0.8px;
+            }
+
+            .fab {
+                top: 15px;
+                right: 15px;
+                padding: 11px 14px;
+                font-size: 10px;
+                letter-spacing: 1px;
+            }
+
+            .request-modal {
+                padding: 12px;
+            }
+
+            .request-panel {
+                max-height: 88vh;
+                padding: 18px;
+                border-radius: 16px;
+            }
+
+            .request-item {
+                padding: 10px;
+            }
+
+            .request-item img {
+                width: 55px;
+                height: 55px;
+            }
+
+            .request-actions {
+                justify-content: stretch;
+            }
+
+            .request-actions .btn {
+                width: 100%;
+            }
+
+            .confidential-note {
+                margin-top: 40px;
+                padding: 0 20px;
+                font-size: 9px;
+            }
+
+            /* Small image preview on phones */
+            .image-viewer {
+                padding: 20px;
+            }
+
+            .image-viewer-panel {
+                width: min(92vw, 420px);
+                max-height: 82vh;
+                padding: 8px;
+                border-radius: 14px;
+            }
+
+            .image-viewer-panel img {
+                max-width: 100%;
+                max-height: 76vh;
+                border-radius: 8px;
+            }
+
+            .image-viewer-close {
+                top: -12px;
+                right: -8px;
+                width: 36px;
+                height: 36px;
+                font-size: 21px;
+            }
+        }
+
+
+        /* Smaller phones */
+        @media (max-width: 400px) {
+
+            .header {
+                padding-top: 70px;
+            }
+
+            .title {
+                font-size: 1.9rem;
+            }
+
+            .filter-nav {
+                gap: 10px;
+            }
+
+            .stage {
+                height: 440px;
+            }
+
+            .card {
+                width: 76vw;
+                height: 410px;
+            }
+
+            .card-content {
+                padding: 17px 14px 14px;
+            }
+
+            .card-title {
+                font-size: 1.05rem;
+            }
+
+            .card-meta {
+                font-size: 9px;
+            }
+
+            .image-viewer-panel {
+                width: 90vw;
+            }
+
+            .image-viewer-panel img {
+                max-height: 74vh;
+            }
+        }
     </style>
 </head>
 <body>
@@ -126,6 +407,23 @@
         </div>
         <p id="active-desc">Connecting to gallery...</p>
     </section>
+
+
+    <!-- ==========================================================
+         FULL IMAGE PREVIEW
+         Opens only when a carousel card is clicked.
+         ========================================================== -->
+
+    <div class="image-viewer" id="imageViewer" aria-hidden="true">
+        <div class="image-viewer-panel" id="imageViewerPanel">
+            <button class="image-viewer-close" id="imageViewerClose" type="button" aria-label="Close image">
+                ×
+            </button>
+
+            <img id="fullImage" src="" alt="Full sample image">
+        </div>
+    </div>
+
 
     <div class="request-modal" id="requestModal" aria-hidden="true">
         <div class="request-panel">
@@ -165,6 +463,13 @@
         const requestModal = document.getElementById('requestModal');
         const requestListContent = document.getElementById('requestListContent');
         const continueRequestBtn = document.getElementById('continueRequest');
+
+        /* --- FULL IMAGE VIEWER ELEMENTS --- */
+        const imageViewer = document.getElementById('imageViewer');
+        const imageViewerPanel = document.getElementById('imageViewerPanel');
+        const fullImage = document.getElementById('fullImage');
+        const imageViewerClose = document.getElementById('imageViewerClose');
+
 
         // Fetch from Supabase
         async function loadSamples() {
@@ -228,6 +533,31 @@
             updateGallery();
         }
 
+
+        /* ==========================================================
+           FULL IMAGE VIEWER FUNCTIONS
+           ========================================================== */
+
+        function openImageViewer(imageUrl, imageName) {
+            fullImage.src = imageUrl;
+            fullImage.alt = imageName || 'Full sample image';
+
+            imageViewer.classList.add('open');
+            imageViewer.setAttribute('aria-hidden', 'false');
+
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeImageViewer() {
+            imageViewer.classList.remove('open');
+            imageViewer.setAttribute('aria-hidden', 'true');
+
+            fullImage.src = '';
+
+            document.body.style.overflow = '';
+        }
+
+
         function init() {
             renderCards();
             updateGallery();
@@ -239,6 +569,7 @@
             document.getElementById('next').onclick = () => {
                 if (activeIndex < filteredData.length - 1) { activeIndex++; updateGallery(); }
             };
+
             document.getElementById('prev').onclick = () => {
                 if (activeIndex > 0) { activeIndex--; updateGallery(); }
             };
@@ -247,9 +578,13 @@
                 btn.onclick = (e) => {
                     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
                     e.target.classList.add('active');
+
                     const cat = e.target.dataset.cat;
+
                     filteredData = cat === 'All' ? [...samples] : samples.filter(s => s.cat === cat);
+
                     activeIndex = Math.max(0, Math.floor(filteredData.length / 2));
+
                     renderCards();
                     updateGallery();
                 };
@@ -261,21 +596,45 @@
             };
 
             document.getElementById('closeModal').onclick = () => requestModal.classList.remove('open');
+
             continueRequestBtn.onclick = () => {
                 if (selectedProducts.length > 0) window.location.href = 'request-quote.html';
             };
+
+
+            /* --- IMAGE VIEWER CLOSE EVENTS --- */
+
+            imageViewerClose.onclick = closeImageViewer;
+
+            imageViewer.onclick = (e) => {
+                if (e.target === imageViewer) {
+                    closeImageViewer();
+                }
+            };
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && imageViewer.classList.contains('open')) {
+                    closeImageViewer();
+                }
+            });
         }
+
 
         function renderCards() {
             track.innerHTML = '';
+
             if (filteredData.length === 0) {
                 document.getElementById('active-name').innerText = "No samples found";
                 return;
             }
+
             filteredData.forEach((item, index) => {
                 const card = document.createElement('div');
+
                 const selected = isSelected(item);
+
                 card.className = `card ${selected ? 'selected' : ''}`;
+
                 card.innerHTML = `
                     <img src="${item.img}" alt="${item.name}">
                     <div class="card-content">
@@ -284,11 +643,34 @@
                         <button class="card-action-btn" type="button">${selected ? 'Added to Request' : 'Add to Request'}</button>
                     </div>
                 `;
-                card.onclick = () => { activeIndex = index; updateGallery(); };
+
+
+                /* ==================================================
+                   CARD CLICK
+                   Keeps the existing carousel behavior AND
+                   opens the complete image in the small viewer.
+                   ================================================== */
+
+                card.onclick = (e) => {
+
+                    /* Do not open the image viewer when the
+                       Add to Request button is clicked. */
+                    if (e.target.closest('.card-action-btn')) {
+                        return;
+                    }
+
+                    activeIndex = index;
+                    updateGallery();
+
+                    openImageViewer(item.img, item.name);
+                };
+
+
                 card.querySelector('.card-action-btn').onclick = (e) => {
                     e.stopPropagation();
                     toggleSelection(item);
                 };
+
                 track.appendChild(card);
             });
         }
@@ -303,7 +685,9 @@
                 continueRequestBtn.disabled = true;
                 return;
             }
+
             continueRequestBtn.disabled = false;
+
             requestListContent.innerHTML = selectedProducts.map(item => `
                 <div class="request-item">
                     <div style="display:flex; align-items:center; gap:12px;">
@@ -318,22 +702,44 @@
             `).join('');
         }
 
+
         function updateGallery() {
             const cards = document.querySelectorAll('.card');
+
             if (cards.length === 0) return;
+
+
+            /* Responsive spacing:
+               Desktop keeps your original 180px spacing.
+               Mobile uses smaller spacing so the carousel
+               doesn't get pushed outside the phone screen. */
+            const isMobile = window.innerWidth <= 768;
+            const carouselSpacing = isMobile ? 115 : 180;
+
 
             cards.forEach((card, i) => {
                 const offset = i - activeIndex;
                 const absOffset = Math.abs(offset);
-                const x = offset * 180; 
+
+                const x = offset * carouselSpacing;
+
                 const z = absOffset === 0 ? 0 : -250;
+
                 const rotateY = offset === 0 ? 0 : (offset > 0 ? -45 : 45);
+
                 const scale = absOffset === 0 ? 1 : 0.8;
 
-                card.style.transform = `translateX(${x}px) translateZ(${z}px) rotateY(${rotateY}deg) scale(${scale})`;
+
+                card.style.transform =
+                    `translateX(${x}px) translateZ(${z}px) rotateY(${rotateY}deg) scale(${scale})`;
+
                 card.style.zIndex = 100 - absOffset;
-                card.style.filter = absOffset === 0 ? 'brightness(100%)' : 'brightness(35%)';
+
+                card.style.filter =
+                    absOffset === 0 ? 'brightness(100%)' : 'brightness(35%)';
+
                 card.style.opacity = absOffset > 2 ? 0 : 1;
+
 
                 if (offset === 0) {
                     document.getElementById('active-name').innerText = filteredData[i].name;
@@ -344,8 +750,19 @@
             });
         }
 
+
+        /* Keep carousel responsive if the phone orientation
+           changes or the browser window is resized. */
+        window.addEventListener('resize', () => {
+            if (filteredData.length > 0) {
+                updateGallery();
+            }
+        });
+
+
         // Start Loading
         loadSamples();
     </script>
 </body>
 </html>
+```
