@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,8 +9,7 @@
 
     <link
         href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400;600;700&display=swap"
-        rel="stylesheet"
-    >
+        rel="stylesheet">
 
     <style>
         :root {
@@ -282,14 +282,12 @@
 
         <header>
 
-            <span
-                style="
+            <span style="
                     color: var(--primary);
                     font-size: 11px;
                     letter-spacing: 3px;
                     text-transform: uppercase;
-                "
-            >
+                ">
                 EAMA Manufacturing
             </span>
 
@@ -319,20 +317,16 @@
 
             <!-- CLIENT INFORMATION -->
 
-            <section
-                style="
+            <section style="
                     margin-top: 50px;
                     border-top: 1px solid var(--outline);
                     padding-top: 40px;
-                "
-            >
+                ">
 
-                <h2
-                    style="
+                <h2 style="
                         margin-bottom: 25px;
                         font-size: 1.8rem;
-                    "
-                >
+                    ">
                     Client Information
                 </h2>
 
@@ -346,12 +340,7 @@
                             Company Name
                         </label>
 
-                        <input
-                            type="text"
-                            id="biz_company"
-                            autocomplete="organization"
-                            required
-                        >
+                        <input type="text" id="biz_company" autocomplete="organization" required>
 
                     </div>
 
@@ -363,12 +352,7 @@
                             Contact Person
                         </label>
 
-                        <input
-                            type="text"
-                            id="biz_name"
-                            autocomplete="name"
-                            required
-                        >
+                        <input type="text" id="biz_name" autocomplete="name" required>
 
                     </div>
 
@@ -380,12 +364,7 @@
                             Email Address
                         </label>
 
-                        <input
-                            type="email"
-                            id="biz_email"
-                            autocomplete="email"
-                            required
-                        >
+                        <input type="email" id="biz_email" autocomplete="email" required>
 
                     </div>
 
@@ -397,32 +376,19 @@
                             WhatsApp / Phone
                         </label>
 
-                        <input
-                            type="tel"
-                            id="biz_phone"
-                            autocomplete="tel"
-                            required
-                        >
+                        <input type="tel" id="biz_phone" autocomplete="tel" required>
 
                     </div>
 
 
                     <!-- Country -->
-                    <div
-                        class="form-group target-country"
-                        style="grid-column: span 2;"
-                    >
+                    <div class="form-group target-country" style="grid-column: span 2;">
 
                         <label for="biz_country">
                             Target Country
                         </label>
 
-                        <input
-                            type="text"
-                            id="biz_country"
-                            autocomplete="country-name"
-                            required
-                        >
+                        <input type="text" id="biz_country" autocomplete="country-name" required>
 
                     </div>
 
@@ -433,11 +399,7 @@
 
             <!-- SUBMIT -->
 
-            <button
-                type="submit"
-                class="btn-submit"
-                id="submitBtn"
-            >
+            <button type="submit" class="btn-submit" id="submitBtn">
                 Submit Formal Inquiry
             </button>
 
@@ -452,12 +414,10 @@
 
     <div id="success-state" class="container">
 
-        <h1
-            style="
+        <h1 style="
                 color: var(--primary);
                 font-size: 3rem;
-            "
-        >
+            ">
             Inquiry Logged.
         </h1>
 
@@ -466,10 +426,7 @@
             Our team will review your requirements and get back to you.
         </p>
 
-        <button
-            class="dashboard-btn"
-            id="dashboardBtn"
-        >
+        <button class="dashboard-btn" id="dashboardBtn">
             View Dashboard
         </button>
 
@@ -993,12 +950,12 @@
 
                         <img
                             src="${escapeAttribute(
-                                sample.image_url || ""
-                            )}"
+                        sample.image_url || ""
+                    )}"
                             class="product-image"
                             alt="${escapeAttribute(
-                                sample.sample_name || "Sample"
-                            )}"
+                        sample.sample_name || "Sample"
+                    )}"
                             loading="lazy"
                         >
 
@@ -1011,9 +968,9 @@
                                 "
                             >
                                 ${escapeHtml(
-                                    sample.sample_name ||
-                                    "Sample"
-                                )}
+                        sample.sample_name ||
+                        "Sample"
+                    )}
                             </h3>
 
 
@@ -1026,8 +983,8 @@
                             >
                                 Category:
                                 ${escapeHtml(
-                                    sample.category || "-"
-                                )}
+                        sample.category || "-"
+                    )}
                             </p>
 
 
@@ -1083,14 +1040,14 @@
                                         >
 
                                             ${fabrics.map(
-                                                fabric => `
+                        fabric => `
                                                     <option
                                                         value="${escapeAttribute(fabric)}"
                                                     >
                                                         ${escapeHtml(fabric)}
                                                     </option>
                                                 `
-                                            ).join("")}
+                    ).join("")}
 
                                         </select>
 
@@ -1110,14 +1067,14 @@
                                         >
 
                                             ${colors.map(
-                                                color => `
+                        color => `
                                                     <option
                                                         value="${escapeAttribute(color)}"
                                                     >
                                                         ${escapeHtml(color)}
                                                     </option>
                                                 `
-                                            ).join("")}
+                    ).join("")}
 
                                         </select>
 
@@ -1137,17 +1094,17 @@
                                         >
 
                                             ${sizes.map(
-                                                size => `
+                        size => `
                                                     <option
                                                         value="${size}"
                                                         ${size === "M"
-                                                            ? "selected"
-                                                            : ""}
+                                ? "selected"
+                                : ""}
                                                     >
                                                         ${size}
                                                     </option>
                                                 `
-                                            ).join("")}
+                    ).join("")}
 
                                         </select>
 
@@ -1449,54 +1406,62 @@
                         ------------------------------------------------ */
 
                         const {
+                            data: insertedRequest,
                             error
-                        } =
-                            await _supabase
-                                .from(
-                                    "manufacturing_requests"
-                                )
-                                .insert([
+                        } = await _supabase
+                            .from("manufacturing_requests")
+                            .insert([
+                                {
+                                    ...biz,
 
-                                    {
+                                    garment_category:
+                                        dbSample.category,
 
-                                        ...biz,
+                                    product_type:
+                                        dbSample.sample_name,
 
-                                        garment_category:
-                                            dbSample.category,
+                                    request_type:
+                                        type,
 
-                                        product_type:
-                                            dbSample.sample_name,
+                                    fabric_preference:
+                                        spec.fabric,
 
-                                        request_type:
-                                            type,
+                                    sample_color:
+                                        spec.color,
 
-                                        fabric_preference:
-                                            spec.fabric,
+                                    sample_size:
+                                        spec.size,
 
-                                        sample_color:
-                                            spec.color,
+                                    target_quantity:
+                                        spec.qty,
 
-                                        sample_size:
-                                            spec.size,
+                                    customization_requirements:
+                                        spec.custom,
 
-                                        target_quantity:
-                                            spec.qty,
+                                    additional_notes:
+                                        spec.notes,
 
-                                        customization_requirements:
-                                            spec.custom,
+                                    status:
+                                        "New",
 
-                                        additional_notes:
-                                            spec.notes,
+                                    priority:
+                                        "Medium"
+                                }
+                            ])
+                            .select("id")
+                            .single();
 
-                                        status:
-                                            "New",
+                        if (error || !insertedRequest) {
 
-                                        priority:
-                                            "Medium"
-                                    }
+                            console.error(
+                                "Manufacturing request error:",
+                                error
+                            );
 
-                                ]);
-
+                            throw new Error(
+                                "Your inquiry could not be saved. Please try again."
+                            );
+                        }
 
                         if (error) {
 
@@ -1524,49 +1489,38 @@
 
                     const {
                         error: funcError
-                    } =
-                        await _supabase.functions.invoke(
-                            "send-inquiry-email",
-                            {
+                    } = await _supabase.functions.invoke(
+                        "send-auth-email",
+                        {
+                            body: {
+                                type: "manufacturing_request",
 
-                                body: {
+                                email:
+                                    biz.email,
 
-                                    customer_name:
-                                        biz.contact_person,
+                                request_id:
+                                    insertedRequest.id,
 
-                                    company_name:
-                                        biz.company_name,
+                                company_name:
+                                    biz.company_name,
 
-                                    customer_email:
-                                        biz.email,
-
-                                    admin_email:
-                                        "admin@eamagarments.com",
-
-                                    message:
-                                        `New inquiry received.
-
-Company:
-${biz.company_name}
-
-Contact Person:
-${biz.contact_person}
-
-Email:
-${biz.email}
-
-Phone:
-${biz.phone}
-
-Target Country:
-${biz.country}
-
-Requested Products:
-${emailLog}`
-                                }
-
+                                contact_person:
+                                    biz.contact_person
                             }
+                        }
+                    );
+
+                    if (funcError) {
+
+                        console.error(
+                            "Client confirmation email failed:",
+                            funcError
                         );
+
+                        console.warn(
+                            "The manufacturing request was saved successfully, but the client confirmation email could not be sent."
+                        );
+                    }
 
 
                     /* ------------------------------------------------
@@ -1691,4 +1645,5 @@ ${emailLog}`
     </script>
 
 </body>
+
 </html>
