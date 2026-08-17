@@ -3,262 +3,2049 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Inquiry Specifications | EAMA Garments</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400;600;700&display=swap"
+        rel="stylesheet"
+    >
+
     <style>
         :root {
-            --primary: #FF6B4A; --bg: #0A0A0A; --surface: #121212; --outline: rgba(255, 255, 255, 0.1);
+            --primary: #FF6B4A;
+            --bg: #0A0A0A;
+            --surface: #121212;
+            --surface-soft: #171717;
+            --outline: rgba(255, 255, 255, 0.1);
             --text-muted: #A1A1A1;
+            --text: #E3E2E2;
+            --danger: #ff5c5c;
+            --success: #7ed6a5;
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background-color: var(--bg); color: #e3e2e2; font-family: 'Inter', sans-serif; padding: 40px 20px; }
-        .container { max-width: 900px; margin: 0 auto; }
-        h1, h2, h3 { font-family: 'Playfair Display', serif; color: #fff; font-weight: 400; }
-        header { border-bottom: 1px solid var(--outline); padding-bottom: 20px; margin-bottom: 40px; }
-        
-        /* Product Cards */
-        .product-card { 
-            background: var(--surface); border: 1px solid var(--outline); 
-            padding: 25px; margin-bottom: 25px; display: grid; 
-            grid-template-columns: 150px 1fr; gap: 25px; border-radius: 4px; 
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
-        .product-image { width: 100%; height: 200px; object-fit: cover; border: 1px solid var(--outline); }
-        
-        .form-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; }
-        label { font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.1em; }
-        
-        select, input, textarea { 
-            background: transparent; border: none; border-bottom: 1px solid var(--outline); 
-            color: #fff; padding: 10px 0; font-size: 15px; width: 100%; outline: none; transition: 0.3s;
+
+        html {
+            scroll-behavior: smooth;
         }
-        select option { background: #1a1a1a; color: #fff; }
-        select:focus, input:focus, textarea:focus { border-bottom-color: var(--primary); }
 
-        .field-block { margin-top: 20px; padding: 20px; background: rgba(255,255,255,0.02); border-left: 2px solid var(--primary); }
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .is-hidden { display: none !important; }
-
-        .btn-submit { 
-            background: var(--primary); color: #fff; padding: 20px; border: none; 
-            width: 100%; text-transform: uppercase; font-weight: 700; cursor: pointer; 
-            letter-spacing: 0.2em; margin-top: 40px; transition: 0.4s;
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            padding: 40px 20px 70px;
+            min-height: 100vh;
+            overflow-x: hidden;
         }
-        .btn-submit:hover { background: #fff; color: #000; }
-        #success-state { display: none; text-align: center; padding: 80px 20px; }
-        
-        @media (max-width: 768px) { .product-card, .grid-2 { grid-template-columns: 1fr; } }
-    </style>
-</head>
-<body>
 
-<div class="container" id="form-container">
-    <header>
-        <span style="color: var(--primary); font-size: 11px; letter-spacing: 3px; text-transform: uppercase;">EAMA Manufacturing</span>
-        <h1 style="font-size: 2.5rem; margin-top: 5px;">Configure Inquiry</h1>
-    </header>
-
-    <div id="loading-overlay" style="text-align: center; padding: 40px; color: var(--primary);">Synchronizing with Sample Inventory...</div>
-
-    <form id="eama-inquiry-form" class="is-hidden">
-        <div id="productList"></div>
-
-        <section style="margin-top: 50px; border-top: 1px solid var(--outline); padding-top: 40px;">
-            <h2 style="margin-bottom: 25px; font-size: 1.8rem;">Client Information</h2>
-            <div class="grid-2">
-                <div class="form-group"><label>Company Name</label><input type="text" id="biz_company" required></div>
-                <div class="form-group"><label>Contact Person</label><input type="text" id="biz_name" required></div>
-                <div class="form-group"><label>Email Address</label><input type="email" id="biz_email" required readonly></div>
-                <div class="form-group"><label>WhatsApp / Phone</label><input type="tel" id="biz_phone" required></div>
-                <div class="form-group" style="grid-column: span 2;"><label>Target Country</label><input type="text" id="biz_country" required></div>
-            </div>
-        </section>
-
-        <button type="submit" class="btn-submit" id="submitBtn">Submit Formal Inquiry</button>
-    </form>
-</div>
-
-<div id="success-state" class="container">
-    <h1 style="color: var(--primary); font-size: 3rem;">Inquiry Logged.</h1>
-    <p>Your request is now visible in your Client Dashboard and our production queue.</p>
-    <button onclick="window.location.href='dashboard/app.html'" style="margin-top:30px; background:var(--primary); color:#fff; padding:15px 30px; border:none; cursor:pointer; text-transform:uppercase; font-size:11px; font-weight:700;">View Dashboard</button>
-</div>
-
-<!-- ... [Keep all existing HTML and CSS above] ... -->
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-    // 1. SUPABASE SETUP
-    const SUPABASE_URL = "MY_SUPABASE_URL";
-    const SUPABASE_KEY = "MY_SUPABASE_KEY";
-    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-    // BREVO_KEY REMOVED FOR SECURITY
-    const storageKey = 'eamaRequestShortlist';
-    
-    let dbSamples = []; 
-    let currentUser = null;
-
-    async function initPage() {
-        const { data: { user } } = await _supabase.auth.getUser();
-        if (!user) {
-            alert("Please log in to submit an inquiry.");
-            window.location.href = "client-portal-sign-in.html";
-            return;
+        body.no-scroll {
+            overflow: hidden;
         }
-        currentUser = user;
-        document.getElementById('biz_email').value = user.email;
 
-        let shortlist = JSON.parse(localStorage.getItem(storageKey)) || [];
-        if (shortlist.length === 0) {
-            document.getElementById('loading-overlay').innerText = "No items selected from gallery.";
-            return;
+        .container {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
         }
-        const ids = shortlist.map(item => item.id);
 
-        const { data, error } = await _supabase.from('samples').select('*').in('id', ids);
-        if (error) { console.error(error); return; }
-        dbSamples = data;
+        h1,
+        h2,
+        h3 {
+            font-family: 'Playfair Display', serif;
+            color: #fff;
+            font-weight: 400;
+        }
 
-        renderForm();
-        document.getElementById('loading-overlay').classList.add('is-hidden');
-        document.getElementById('eama-inquiry-form').classList.remove('is-hidden');
-    }
+        header {
+            border-bottom: 1px solid var(--outline);
+            padding-bottom: 20px;
+            margin-bottom: 40px;
+        }
 
-    function renderForm() {
-        const list = document.getElementById('productList');
-        list.innerHTML = dbSamples.map((sample, idx) => {
-            const fabrics = sample.fabric ? sample.fabric.split(',').map(s => s.trim()) : ["Standard"];
-            const colors = sample.color ? sample.color.split(',').map(s => s.trim()) : ["As per Sample"];
-            const sizes = ["XS", "S", "M", "L", "XL", "XXL"];
+        .brand-label {
+            color: var(--primary);
+            font-size: 11px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
 
-            return `
-            <div class="product-card">
-                <img src="${sample.image_url}" class="product-image">
-                <div>
-                    <h3 style="margin-bottom: 5px;">${sample.sample_name}</h3>
-                    <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 15px;">Category: ${sample.category}</p>
-                    
-                    <div class="form-group">
-                        <label>Request Type</label>
-                        <select class="field-type" onchange="toggleUI(${idx})">
-                            <option value="sample">Request Sample</option>
-                            <option value="quote">Request Manufacturing Quote</option>
-                            <option value="both" selected>Request Sample & Quote</option>
-                        </select>
-                    </div>
+        .page-title {
+            font-size: 2.5rem;
+            margin-top: 5px;
+            line-height: 1.2;
+        }
 
-                    <div class="field-block">
-                        <div class="grid-2">
-                            <div class="form-group"><label>Available Fabrics</label>
-                                <select class="f-fabric">${fabrics.map(f => `<option value="${f}">${f}</option>`).join('')}</select>
-                            </div>
-                            <div class="form-group"><label>Available Colors</label>
-                                <select class="f-color">${colors.map(c => `<option value="${c}">${c}</option>`).join('')}</select>
-                            </div>
-                            <div class="form-group"><label>Size</label>
-                                <select class="f-size">${sizes.map(s => `<option value="${s}" ${s === 'M' ? 'selected' : ''}>${s}</option>`).join('')}</select>
-                            </div>
-                            <div class="form-group"><label>Target Quantity</label>
-                                <input type="number" class="f-qty" value="100" min="1">
-                            </div>
-                            <div class="form-group f-custom-wrap full-width" style="grid-column: span 2;">
-                                <label>Customization / Branding</label>
-                                <input type="text" class="f-custom" placeholder="e.g. Branded woven labels and chest print">
-                            </div>
-                        </div>
-                        <div class="form-group" style="margin-top:10px;"><label>Additional Notes</label>
-                            <textarea class="f-notes" rows="2" placeholder="Any specific requirements..."></textarea>
-                        </div>
-                    </div>
-                </div>
-            </div>`;
-        }).join('');
-    }
+        /* =====================================================
+           LOADING STATE
+           ===================================================== */
 
-    window.toggleUI = (idx) => {
-        const card = document.querySelectorAll('.product-card')[idx];
-        const type = card.querySelector('.field-type').value;
-        card.querySelector('.f-custom-wrap').classList.toggle('is-hidden', type === 'sample');
-    };
+        #loading-overlay {
+            text-align: center;
+            padding: 55px 20px;
+            color: var(--primary);
+            font-size: 13px;
+            letter-spacing: 0.04em;
+            line-height: 1.7;
+        }
 
-    document.getElementById('eama-inquiry-form').onsubmit = async (e) => {
-        e.preventDefault();
-        const btn = document.getElementById('submitBtn');
-        btn.disabled = true;
-        btn.innerText = "Processing Inquiry...";
+        .loading-spinner {
+            width: 28px;
+            height: 28px;
+            border: 2px solid rgba(255, 107, 74, 0.2);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            margin: 0 auto 18px;
+            animation: spin 0.8s linear infinite;
+        }
 
-        const biz = {
-            client_id: currentUser.id,
-            company_name: document.getElementById('biz_company').value,
-            contact_person: document.getElementById('biz_name').value,
-            email: document.getElementById('biz_email').value,
-            phone: document.getElementById('biz_phone').value,
-            country: document.getElementById('biz_country').value
-        };
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
 
-        try {
-            let emailLog = "";
-            const cards = document.querySelectorAll('.product-card');
+        .loading-message {
+            color: var(--text-muted);
+            font-size: 12px;
+        }
 
-            for (let i = 0; i < cards.length; i++) {
-                const card = cards[i];
-                const dbSample = dbSamples[i];
-                
-                const type = card.querySelector('.field-type').value;
-                const spec = {
-                    fabric: card.querySelector('.f-fabric').value,
-                    color: card.querySelector('.f-color').value,
-                    size: card.querySelector('.f-size').value,
-                    qty: parseInt(card.querySelector('.f-qty').value),
-                    custom: card.querySelector('.f-custom').value,
-                    notes: card.querySelector('.f-notes').value
-                };
+        /* =====================================================
+           ERROR STATE
+           ===================================================== */
 
-                // Keep database logic unchanged
-                const { error } = await _supabase.from('manufacturing_requests').insert([{
-                    ...biz,
-                    garment_category: dbSample.category,
-                    product_type: dbSample.sample_name,
-                    request_type: type,
-                    fabric_preference: spec.fabric,
-                    sample_color: spec.color,
-                    sample_size: spec.size,
-                    target_quantity: spec.qty,
-                    customization_requirements: spec.custom,
-                    additional_notes: spec.notes,
-                    status: 'New',
-                    priority: 'Medium'
-                }]);
-                if (error) throw error;
-                emailLog += `${dbSample.sample_name} (${type}): ${spec.qty}pcs in ${spec.fabric}. \n`;
+        .error-state {
+            max-width: 550px;
+            margin: 0 auto;
+            text-align: center;
+            line-height: 1.7;
+        }
+
+        .error-title {
+            color: var(--primary);
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .error-message {
+            color: var(--text-muted);
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+
+        .secondary-btn {
+            display: inline-block;
+            background: transparent;
+            color: #fff;
+            border: 1px solid var(--outline);
+            padding: 12px 20px;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            transition: 0.3s;
+        }
+
+        .secondary-btn:hover {
+            background: #fff;
+            color: #000;
+            border-color: #fff;
+        }
+
+        /* =====================================================
+           PRODUCT CARDS
+           ===================================================== */
+
+        .product-card {
+            background: var(--surface);
+            border: 1px solid var(--outline);
+            padding: 25px;
+            margin-bottom: 25px;
+            display: grid;
+            grid-template-columns: 150px minmax(0, 1fr);
+            gap: 25px;
+            border-radius: 6px;
+        }
+
+        .product-image-wrapper {
+            width: 100%;
+        }
+
+        .product-image {
+            display: block;
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border: 1px solid var(--outline);
+            background: #0d0d0d;
+        }
+
+        .product-info {
+            min-width: 0;
+        }
+
+        .product-title {
+            margin-bottom: 5px;
+            font-size: 1.35rem;
+            line-height: 1.3;
+        }
+
+        .product-category {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 18px;
+        }
+
+        /* =====================================================
+           FORM ELEMENTS
+           ===================================================== */
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 15px;
+            min-width: 0;
+        }
+
+        label {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 0.1em;
+        }
+
+        select,
+        input,
+        textarea {
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid var(--outline);
+            color: #fff;
+            padding: 10px 0;
+            font-size: 15px;
+            width: 100%;
+            max-width: 100%;
+            outline: none;
+            transition: 0.3s;
+            font-family: 'Inter', sans-serif;
+            border-radius: 0;
+        }
+
+        select {
+            cursor: pointer;
+        }
+
+        select option {
+            background: #1a1a1a;
+            color: #fff;
+        }
+
+        select:focus,
+        input:focus,
+        textarea:focus {
+            border-bottom-color: var(--primary);
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: #666;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 70px;
+            line-height: 1.5;
+        }
+
+        input[readonly] {
+            color: #999;
+            cursor: not-allowed;
+        }
+
+        /* =====================================================
+           FIELD BLOCK
+           ===================================================== */
+
+        .field-block {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.02);
+            border-left: 2px solid var(--primary);
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            gap: 20px;
+        }
+
+        .full-width {
+            grid-column: span 2;
+        }
+
+        .is-hidden {
+            display: none !important;
+        }
+
+        /* =====================================================
+           CLIENT INFORMATION
+           ===================================================== */
+
+        .client-section {
+            margin-top: 50px;
+            border-top: 1px solid var(--outline);
+            padding-top: 40px;
+        }
+
+        .client-heading {
+            margin-bottom: 25px;
+            font-size: 1.8rem;
+        }
+
+        /* =====================================================
+           SUBMIT BUTTON
+           ===================================================== */
+
+        .btn-submit {
+            background: var(--primary);
+            color: #fff;
+            padding: 20px;
+            border: none;
+            width: 100%;
+            text-transform: uppercase;
+            font-weight: 700;
+            cursor: pointer;
+            letter-spacing: 0.2em;
+            margin-top: 40px;
+            transition: 0.4s;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-submit:hover:not(:disabled) {
+            background: #fff;
+            color: #000;
+        }
+
+        .btn-submit:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+        }
+
+        /* =====================================================
+           SUCCESS STATE
+           ===================================================== */
+
+        #success-state {
+            display: none;
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        .success-title {
+            color: var(--primary);
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .success-text {
+            color: var(--text-muted);
+            font-size: 14px;
+            line-height: 1.7;
+            max-width: 550px;
+            margin: 0 auto;
+        }
+
+        .dashboard-btn {
+            margin-top: 30px;
+            background: var(--primary);
+            color: #fff;
+            padding: 15px 30px;
+            border: none;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            transition: 0.3s;
+        }
+
+        .dashboard-btn:hover {
+            background: #fff;
+            color: #000;
+        }
+
+        /* =====================================================
+           MOBILE
+           ===================================================== */
+
+        @media (max-width: 768px) {
+
+            body {
+                padding: 25px 12px 50px;
             }
 
-            // CALL SUPABASE EDGE FUNCTION (Replaces Brevo Direct Call)
-            const { data: funcData, error: funcError } = await _supabase.functions.invoke('send-inquiry-email', {
-                body: {
-                    customer_name: biz.contact_person,
-                    company_name: biz.company_name,
-                    customer_email: biz.email,
-                    admin_email: "admin@eamagarments.com",
-                    message: `New unified request received for: \n${emailLog}`
-                }
-            });
+            .container {
+                width: 100%;
+            }
 
-            if (funcError) throw new Error("Email notification failed, but request saved.");
+            header {
+                margin-bottom: 25px;
+                padding-bottom: 18px;
+            }
 
-            document.getElementById('form-container').style.display = 'none';
-            document.getElementById('success-state').style.display = 'block';
-            localStorage.removeItem(storageKey);
+            .brand-label {
+                font-size: 9px;
+                letter-spacing: 2.5px;
+            }
 
-        } catch (err) {
-            alert("Error: " + err.message);
-            btn.disabled = false;
-            btn.innerText = "Submit Formal Inquiry";
+            .page-title {
+                font-size: 2rem;
+            }
+
+            #loading-overlay {
+                padding: 45px 10px;
+            }
+
+            /* Product becomes a vertical card */
+
+            .product-card {
+                display: flex;
+                flex-direction: column;
+                gap: 18px;
+                padding: 15px;
+                margin-bottom: 18px;
+            }
+
+            .product-image-wrapper {
+                width: 100%;
+            }
+
+            .product-image {
+                width: 100%;
+                height: min(110vw, 420px);
+                object-fit: cover;
+            }
+
+            .product-title {
+                font-size: 1.25rem;
+            }
+
+            .field-block {
+                padding: 15px;
+                margin-top: 15px;
+            }
+
+            .grid-2 {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 14px;
+            }
+
+            .full-width {
+                grid-column: auto !important;
+            }
+
+            .form-group {
+                margin-bottom: 13px;
+            }
+
+            select,
+            input,
+            textarea {
+                font-size: 16px;
+                min-height: 44px;
+            }
+
+            textarea {
+                min-height: 90px;
+            }
+
+            .client-section {
+                margin-top: 35px;
+                padding-top: 30px;
+            }
+
+            .client-heading {
+                font-size: 1.6rem;
+                margin-bottom: 20px;
+            }
+
+            .btn-submit {
+                padding: 17px 14px;
+                margin-top: 25px;
+                font-size: 10px;
+                letter-spacing: 0.12em;
+            }
+
+            #success-state {
+                padding: 50px 15px;
+            }
+
+            .success-title {
+                font-size: 2.2rem;
+            }
+
+            .success-text {
+                font-size: 13px;
+            }
         }
-    };
 
-    initPage();
-</script>
-</script>
+        /* =====================================================
+           SMALL PHONES
+           ===================================================== */
+
+        @media (max-width: 400px) {
+
+            body {
+                padding: 18px 10px 40px;
+            }
+
+            .page-title {
+                font-size: 1.75rem;
+            }
+
+            .product-card {
+                padding: 12px;
+            }
+
+            .product-image {
+                height: 105vw;
+                max-height: 380px;
+            }
+
+            .field-block {
+                padding: 12px;
+            }
+
+            label {
+                font-size: 9px;
+            }
+
+            .btn-submit {
+                font-size: 9px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =====================================================
+         FORM CONTAINER
+         ===================================================== -->
+
+    <div class="container" id="form-container">
+
+        <header>
+            <span class="brand-label">
+                EAMA Manufacturing
+            </span>
+
+            <h1 class="page-title">
+                Configure Inquiry
+            </h1>
+        </header>
+
+
+        <!-- =================================================
+             LOADING / ERROR AREA
+             ================================================= -->
+
+        <div id="loading-overlay">
+
+            <div class="loading-spinner"></div>
+
+            <div class="loading-message">
+                Synchronizing with Sample Inventory...
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             MAIN INQUIRY FORM
+             ================================================= -->
+
+        <form
+            id="eama-inquiry-form"
+            class="is-hidden"
+        >
+
+            <!-- Selected products are inserted here -->
+            <div id="productList"></div>
+
+
+            <!-- =================================================
+                 CLIENT INFORMATION
+                 ================================================= -->
+
+            <section class="client-section">
+
+                <h2 class="client-heading">
+                    Client Information
+                </h2>
+
+                <div class="grid-2">
+
+                    <div class="form-group">
+
+                        <label for="biz_company">
+                            Company Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="biz_company"
+                            autocomplete="organization"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="biz_name">
+                            Contact Person
+                        </label>
+
+                        <input
+                            type="text"
+                            id="biz_name"
+                            autocomplete="name"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="biz_email">
+                            Email Address
+                        </label>
+
+                        <input
+                            type="email"
+                            id="biz_email"
+                            autocomplete="email"
+                            required
+                            readonly
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="biz_phone">
+                            WhatsApp / Phone
+                        </label>
+
+                        <input
+                            type="tel"
+                            id="biz_phone"
+                            autocomplete="tel"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group full-width">
+
+                        <label for="biz_country">
+                            Target Country
+                        </label>
+
+                        <input
+                            type="text"
+                            id="biz_country"
+                            autocomplete="country-name"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 SUBMIT
+                 ================================================= -->
+
+            <button
+                type="submit"
+                class="btn-submit"
+                id="submitBtn"
+            >
+                Submit Formal Inquiry
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- =====================================================
+         SUCCESS STATE
+         ===================================================== -->
+
+    <div
+        id="success-state"
+        class="container"
+    >
+
+        <h1 class="success-title">
+            Inquiry Logged.
+        </h1>
+
+        <p class="success-text">
+            Your request is now visible in your Client Dashboard
+            and our production queue.
+        </p>
+
+        <button
+            type="button"
+            class="dashboard-btn"
+            onclick="window.location.href='dashboard/app.html'"
+        >
+            View Dashboard
+        </button>
+
+    </div>
+
+
+    <!-- =====================================================
+         SUPABASE
+         ===================================================== -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+    <script>
+
+        /* =====================================================
+           EAMA GARMENTS
+           REQUEST QUOTE / INQUIRY PAGE
+           ===================================================== */
+
+
+        /* =====================================================
+           SUPABASE CONFIGURATION
+           ===================================================== */
+
+        const SUPABASE_URL =
+            "https://mxbzlscxsonbwiqjmnzx.supabase.co";
+
+        const SUPABASE_KEY =
+            "sb_publishable_H3k7_8EsXTns6v0YVOdGww_9xd6iBYE";
+
+
+        const _supabase =
+            supabase.createClient(
+                SUPABASE_URL,
+                SUPABASE_KEY
+            );
+
+
+        /* =====================================================
+           STORAGE
+           ===================================================== */
+
+        const storageKey =
+            "eamaRequestShortlist";
+
+
+        /* =====================================================
+           STATE
+           ===================================================== */
+
+        let dbSamples = [];
+
+        let currentUser = null;
+
+
+        /* =====================================================
+           ELEMENT REFERENCES
+           ===================================================== */
+
+        const loadingOverlay =
+            document.getElementById(
+                "loading-overlay"
+            );
+
+        const inquiryForm =
+            document.getElementById(
+                "eama-inquiry-form"
+            );
+
+        const productList =
+            document.getElementById(
+                "productList"
+            );
+
+        const submitBtn =
+            document.getElementById(
+                "submitBtn"
+            );
+
+        const formContainer =
+            document.getElementById(
+                "form-container"
+            );
+
+        const successState =
+            document.getElementById(
+                "success-state"
+            );
+
+
+        /* =====================================================
+           LOADING STATE
+           ===================================================== */
+
+        function showLoading(message) {
+
+            loadingOverlay.classList.remove(
+                "is-hidden"
+            );
+
+            loadingOverlay.innerHTML = `
+                <div class="loading-spinner"></div>
+
+                <div class="loading-message">
+                    ${escapeHtml(message)}
+                </div>
+            `;
+        }
+
+
+        /* =====================================================
+           ERROR STATE
+           ===================================================== */
+
+        function showError(message) {
+
+            loadingOverlay.classList.remove(
+                "is-hidden"
+            );
+
+            loadingOverlay.innerHTML = `
+                <div class="error-state">
+
+                    <div class="error-title">
+                        Unable to load inquiry
+                    </div>
+
+                    <div class="error-message">
+                        ${escapeHtml(message)}
+                    </div>
+
+                    <button
+                        type="button"
+                        class="secondary-btn"
+                        id="retryBtn"
+                    >
+                        Try Again
+                    </button>
+
+                </div>
+            `;
+
+
+            inquiryForm.classList.add(
+                "is-hidden"
+            );
+
+
+            const retryBtn =
+                document.getElementById(
+                    "retryBtn"
+                );
+
+
+            if (retryBtn) {
+
+                retryBtn.addEventListener(
+                    "click",
+                    () => {
+                        window.location.reload();
+                    }
+                );
+
+            }
+        }
+
+
+        /* =====================================================
+           BASIC HTML ESCAPING
+           Prevents database text from becoming HTML.
+           ===================================================== */
+
+        function escapeHtml(value) {
+
+            if (
+                value === null ||
+                value === undefined
+            ) {
+                return "";
+            }
+
+            return String(value)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+
+        /* =====================================================
+           GET SAVED SHORTLIST
+           ===================================================== */
+
+        function getShortlist() {
+
+            try {
+
+                const saved =
+                    localStorage.getItem(
+                        storageKey
+                    );
+
+
+                if (!saved) {
+                    return [];
+                }
+
+
+                const parsed =
+                    JSON.parse(saved);
+
+
+                return Array.isArray(parsed)
+                    ? parsed
+                    : [];
+
+            } catch (error) {
+
+                console.error(
+                    "Shortlist parsing error:",
+                    error
+                );
+
+                return [];
+            }
+        }
+
+
+        /* =====================================================
+           SAVE SHORTLIST
+           ===================================================== */
+
+        function saveShortlist(items) {
+
+            try {
+
+                localStorage.setItem(
+                    storageKey,
+                    JSON.stringify(items)
+                );
+
+            } catch (error) {
+
+                console.error(
+                    "Shortlist save error:",
+                    error
+                );
+            }
+        }
+
+
+        /* =====================================================
+           INITIALIZE PAGE
+           ===================================================== */
+
+        async function initPage() {
+
+            try {
+
+                /* ---------------------------------------------
+                   STEP 1
+                   Check authentication
+                   --------------------------------------------- */
+
+                showLoading(
+                    "Checking your client session..."
+                );
+
+
+                const {
+                    data: authData,
+                    error: authError
+                } =
+                    await _supabase.auth.getUser();
+
+
+                if (authError) {
+
+                    console.error(
+                        "Supabase auth error:",
+                        authError
+                    );
+
+                    throw new Error(
+                        "We could not verify your client session."
+                    );
+                }
+
+
+                const user =
+                    authData?.user || null;
+
+
+                if (!user) {
+
+                    alert(
+                        "Please log in to submit an inquiry."
+                    );
+
+
+                    window.location.href =
+                        "client-portal-sign-in.html";
+
+
+                    return;
+                }
+
+
+                currentUser =
+                    user;
+
+
+                /* ---------------------------------------------
+                   Put authenticated email into form
+                   --------------------------------------------- */
+
+                const emailInput =
+                    document.getElementById(
+                        "biz_email"
+                    );
+
+
+                if (emailInput) {
+
+                    emailInput.value =
+                        user.email || "";
+
+                }
+
+
+                /* ---------------------------------------------
+                   STEP 2
+                   Get shortlist
+                   --------------------------------------------- */
+
+                showLoading(
+                    "Synchronizing with Sample Inventory..."
+                );
+
+
+                let shortlist =
+                    getShortlist();
+
+
+                /* ---------------------------------------------
+                   No selected products
+                   --------------------------------------------- */
+
+                if (
+                    !shortlist ||
+                    shortlist.length === 0
+                ) {
+
+                    showError(
+                        "No samples have been selected from the gallery. Please return to the Sample Catalog and add at least one garment to your request."
+                    );
+
+                    return;
+                }
+
+
+                /* ---------------------------------------------
+                   STEP 3
+                   Get valid IDs
+                   --------------------------------------------- */
+
+                const ids =
+                    shortlist
+                        .map(item =>
+                            item?.id
+                        )
+                        .filter(id =>
+                            id !== null &&
+                            id !== undefined &&
+                            String(id).trim() !== ""
+                        )
+                        .map(id =>
+                            String(id)
+                        );
+
+
+                if (ids.length === 0) {
+
+                    localStorage.removeItem(
+                        storageKey
+                    );
+
+
+                    showError(
+                        "The selected samples could not be identified. Please return to the gallery and select them again."
+                    );
+
+                    return;
+                }
+
+
+                /* ---------------------------------------------
+                   STEP 4
+                   Query current inventory
+                   --------------------------------------------- */
+
+                const {
+                    data,
+                    error
+                } =
+                    await _supabase
+                        .from("samples")
+                        .select("*")
+                        .in("id", ids);
+
+
+                if (error) {
+
+                    console.error(
+                        "Sample inventory error:",
+                        error
+                    );
+
+
+                    throw new Error(
+                        "The sample inventory could not be loaded. Please try again."
+                    );
+                }
+
+
+                dbSamples =
+                    Array.isArray(data)
+                        ? data
+                        : [];
+
+
+                /* ---------------------------------------------
+                   STEP 5
+                   Remove deleted samples from shortlist
+                   --------------------------------------------- */
+
+                const currentIds =
+                    new Set(
+                        dbSamples.map(
+                            sample =>
+                                String(sample.id)
+                        )
+                    );
+
+
+                const validShortlist =
+                    shortlist.filter(
+                        item =>
+                            currentIds.has(
+                                String(item.id)
+                            )
+                    );
+
+
+                saveShortlist(
+                    validShortlist
+                );
+
+
+                /* ---------------------------------------------
+                   No valid samples remain
+                   --------------------------------------------- */
+
+                if (
+                    dbSamples.length === 0
+                ) {
+
+                    localStorage.removeItem(
+                        storageKey
+                    );
+
+
+                    showError(
+                        "The samples previously selected from the gallery are no longer available. Please return to the gallery and select current samples."
+                    );
+
+
+                    return;
+                }
+
+
+                /* ---------------------------------------------
+                   STEP 6
+                   Render products
+                   --------------------------------------------- */
+
+                renderForm();
+
+
+                /* ---------------------------------------------
+                   STEP 7
+                   Reveal form
+                   --------------------------------------------- */
+
+                loadingOverlay.classList.add(
+                    "is-hidden"
+                );
+
+
+                inquiryForm.classList.remove(
+                    "is-hidden"
+                );
+
+
+                /* Scroll to top */
+
+                window.scrollTo({
+                    top: 0,
+                    behavior: "smooth"
+                });
+
+
+            } catch (error) {
+
+                console.error(
+                    "Request quote initialization error:",
+                    error
+                );
+
+
+                showError(
+                    error?.message ||
+                    "Something went wrong while loading the inquiry form."
+                );
+            }
+        }
+
+
+        /* =====================================================
+           SPLIT COMMA-SEPARATED VALUES
+           ===================================================== */
+
+        function splitValues(
+            value,
+            fallback
+        ) {
+
+            if (
+                !value ||
+                String(value).trim() === ""
+            ) {
+                return [fallback];
+            }
+
+
+            const result =
+                String(value)
+                    .split(",")
+                    .map(value =>
+                        value.trim()
+                    )
+                    .filter(Boolean);
+
+
+            return result.length
+                ? result
+                : [fallback];
+        }
+
+
+        /* =====================================================
+           RENDER PRODUCT FORM
+           ===================================================== */
+
+        function renderForm() {
+
+            productList.innerHTML = "";
+
+
+            dbSamples.forEach(
+                (sample, index) => {
+
+                    const fabrics =
+                        splitValues(
+                            sample.fabric,
+                            "Standard"
+                        );
+
+
+                    const colors =
+                        splitValues(
+                            sample.color,
+                            "As per Sample"
+                        );
+
+
+                    const sizes = [
+                        "XS",
+                        "S",
+                        "M",
+                        "L",
+                        "XL",
+                        "XXL"
+                    ];
+
+
+                    const card =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    card.className =
+                        "product-card";
+
+
+                    const imageUrl =
+                        sample.image_url ||
+                        "";
+
+
+                    const sampleName =
+                        sample.sample_name ||
+                        "Sample";
+
+
+                    const category =
+                        sample.category ||
+                        "-";
+
+
+                    card.innerHTML = `
+
+                        <div class="product-image-wrapper">
+
+                            <img
+                                src="${escapeHtml(imageUrl)}"
+                                class="product-image"
+                                alt="${escapeHtml(sampleName)}"
+                                loading="lazy"
+                            >
+
+                        </div>
+
+
+                        <div class="product-info">
+
+                            <h3 class="product-title">
+                                ${escapeHtml(sampleName)}
+                            </h3>
+
+
+                            <p class="product-category">
+                                Category:
+                                ${escapeHtml(category)}
+                            </p>
+
+
+                            <!-- REQUEST TYPE -->
+
+                            <div class="form-group">
+
+                                <label>
+                                    Request Type
+                                </label>
+
+
+                                <select
+                                    class="field-type"
+                                    aria-label="Request Type"
+                                >
+
+                                    <option value="sample">
+                                        Request Sample
+                                    </option>
+
+                                    <option value="quote">
+                                        Request Manufacturing Quote
+                                    </option>
+
+                                    <option
+                                        value="both"
+                                        selected
+                                    >
+                                        Request Sample &amp; Quote
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <!-- SPECIFICATIONS -->
+
+                            <div class="field-block">
+
+                                <div class="grid-2">
+
+
+                                    <!-- FABRIC -->
+
+                                    <div class="form-group">
+
+                                        <label>
+                                            Available Fabrics
+                                        </label>
+
+
+                                        <select
+                                            class="f-fabric"
+                                        >
+
+                                            ${fabrics.map(
+                                                fabric => `
+                                                    <option
+                                                        value="${escapeHtml(fabric)}"
+                                                    >
+                                                        ${escapeHtml(fabric)}
+                                                    </option>
+                                                `
+                                            ).join("")}
+
+                                        </select>
+
+                                    </div>
+
+
+                                    <!-- COLOR -->
+
+                                    <div class="form-group">
+
+                                        <label>
+                                            Available Colors
+                                        </label>
+
+
+                                        <select
+                                            class="f-color"
+                                        >
+
+                                            ${colors.map(
+                                                color => `
+                                                    <option
+                                                        value="${escapeHtml(color)}"
+                                                    >
+                                                        ${escapeHtml(color)}
+                                                    </option>
+                                                `
+                                            ).join("")}
+
+                                        </select>
+
+                                    </div>
+
+
+                                    <!-- SIZE -->
+
+                                    <div class="form-group">
+
+                                        <label>
+                                            Size
+                                        </label>
+
+
+                                        <select
+                                            class="f-size"
+                                        >
+
+                                            ${sizes.map(
+                                                size => `
+                                                    <option
+                                                        value="${size}"
+                                                        ${
+                                                            size === "M"
+                                                                ? "selected"
+                                                                : ""
+                                                        }
+                                                    >
+                                                        ${size}
+                                                    </option>
+                                                `
+                                            ).join("")}
+
+                                        </select>
+
+                                    </div>
+
+
+                                    <!-- QUANTITY -->
+
+                                    <div class="form-group">
+
+                                        <label>
+                                            Target Quantity
+                                        </label>
+
+
+                                        <input
+                                            type="number"
+                                            class="f-qty"
+                                            value="100"
+                                            min="1"
+                                            inputmode="numeric"
+                                            required
+                                        >
+
+                                    </div>
+
+
+                                    <!-- CUSTOMIZATION -->
+
+                                    <div
+                                        class="form-group f-custom-wrap full-width"
+                                    >
+
+                                        <label>
+                                            Customization / Branding
+                                        </label>
+
+
+                                        <input
+                                            type="text"
+                                            class="f-custom"
+                                            placeholder="e.g. Branded woven labels and chest print"
+                                        >
+
+                                    </div>
+
+
+                                </div>
+
+
+                                <!-- NOTES -->
+
+                                <div
+                                    class="form-group"
+                                    style="margin-top:10px;"
+                                >
+
+                                    <label>
+                                        Additional Notes
+                                    </label>
+
+
+                                    <textarea
+                                        class="f-notes"
+                                        rows="3"
+                                        placeholder="Any specific requirements..."
+                                    ></textarea>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    `;
+
+
+                    productList.appendChild(
+                        card
+                    );
+
+
+                    /* -----------------------------------------
+                       IMAGE ERROR HANDLING
+                       ----------------------------------------- */
+
+                    const image =
+                        card.querySelector(
+                            ".product-image"
+                        );
+
+
+                    image.addEventListener(
+                        "error",
+                        () => {
+
+                            image.style.display =
+                                "none";
+
+                        }
+                    );
+
+
+                    /* -----------------------------------------
+                       REQUEST TYPE
+                       ----------------------------------------- */
+
+                    const typeSelect =
+                        card.querySelector(
+                            ".field-type"
+                        );
+
+
+                    const customWrap =
+                        card.querySelector(
+                            ".f-custom-wrap"
+                        );
+
+
+                    typeSelect.addEventListener(
+                        "change",
+                        () => {
+
+                            const type =
+                                typeSelect.value;
+
+
+                            customWrap.classList.toggle(
+                                "is-hidden",
+                                type === "sample"
+                            );
+
+                        }
+                    );
+
+
+                    /* Keep index available if needed */
+
+                    card.dataset.sampleIndex =
+                        String(index);
+
+                }
+            );
+        }
+
+
+        /* =====================================================
+           FORM SUBMISSION
+           ===================================================== */
+
+        inquiryForm.addEventListener(
+            "submit",
+            async (event) => {
+
+                event.preventDefault();
+
+
+                if (!currentUser) {
+
+                    alert(
+                        "Your session has expired. Please log in again."
+                    );
+
+                    window.location.href =
+                        "client-portal-sign-in.html";
+
+                    return;
+                }
+
+
+                /* ---------------------------------------------
+                   Validate browser form
+                   --------------------------------------------- */
+
+                if (
+                    !inquiryForm.checkValidity()
+                ) {
+
+                    inquiryForm.reportValidity();
+
+                    return;
+                }
+
+
+                /* ---------------------------------------------
+                   Disable submit
+                   --------------------------------------------- */
+
+                submitBtn.disabled =
+                    true;
+
+                submitBtn.innerText =
+                    "Processing Inquiry...";
+
+
+                /* ---------------------------------------------
+                   Client information
+                   --------------------------------------------- */
+
+                const biz = {
+
+                    client_id:
+                        currentUser.id,
+
+                    company_name:
+                        document
+                            .getElementById(
+                                "biz_company"
+                            )
+                            .value
+                            .trim(),
+
+                    contact_person:
+                        document
+                            .getElementById(
+                                "biz_name"
+                            )
+                            .value
+                            .trim(),
+
+                    email:
+                        document
+                            .getElementById(
+                                "biz_email"
+                            )
+                            .value
+                            .trim(),
+
+                    phone:
+                        document
+                            .getElementById(
+                                "biz_phone"
+                            )
+                            .value
+                            .trim(),
+
+                    country:
+                        document
+                            .getElementById(
+                                "biz_country"
+                            )
+                            .value
+                            .trim()
+                };
+
+
+                try {
+
+                    let emailLog = "";
+
+
+                    const cards =
+                        document.querySelectorAll(
+                            ".product-card"
+                        );
+
+
+                    if (
+                        cards.length === 0 ||
+                        dbSamples.length === 0
+                    ) {
+
+                        throw new Error(
+                            "There are no valid samples in this inquiry."
+                        );
+                    }
+
+
+                    /* -----------------------------------------
+                       INSERT EACH REQUEST
+                       ----------------------------------------- */
+
+                    for (
+                        let i = 0;
+                        i < cards.length;
+                        i++
+                    ) {
+
+                        const card =
+                            cards[i];
+
+
+                        const dbSample =
+                            dbSamples[i];
+
+
+                        if (!dbSample) {
+                            continue;
+                        }
+
+
+                        const type =
+                            card
+                                .querySelector(
+                                    ".field-type"
+                                )
+                                .value;
+
+
+                        const fabric =
+                            card
+                                .querySelector(
+                                    ".f-fabric"
+                                )
+                                .value;
+
+
+                        const color =
+                            card
+                                .querySelector(
+                                    ".f-color"
+                                )
+                                .value;
+
+
+                        const size =
+                            card
+                                .querySelector(
+                                    ".f-size"
+                                )
+                                .value;
+
+
+                        const quantity =
+                            parseInt(
+                                card
+                                    .querySelector(
+                                        ".f-qty"
+                                    )
+                                    .value,
+                                10
+                            );
+
+
+                        const custom =
+                            card
+                                .querySelector(
+                                    ".f-custom"
+                                )
+                                .value
+                                .trim();
+
+
+                        const notes =
+                            card
+                                .querySelector(
+                                    ".f-notes"
+                                )
+                                .value
+                                .trim();
+
+
+                        if (
+                            !Number.isFinite(
+                                quantity
+                            ) ||
+                            quantity < 1
+                        ) {
+
+                            throw new Error(
+                                `Please enter a valid quantity for ${dbSample.sample_name}.`
+                            );
+                        }
+
+
+                        /* -------------------------------------
+                           Database insert
+                           ------------------------------------- */
+
+                        const {
+                            error
+                        } =
+                            await _supabase
+                                .from(
+                                    "manufacturing_requests"
+                                )
+                                .insert([
+
+                                    {
+                                        ...biz,
+
+                                        garment_category:
+                                            dbSample.category,
+
+                                        product_type:
+                                            dbSample.sample_name,
+
+                                        request_type:
+                                            type,
+
+                                        fabric_preference:
+                                            fabric,
+
+                                        sample_color:
+                                            color,
+
+                                        sample_size:
+                                            size,
+
+                                        target_quantity:
+                                            quantity,
+
+                                        customization_requirements:
+                                            custom,
+
+                                        additional_notes:
+                                            notes,
+
+                                        status:
+                                            "New",
+
+                                        priority:
+                                            "Medium"
+                                    }
+
+                                ]);
+
+
+                        if (error) {
+
+                            console.error(
+                                "Manufacturing request error:",
+                                error
+                            );
+
+
+                            throw new Error(
+                                "Your inquiry could not be saved. Please try again."
+                            );
+                        }
+
+
+                        /* -------------------------------------
+                           Email summary
+                           ------------------------------------- */
+
+                        emailLog +=
+                            `${dbSample.sample_name} (${type}): ${quantity}pcs in ${fabric}, ${color}, size ${size}.\n`;
+                    }
+
+
+                    /* -----------------------------------------
+                       SEND ADMIN EMAIL
+                       ----------------------------------------- */
+
+                    const {
+                        error: funcError
+                    } =
+                        await _supabase.functions.invoke(
+                            "send-inquiry-email",
+                            {
+                                body: {
+
+                                    customer_name:
+                                        biz.contact_person,
+
+                                    company_name:
+                                        biz.company_name,
+
+                                    customer_email:
+                                        biz.email,
+
+                                    admin_email:
+                                        "admin@eamagarments.com",
+
+                                    message:
+                                        `New unified request received for:\n${emailLog}`
+                                }
+                            }
+                        );
+
+
+                    /* -----------------------------------------
+                       IMPORTANT:
+                       Database request is already saved.
+
+                       If email fails, don't tell customer
+                       their inquiry failed.
+                       ----------------------------------------- */
+
+                    if (funcError) {
+
+                        console.error(
+                            "Email function error:",
+                            funcError
+                        );
+
+                        console.warn(
+                            "Inquiry saved successfully, but email notification failed."
+                        );
+
+                    }
+
+
+                    /* -----------------------------------------
+                       SUCCESS
+                       ----------------------------------------- */
+
+                    localStorage.removeItem(
+                        storageKey
+                    );
+
+
+                    formContainer.style.display =
+                        "none";
+
+
+                    successState.style.display =
+                        "block";
+
+
+                    window.scrollTo({
+                        top: 0,
+                        behavior: "smooth"
+                    });
+
+
+                } catch (error) {
+
+                    console.error(
+                        "Inquiry submission error:",
+                        error
+                    );
+
+
+                    alert(
+                        "Error: " +
+                        (
+                            error?.message ||
+                            "Unable to submit inquiry."
+                        )
+                    );
+
+
+                    submitBtn.disabled =
+                        false;
+
+
+                    submitBtn.innerText =
+                        "Submit Formal Inquiry";
+                }
+
+            }
+        );
+
+
+        /* =====================================================
+           START PAGE
+           ===================================================== */
+
+        initPage();
+
+    </script>
+
 </body>
 </html>
