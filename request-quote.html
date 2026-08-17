@@ -16,12 +16,8 @@
             --primary: #FF6B4A;
             --bg: #0A0A0A;
             --surface: #121212;
-            --surface-soft: #171717;
             --outline: rgba(255, 255, 255, 0.1);
             --text-muted: #A1A1A1;
-            --text: #E3E2E2;
-            --danger: #ff5c5c;
-            --success: #7ed6a5;
         }
 
         * {
@@ -30,25 +26,15 @@
             padding: 0;
         }
 
-        html {
-            scroll-behavior: smooth;
-        }
-
         body {
             background-color: var(--bg);
-            color: var(--text);
+            color: #e3e2e2;
             font-family: 'Inter', sans-serif;
-            padding: 40px 20px 70px;
+            padding: 40px 20px;
             min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        body.no-scroll {
-            overflow: hidden;
         }
 
         .container {
-            width: 100%;
             max-width: 900px;
             margin: 0 auto;
         }
@@ -67,100 +53,7 @@
             margin-bottom: 40px;
         }
 
-        .brand-label {
-            color: var(--primary);
-            font-size: 11px;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-        }
-
-        .page-title {
-            font-size: 2.5rem;
-            margin-top: 5px;
-            line-height: 1.2;
-        }
-
-        /* =====================================================
-           LOADING STATE
-           ===================================================== */
-
-        #loading-overlay {
-            text-align: center;
-            padding: 55px 20px;
-            color: var(--primary);
-            font-size: 13px;
-            letter-spacing: 0.04em;
-            line-height: 1.7;
-        }
-
-        .loading-spinner {
-            width: 28px;
-            height: 28px;
-            border: 2px solid rgba(255, 107, 74, 0.2);
-            border-top-color: var(--primary);
-            border-radius: 50%;
-            margin: 0 auto 18px;
-            animation: spin 0.8s linear infinite;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        .loading-message {
-            color: var(--text-muted);
-            font-size: 12px;
-        }
-
-        /* =====================================================
-           ERROR STATE
-           ===================================================== */
-
-        .error-state {
-            max-width: 550px;
-            margin: 0 auto;
-            text-align: center;
-            line-height: 1.7;
-        }
-
-        .error-title {
-            color: var(--primary);
-            font-size: 15px;
-            font-weight: 600;
-            margin-bottom: 10px;
-        }
-
-        .error-message {
-            color: var(--text-muted);
-            font-size: 13px;
-            margin-bottom: 20px;
-        }
-
-        .secondary-btn {
-            display: inline-block;
-            background: transparent;
-            color: #fff;
-            border: 1px solid var(--outline);
-            padding: 12px 20px;
-            cursor: pointer;
-            text-transform: uppercase;
-            font-size: 10px;
-            font-weight: 700;
-            letter-spacing: 1.5px;
-            transition: 0.3s;
-        }
-
-        .secondary-btn:hover {
-            background: #fff;
-            color: #000;
-            border-color: #fff;
-        }
-
-        /* =====================================================
-           PRODUCT CARDS
-           ===================================================== */
+        /* Product Cards */
 
         .product-card {
             background: var(--surface);
@@ -168,50 +61,24 @@
             padding: 25px;
             margin-bottom: 25px;
             display: grid;
-            grid-template-columns: 150px minmax(0, 1fr);
+            grid-template-columns: 150px 1fr;
             gap: 25px;
-            border-radius: 6px;
-        }
-
-        .product-image-wrapper {
-            width: 100%;
+            border-radius: 4px;
         }
 
         .product-image {
-            display: block;
             width: 100%;
             height: 200px;
             object-fit: cover;
             border: 1px solid var(--outline);
-            background: #0d0d0d;
+            background: #0f0f0f;
         }
-
-        .product-info {
-            min-width: 0;
-        }
-
-        .product-title {
-            margin-bottom: 5px;
-            font-size: 1.35rem;
-            line-height: 1.3;
-        }
-
-        .product-category {
-            font-size: 12px;
-            color: var(--text-muted);
-            margin-bottom: 18px;
-        }
-
-        /* =====================================================
-           FORM ELEMENTS
-           ===================================================== */
 
         .form-group {
             display: flex;
             flex-direction: column;
             gap: 8px;
             margin-bottom: 15px;
-            min-width: 0;
         }
 
         label {
@@ -232,15 +99,9 @@
             padding: 10px 0;
             font-size: 15px;
             width: 100%;
-            max-width: 100%;
             outline: none;
             transition: 0.3s;
             font-family: 'Inter', sans-serif;
-            border-radius: 0;
-        }
-
-        select {
-            cursor: pointer;
         }
 
         select option {
@@ -254,25 +115,9 @@
             border-bottom-color: var(--primary);
         }
 
-        input::placeholder,
-        textarea::placeholder {
-            color: #666;
-        }
-
         textarea {
             resize: vertical;
-            min-height: 70px;
-            line-height: 1.5;
         }
-
-        input[readonly] {
-            color: #999;
-            cursor: not-allowed;
-        }
-
-        /* =====================================================
-           FIELD BLOCK
-           ===================================================== */
 
         .field-block {
             margin-top: 20px;
@@ -283,36 +128,13 @@
 
         .grid-2 {
             display: grid;
-            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            grid-template-columns: 1fr 1fr;
             gap: 20px;
-        }
-
-        .full-width {
-            grid-column: span 2;
         }
 
         .is-hidden {
             display: none !important;
         }
-
-        /* =====================================================
-           CLIENT INFORMATION
-           ===================================================== */
-
-        .client-section {
-            margin-top: 50px;
-            border-top: 1px solid var(--outline);
-            padding-top: 40px;
-        }
-
-        .client-heading {
-            margin-bottom: 25px;
-            font-size: 1.8rem;
-        }
-
-        /* =====================================================
-           SUBMIT BUTTON
-           ===================================================== */
 
         .btn-submit {
             background: var(--primary);
@@ -326,7 +148,6 @@
             letter-spacing: 0.2em;
             margin-top: 40px;
             transition: 0.4s;
-            font-family: 'Inter', sans-serif;
         }
 
         .btn-submit:hover:not(:disabled) {
@@ -335,13 +156,9 @@
         }
 
         .btn-submit:disabled {
-            opacity: 0.55;
+            opacity: 0.6;
             cursor: not-allowed;
         }
-
-        /* =====================================================
-           SUCCESS STATE
-           ===================================================== */
 
         #success-state {
             display: none;
@@ -349,188 +166,76 @@
             padding: 80px 20px;
         }
 
-        .success-title {
-            color: var(--primary);
-            font-size: 3rem;
-            margin-bottom: 15px;
-        }
-
-        .success-text {
-            color: var(--text-muted);
-            font-size: 14px;
-            line-height: 1.7;
-            max-width: 550px;
+        .error-box {
+            max-width: 520px;
             margin: 0 auto;
+            line-height: 1.7;
         }
 
-        .dashboard-btn {
-            margin-top: 30px;
+        .error-title {
+            font-size: 14px;
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .error-message {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 18px;
+        }
+
+        .retry-button {
             background: var(--primary);
             color: #fff;
-            padding: 15px 30px;
             border: none;
+            padding: 12px 20px;
             cursor: pointer;
             text-transform: uppercase;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 700;
-            letter-spacing: 0.08em;
-            transition: 0.3s;
+            letter-spacing: 1.5px;
         }
 
-        .dashboard-btn:hover {
+        .retry-button:hover {
             background: #fff;
             color: #000;
         }
 
-        /* =====================================================
-           MOBILE
-           ===================================================== */
+        .image-fallback {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            font-size: 11px;
+            text-align: center;
+        }
 
         @media (max-width: 768px) {
 
             body {
-                padding: 25px 12px 50px;
+                padding: 25px 15px;
             }
-
-            .container {
-                width: 100%;
-            }
-
-            header {
-                margin-bottom: 25px;
-                padding-bottom: 18px;
-            }
-
-            .brand-label {
-                font-size: 9px;
-                letter-spacing: 2.5px;
-            }
-
-            .page-title {
-                font-size: 2rem;
-            }
-
-            #loading-overlay {
-                padding: 45px 10px;
-            }
-
-            /* Product becomes a vertical card */
 
             .product-card {
-                display: flex;
-                flex-direction: column;
-                gap: 18px;
-                padding: 15px;
-                margin-bottom: 18px;
-            }
-
-            .product-image-wrapper {
-                width: 100%;
+                grid-template-columns: 1fr;
             }
 
             .product-image {
-                width: 100%;
-                height: min(110vw, 420px);
-                object-fit: cover;
-            }
-
-            .product-title {
-                font-size: 1.25rem;
-            }
-
-            .field-block {
-                padding: 15px;
-                margin-top: 15px;
+                height: 300px;
+                max-width: 100%;
             }
 
             .grid-2 {
-                display: grid;
                 grid-template-columns: 1fr;
-                gap: 14px;
             }
 
             .full-width {
-                grid-column: auto !important;
-            }
-
-            .form-group {
-                margin-bottom: 13px;
-            }
-
-            select,
-            input,
-            textarea {
-                font-size: 16px;
-                min-height: 44px;
-            }
-
-            textarea {
-                min-height: 90px;
-            }
-
-            .client-section {
-                margin-top: 35px;
-                padding-top: 30px;
-            }
-
-            .client-heading {
-                font-size: 1.6rem;
-                margin-bottom: 20px;
-            }
-
-            .btn-submit {
-                padding: 17px 14px;
-                margin-top: 25px;
-                font-size: 10px;
-                letter-spacing: 0.12em;
+                grid-column: span 1 !important;
             }
 
             #success-state {
-                padding: 50px 15px;
-            }
-
-            .success-title {
-                font-size: 2.2rem;
-            }
-
-            .success-text {
-                font-size: 13px;
-            }
-        }
-
-        /* =====================================================
-           SMALL PHONES
-           ===================================================== */
-
-        @media (max-width: 400px) {
-
-            body {
-                padding: 18px 10px 40px;
-            }
-
-            .page-title {
-                font-size: 1.75rem;
-            }
-
-            .product-card {
-                padding: 12px;
-            }
-
-            .product-image {
-                height: 105vw;
-                max-height: 380px;
-            }
-
-            .field-block {
-                padding: 12px;
-            }
-
-            label {
-                font-size: 9px;
-            }
-
-            .btn-submit {
-                font-size: 9px;
+                padding: 60px 20px;
             }
         }
     </style>
@@ -538,48 +243,58 @@
 
 <body>
 
-    <!-- =====================================================
+    <!-- =========================================================
          FORM CONTAINER
-         ===================================================== -->
+         ========================================================= -->
 
     <div class="container" id="form-container">
 
         <header>
-            <span class="brand-label">
+            <span
+                style="
+                    color: var(--primary);
+                    font-size: 11px;
+                    letter-spacing: 3px;
+                    text-transform: uppercase;
+                "
+            >
                 EAMA Manufacturing
             </span>
 
-            <h1 class="page-title">
+            <h1
+                style="
+                    font-size: 2.5rem;
+                    margin-top: 5px;
+                "
+            >
                 Configure Inquiry
             </h1>
         </header>
 
 
-        <!-- =================================================
-             LOADING / ERROR AREA
-             ================================================= -->
+        <!-- Loading -->
 
-        <div id="loading-overlay">
-
-            <div class="loading-spinner"></div>
-
-            <div class="loading-message">
-                Synchronizing with Sample Inventory...
-            </div>
-
+        <div
+            id="loading-overlay"
+            style="
+                text-align: center;
+                padding: 40px;
+                color: var(--primary);
+            "
+        >
+            Synchronizing with Sample Inventory...
         </div>
 
 
-        <!-- =================================================
-             MAIN INQUIRY FORM
-             ================================================= -->
+        <!-- =====================================================
+             INQUIRY FORM
+             ===================================================== -->
 
         <form
             id="eama-inquiry-form"
             class="is-hidden"
         >
 
-            <!-- Selected products are inserted here -->
             <div id="productList"></div>
 
 
@@ -587,16 +302,27 @@
                  CLIENT INFORMATION
                  ================================================= -->
 
-            <section class="client-section">
+            <section
+                style="
+                    margin-top: 50px;
+                    border-top: 1px solid var(--outline);
+                    padding-top: 40px;
+                "
+            >
 
-                <h2 class="client-heading">
+                <h2
+                    style="
+                        margin-bottom: 25px;
+                        font-size: 1.8rem;
+                    "
+                >
                     Client Information
                 </h2>
+
 
                 <div class="grid-2">
 
                     <div class="form-group">
-
                         <label for="biz_company">
                             Company Name
                         </label>
@@ -604,15 +330,12 @@
                         <input
                             type="text"
                             id="biz_company"
-                            autocomplete="organization"
                             required
                         >
-
                     </div>
 
 
                     <div class="form-group">
-
                         <label for="biz_name">
                             Contact Person
                         </label>
@@ -620,15 +343,12 @@
                         <input
                             type="text"
                             id="biz_name"
-                            autocomplete="name"
                             required
                         >
-
                     </div>
 
 
                     <div class="form-group">
-
                         <label for="biz_email">
                             Email Address
                         </label>
@@ -636,16 +356,13 @@
                         <input
                             type="email"
                             id="biz_email"
-                            autocomplete="email"
                             required
                             readonly
                         >
-
                     </div>
 
 
                     <div class="form-group">
-
                         <label for="biz_phone">
                             WhatsApp / Phone
                         </label>
@@ -653,15 +370,15 @@
                         <input
                             type="tel"
                             id="biz_phone"
-                            autocomplete="tel"
                             required
                         >
-
                     </div>
 
 
-                    <div class="form-group full-width">
-
+                    <div
+                        class="form-group"
+                        style="grid-column: span 2;"
+                    >
                         <label for="biz_country">
                             Target Country
                         </label>
@@ -669,10 +386,8 @@
                         <input
                             type="text"
                             id="biz_country"
-                            autocomplete="country-name"
                             required
                         >
-
                     </div>
 
                 </div>
@@ -680,9 +395,7 @@
             </section>
 
 
-            <!-- =================================================
-                 SUBMIT
-                 ================================================= -->
+            <!-- Submit -->
 
             <button
                 type="submit"
@@ -697,28 +410,43 @@
     </div>
 
 
-    <!-- =====================================================
+    <!-- =========================================================
          SUCCESS STATE
-         ===================================================== -->
+         ========================================================= -->
 
     <div
         id="success-state"
         class="container"
     >
 
-        <h1 class="success-title">
+        <h1
+            style="
+                color: var(--primary);
+                font-size: 3rem;
+            "
+        >
             Inquiry Logged.
         </h1>
 
-        <p class="success-text">
+        <p style="margin-top: 15px;">
             Your request is now visible in your Client Dashboard
             and our production queue.
         </p>
 
         <button
             type="button"
-            class="dashboard-btn"
-            onclick="window.location.href='dashboard/app.html'"
+            onclick="goToDashboard()"
+            style="
+                margin-top: 30px;
+                background: var(--primary);
+                color: #fff;
+                padding: 15px 30px;
+                border: none;
+                cursor: pointer;
+                text-transform: uppercase;
+                font-size: 11px;
+                font-weight: 700;
+            "
         >
             View Dashboard
         </button>
@@ -726,27 +454,34 @@
     </div>
 
 
-    <!-- =====================================================
+    <!-- =========================================================
          SUPABASE
-         ===================================================== -->
+         ========================================================= -->
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 
     <script>
 
-        /* =====================================================
+        /* =========================================================
            EAMA GARMENTS
            REQUEST QUOTE / INQUIRY PAGE
-           ===================================================== */
+           ========================================================= */
 
 
-        /* =====================================================
+        /* =========================================================
            SUPABASE CONFIGURATION
-           ===================================================== */
+           ========================================================= */
 
         const SUPABASE_URL =
             "https://mxbzlscxsonbwiqjmnzx.supabase.co";
+
+        /*
+         * IMPORTANT:
+         * Put your existing Supabase PUBLISHABLE KEY here.
+         *
+         * Do NOT use the service_role key.
+         */
 
         const SUPABASE_KEY =
             "sb_publishable_H3k7_8EsXTns6v0YVOdGww_9xd6iBYE";
@@ -759,26 +494,26 @@
             );
 
 
-        /* =====================================================
+        /* =========================================================
            STORAGE
-           ===================================================== */
+           ========================================================= */
 
         const storageKey =
             "eamaRequestShortlist";
 
 
-        /* =====================================================
-           STATE
-           ===================================================== */
+        /* =========================================================
+           GLOBAL STATE
+           ========================================================= */
 
         let dbSamples = [];
 
         let currentUser = null;
 
 
-        /* =====================================================
-           ELEMENT REFERENCES
-           ===================================================== */
+        /* =========================================================
+           DOM ELEMENTS
+           ========================================================= */
 
         const loadingOverlay =
             document.getElementById(
@@ -811,9 +546,9 @@
             );
 
 
-        /* =====================================================
-           LOADING STATE
-           ===================================================== */
+        /* =========================================================
+           LOADING MESSAGE
+           ========================================================= */
 
         function showLoading(message) {
 
@@ -821,19 +556,13 @@
                 "is-hidden"
             );
 
-            loadingOverlay.innerHTML = `
-                <div class="loading-spinner"></div>
-
-                <div class="loading-message">
-                    ${escapeHtml(message)}
-                </div>
-            `;
+            loadingOverlay.innerHTML = message;
         }
 
 
-        /* =====================================================
-           ERROR STATE
-           ===================================================== */
+        /* =========================================================
+           ERROR MESSAGE
+           ========================================================= */
 
         function showError(message) {
 
@@ -842,67 +571,44 @@
             );
 
             loadingOverlay.innerHTML = `
-                <div class="error-state">
+
+                <div class="error-box">
 
                     <div class="error-title">
                         Unable to load inquiry
                     </div>
 
                     <div class="error-message">
-                        ${escapeHtml(message)}
+                        ${escapeHTML(message)}
                     </div>
 
                     <button
                         type="button"
-                        class="secondary-btn"
-                        id="retryBtn"
+                        class="retry-button"
+                        onclick="window.location.reload()"
                     >
                         Try Again
                     </button>
 
                 </div>
-            `;
 
+            `;
 
             inquiryForm.classList.add(
                 "is-hidden"
             );
-
-
-            const retryBtn =
-                document.getElementById(
-                    "retryBtn"
-                );
-
-
-            if (retryBtn) {
-
-                retryBtn.addEventListener(
-                    "click",
-                    () => {
-                        window.location.reload();
-                    }
-                );
-
-            }
         }
 
 
-        /* =====================================================
-           BASIC HTML ESCAPING
-           Prevents database text from becoming HTML.
-           ===================================================== */
+        /* =========================================================
+           HTML ESCAPE
+           Prevents database values from being interpreted
+           as HTML.
+           ========================================================= */
 
-        function escapeHtml(value) {
+        function escapeHTML(value) {
 
-            if (
-                value === null ||
-                value === undefined
-            ) {
-                return "";
-            }
-
-            return String(value)
+            return String(value ?? "")
                 .replace(/&/g, "&amp;")
                 .replace(/</g, "&lt;")
                 .replace(/>/g, "&gt;")
@@ -911,79 +617,51 @@
         }
 
 
-        /* =====================================================
-           GET SAVED SHORTLIST
-           ===================================================== */
+        /* =========================================================
+           IMAGE ERROR
+           ========================================================= */
 
-        function getShortlist() {
+        function handleImageError(image) {
 
-            try {
+            const fallback =
+                document.createElement("div");
 
-                const saved =
-                    localStorage.getItem(
-                        storageKey
-                    );
+            fallback.className =
+                "product-image image-fallback";
 
+            fallback.innerText =
+                "Sample image unavailable";
 
-                if (!saved) {
-                    return [];
-                }
-
-
-                const parsed =
-                    JSON.parse(saved);
-
-
-                return Array.isArray(parsed)
-                    ? parsed
-                    : [];
-
-            } catch (error) {
-
-                console.error(
-                    "Shortlist parsing error:",
-                    error
-                );
-
-                return [];
-            }
+            image.replaceWith(fallback);
         }
 
 
-        /* =====================================================
-           SAVE SHORTLIST
-           ===================================================== */
-
-        function saveShortlist(items) {
-
-            try {
-
-                localStorage.setItem(
-                    storageKey,
-                    JSON.stringify(items)
-                );
-
-            } catch (error) {
-
-                console.error(
-                    "Shortlist save error:",
-                    error
-                );
-            }
-        }
-
-
-        /* =====================================================
+        /* =========================================================
            INITIALIZE PAGE
-           ===================================================== */
+           ========================================================= */
 
         async function initPage() {
 
             try {
 
                 /* ---------------------------------------------
-                   STEP 1
-                   Check authentication
+                   Step 1
+                   Check Supabase client
+                   --------------------------------------------- */
+
+                if (
+                    typeof supabase === "undefined"
+                ) {
+
+                    throw new Error(
+                        "Supabase could not be loaded. Please refresh the page."
+                    );
+                }
+
+
+                /* ---------------------------------------------
+                   Step 2
+                   Check logged-in user
                    --------------------------------------------- */
 
                 showLoading(
@@ -992,28 +670,63 @@
 
 
                 const {
-                    data: authData,
+                    data,
                     error: authError
                 } =
                     await _supabase.auth.getUser();
 
 
+                /*
+                 * If Supabase returns an authentication error,
+                 * show the actual reason in the console.
+                 */
+
                 if (authError) {
 
                     console.error(
-                        "Supabase auth error:",
+                        "Supabase authentication error:",
                         authError
                     );
 
+                    /*
+                     * A stale/expired session is not necessarily
+                     * a broken application.
+                     */
+
+                    if (
+                        authError.message &&
+                        authError.message.toLowerCase().includes(
+                            "jwt"
+                        )
+                    ) {
+
+                        await _supabase.auth.signOut();
+
+                        alert(
+                            "Your login session has expired. Please sign in again."
+                        );
+
+                        window.location.href =
+                            "client-portal-sign-in.html";
+
+                        return;
+                    }
+
+
                     throw new Error(
+                        authError.message ||
                         "We could not verify your client session."
                     );
                 }
 
 
-                const user =
-                    authData?.user || null;
+                const user = data?.user || null;
 
+
+                /* ---------------------------------------------
+                   Step 3
+                   User not logged in
+                   --------------------------------------------- */
 
                 if (!user) {
 
@@ -1021,40 +734,30 @@
                         "Please log in to submit an inquiry."
                     );
 
-
                     window.location.href =
                         "client-portal-sign-in.html";
-
 
                     return;
                 }
 
 
-                currentUser =
-                    user;
-
-
                 /* ---------------------------------------------
-                   Put authenticated email into form
+                   Step 4
+                   Store current user
                    --------------------------------------------- */
 
-                const emailInput =
-                    document.getElementById(
-                        "biz_email"
-                    );
+                currentUser = user;
 
 
-                if (emailInput) {
-
-                    emailInput.value =
-                        user.email || "";
-
-                }
+                document.getElementById(
+                    "biz_email"
+                ).value =
+                    user.email || "";
 
 
                 /* ---------------------------------------------
-                   STEP 2
-                   Get shortlist
+                   Step 5
+                   Load shortlist
                    --------------------------------------------- */
 
                 showLoading(
@@ -1062,16 +765,52 @@
                 );
 
 
-                let shortlist =
-                    getShortlist();
+                let shortlist = [];
+
+
+                try {
+
+                    const saved =
+                        localStorage.getItem(
+                            storageKey
+                        );
+
+
+                    if (saved) {
+
+                        shortlist =
+                            JSON.parse(saved);
+
+                    }
+
+                } catch (storageError) {
+
+                    console.error(
+                        "Shortlist storage error:",
+                        storageError
+                    );
+
+                    shortlist = [];
+                }
 
 
                 /* ---------------------------------------------
-                   No selected products
+                   Make sure shortlist is an array
                    --------------------------------------------- */
 
                 if (
-                    !shortlist ||
+                    !Array.isArray(shortlist)
+                ) {
+
+                    shortlist = [];
+                }
+
+
+                /* ---------------------------------------------
+                   No samples
+                   --------------------------------------------- */
+
+                if (
                     shortlist.length === 0
                 ) {
 
@@ -1084,85 +823,92 @@
 
 
                 /* ---------------------------------------------
-                   STEP 3
-                   Get valid IDs
+                   Extract sample IDs
                    --------------------------------------------- */
 
                 const ids =
                     shortlist
-                        .map(item =>
-                            item?.id
+                        .map(
+                            item =>
+                                item?.id
                         )
-                        .filter(id =>
-                            id !== null &&
-                            id !== undefined &&
-                            String(id).trim() !== ""
-                        )
-                        .map(id =>
-                            String(id)
+                        .filter(
+                            id =>
+                                id !== null &&
+                                id !== undefined &&
+                                String(id).trim() !== ""
                         );
 
 
-                if (ids.length === 0) {
+                if (
+                    ids.length === 0
+                ) {
 
                     localStorage.removeItem(
                         storageKey
                     );
 
-
                     showError(
-                        "The selected samples could not be identified. Please return to the gallery and select them again."
+                        "The selected samples could not be identified. Please return to the gallery and select the samples again."
                     );
 
                     return;
                 }
 
 
+                console.log(
+                    "Loading sample IDs:",
+                    ids
+                );
+
+
                 /* ---------------------------------------------
-                   STEP 4
-                   Query current inventory
+                   Step 6
+                   Load samples
                    --------------------------------------------- */
 
                 const {
-                    data,
-                    error
+                    data: samples,
+                    error: sampleError
                 } =
                     await _supabase
                         .from("samples")
                         .select("*")
-                        .in("id", ids);
+                        .in(
+                            "id",
+                            ids
+                        );
 
 
-                if (error) {
+                if (sampleError) {
 
                     console.error(
                         "Sample inventory error:",
-                        error
+                        sampleError
                     );
 
-
                     throw new Error(
-                        "The sample inventory could not be loaded. Please try again."
+                        sampleError.message ||
+                        "The sample inventory could not be loaded."
                     );
                 }
 
 
                 dbSamples =
-                    Array.isArray(data)
-                        ? data
-                        : [];
+                    samples || [];
 
 
                 /* ---------------------------------------------
-                   STEP 5
-                   Remove deleted samples from shortlist
+                   Remove samples that no longer exist
                    --------------------------------------------- */
 
                 const currentIds =
                     new Set(
                         dbSamples.map(
                             sample =>
-                                String(sample.id)
+                                String(
+                                    sample.id
+                                )
                         )
                     );
 
@@ -1171,18 +917,29 @@
                     shortlist.filter(
                         item =>
                             currentIds.has(
-                                String(item.id)
+                                String(
+                                    item.id
+                                )
                             )
                     );
 
 
-                saveShortlist(
-                    validShortlist
-                );
+                if (
+                    validShortlist.length !==
+                    shortlist.length
+                ) {
+
+                    localStorage.setItem(
+                        storageKey,
+                        JSON.stringify(
+                            validShortlist
+                        )
+                    );
+                }
 
 
                 /* ---------------------------------------------
-                   No valid samples remain
+                   All samples deleted
                    --------------------------------------------- */
 
                 if (
@@ -1193,45 +950,34 @@
                         storageKey
                     );
 
-
                     showError(
                         "The samples previously selected from the gallery are no longer available. Please return to the gallery and select current samples."
                     );
-
 
                     return;
                 }
 
 
                 /* ---------------------------------------------
-                   STEP 6
-                   Render products
+                   Step 7
+                   Render inquiry
                    --------------------------------------------- */
 
                 renderForm();
 
 
                 /* ---------------------------------------------
-                   STEP 7
-                   Reveal form
+                   Step 8
+                   Show form
                    --------------------------------------------- */
 
                 loadingOverlay.classList.add(
                     "is-hidden"
                 );
 
-
                 inquiryForm.classList.remove(
                     "is-hidden"
                 );
-
-
-                /* Scroll to top */
-
-                window.scrollTo({
-                    top: 0,
-                    behavior: "smooth"
-                });
 
 
             } catch (error) {
@@ -1243,48 +989,16 @@
 
 
                 showError(
-                    error?.message ||
+                    error.message ||
                     "Something went wrong while loading the inquiry form."
                 );
             }
         }
 
 
-        /* =====================================================
-           SPLIT COMMA-SEPARATED VALUES
-           ===================================================== */
-
-        function splitValues(
-            value,
-            fallback
-        ) {
-
-            if (
-                !value ||
-                String(value).trim() === ""
-            ) {
-                return [fallback];
-            }
-
-
-            const result =
-                String(value)
-                    .split(",")
-                    .map(value =>
-                        value.trim()
-                    )
-                    .filter(Boolean);
-
-
-            return result.length
-                ? result
-                : [fallback];
-        }
-
-
-        /* =====================================================
+        /* =========================================================
            RENDER PRODUCT FORM
-           ===================================================== */
+           ========================================================= */
 
         function renderForm() {
 
@@ -1294,19 +1008,45 @@
             dbSamples.forEach(
                 (sample, index) => {
 
-                    const fabrics =
-                        splitValues(
-                            sample.fabric,
-                            "Standard"
-                        );
+                    /* -----------------------------------------
+                       Fabrics
+                       ----------------------------------------- */
 
+                    const fabrics =
+                        sample.fabric
+                            ? String(
+                                sample.fabric
+                            )
+                                .split(",")
+                                .map(
+                                    item =>
+                                        item.trim()
+                                )
+                                .filter(Boolean)
+                            : ["Standard"];
+
+
+                    /* -----------------------------------------
+                       Colors
+                       ----------------------------------------- */
 
                     const colors =
-                        splitValues(
-                            sample.color,
-                            "As per Sample"
-                        );
+                        sample.color
+                            ? String(
+                                sample.color
+                            )
+                                .split(",")
+                                .map(
+                                    item =>
+                                        item.trim()
+                                )
+                                .filter(Boolean)
+                            : ["As per Sample"];
 
+
+                    /* -----------------------------------------
+                       Sizes
+                       ----------------------------------------- */
 
                     const sizes = [
                         "XS",
@@ -1318,55 +1058,59 @@
                     ];
 
 
+                    /* -----------------------------------------
+                       Create card
+                       ----------------------------------------- */
+
                     const card =
                         document.createElement(
                             "div"
                         );
 
-
                     card.className =
                         "product-card";
 
 
-                    const imageUrl =
-                        sample.image_url ||
-                        "";
-
-
-                    const sampleName =
-                        sample.sample_name ||
-                        "Sample";
-
-
-                    const category =
-                        sample.category ||
-                        "-";
-
-
                     card.innerHTML = `
 
-                        <div class="product-image-wrapper">
+                        <img
+                            src="${escapeHTML(
+                                sample.image_url || ""
+                            )}"
+                            class="product-image"
+                            alt="${escapeHTML(
+                                sample.sample_name || "Sample"
+                            )}"
+                            loading="lazy"
+                            onerror="handleImageError(this)"
+                        >
 
-                            <img
-                                src="${escapeHtml(imageUrl)}"
-                                class="product-image"
-                                alt="${escapeHtml(sampleName)}"
-                                loading="lazy"
+
+                        <div>
+
+                            <h3
+                                style="
+                                    margin-bottom:5px;
+                                "
                             >
-
-                        </div>
-
-
-                        <div class="product-info">
-
-                            <h3 class="product-title">
-                                ${escapeHtml(sampleName)}
+                                ${escapeHTML(
+                                    sample.sample_name ||
+                                    "Sample"
+                                )}
                             </h3>
 
 
-                            <p class="product-category">
+                            <p
+                                style="
+                                    font-size:12px;
+                                    color:var(--text-muted);
+                                    margin-bottom:15px;
+                                "
+                            >
                                 Category:
-                                ${escapeHtml(category)}
+                                ${escapeHTML(
+                                    sample.category || "-"
+                                )}
                             </p>
 
 
@@ -1378,10 +1122,8 @@
                                     Request Type
                                 </label>
 
-
                                 <select
                                     class="field-type"
-                                    aria-label="Request Type"
                                 >
 
                                     <option value="sample">
@@ -1396,7 +1138,7 @@
                                         value="both"
                                         selected
                                     >
-                                        Request Sample &amp; Quote
+                                        Request Sample & Quote
                                     </option>
 
                                 </select>
@@ -1419,20 +1161,25 @@
                                             Available Fabrics
                                         </label>
 
-
                                         <select
                                             class="f-fabric"
                                         >
 
-                                            ${fabrics.map(
-                                                fabric => `
-                                                    <option
-                                                        value="${escapeHtml(fabric)}"
-                                                    >
-                                                        ${escapeHtml(fabric)}
-                                                    </option>
-                                                `
-                                            ).join("")}
+                                            ${fabrics
+                                                .map(
+                                                    fabric => `
+                                                        <option
+                                                            value="${escapeHTML(
+                                                                fabric
+                                                            )}"
+                                                        >
+                                                            ${escapeHTML(
+                                                                fabric
+                                                            )}
+                                                        </option>
+                                                    `
+                                                )
+                                                .join("")}
 
                                         </select>
 
@@ -1447,20 +1194,25 @@
                                             Available Colors
                                         </label>
 
-
                                         <select
                                             class="f-color"
                                         >
 
-                                            ${colors.map(
-                                                color => `
-                                                    <option
-                                                        value="${escapeHtml(color)}"
-                                                    >
-                                                        ${escapeHtml(color)}
-                                                    </option>
-                                                `
-                                            ).join("")}
+                                            ${colors
+                                                .map(
+                                                    color => `
+                                                        <option
+                                                            value="${escapeHTML(
+                                                                color
+                                                            )}"
+                                                        >
+                                                            ${escapeHTML(
+                                                                color
+                                                            )}
+                                                        </option>
+                                                    `
+                                                )
+                                                .join("")}
 
                                         </select>
 
@@ -1475,25 +1227,26 @@
                                             Size
                                         </label>
 
-
                                         <select
                                             class="f-size"
                                         >
 
-                                            ${sizes.map(
-                                                size => `
-                                                    <option
-                                                        value="${size}"
-                                                        ${
-                                                            size === "M"
-                                                                ? "selected"
-                                                                : ""
-                                                        }
-                                                    >
-                                                        ${size}
-                                                    </option>
-                                                `
-                                            ).join("")}
+                                            ${sizes
+                                                .map(
+                                                    size => `
+                                                        <option
+                                                            value="${size}"
+                                                            ${
+                                                                size === "M"
+                                                                    ? "selected"
+                                                                    : ""
+                                                            }
+                                                        >
+                                                            ${size}
+                                                        </option>
+                                                    `
+                                                )
+                                                .join("")}
 
                                         </select>
 
@@ -1508,13 +1261,11 @@
                                             Target Quantity
                                         </label>
 
-
                                         <input
                                             type="number"
                                             class="f-qty"
                                             value="100"
                                             min="1"
-                                            inputmode="numeric"
                                             required
                                         >
 
@@ -1525,12 +1276,14 @@
 
                                     <div
                                         class="form-group f-custom-wrap full-width"
+                                        style="
+                                            grid-column:span 2;
+                                        "
                                     >
 
                                         <label>
                                             Customization / Branding
                                         </label>
-
 
                                         <input
                                             type="text"
@@ -1540,7 +1293,6 @@
 
                                     </div>
 
-
                                 </div>
 
 
@@ -1548,13 +1300,14 @@
 
                                 <div
                                     class="form-group"
-                                    style="margin-top:10px;"
+                                    style="
+                                        margin-top:10px;
+                                    "
                                 >
 
                                     <label>
                                         Additional Notes
                                     </label>
-
 
                                     <textarea
                                         class="f-notes"
@@ -1576,28 +1329,7 @@
 
 
                     /* -----------------------------------------
-                       IMAGE ERROR HANDLING
-                       ----------------------------------------- */
-
-                    const image =
-                        card.querySelector(
-                            ".product-image"
-                        );
-
-
-                    image.addEventListener(
-                        "error",
-                        () => {
-
-                            image.style.display =
-                                "none";
-
-                        }
-                    );
-
-
-                    /* -----------------------------------------
-                       REQUEST TYPE
+                       Request type listener
                        ----------------------------------------- */
 
                     const typeSelect =
@@ -1606,46 +1338,36 @@
                         );
 
 
-                    const customWrap =
-                        card.querySelector(
-                            ".f-custom-wrap"
-                        );
-
-
                     typeSelect.addEventListener(
                         "change",
-                        () => {
+                        function () {
 
-                            const type =
-                                typeSelect.value;
+                            const customWrap =
+                                card.querySelector(
+                                    ".f-custom-wrap"
+                                );
 
 
                             customWrap.classList.toggle(
                                 "is-hidden",
-                                type === "sample"
+                                this.value === "sample"
                             );
 
                         }
                     );
-
-
-                    /* Keep index available if needed */
-
-                    card.dataset.sampleIndex =
-                        String(index);
 
                 }
             );
         }
 
 
-        /* =====================================================
+        /* =========================================================
            FORM SUBMISSION
-           ===================================================== */
+           ========================================================= */
 
         inquiryForm.addEventListener(
             "submit",
-            async (event) => {
+            async function (event) {
 
                 event.preventDefault();
 
@@ -1653,7 +1375,7 @@
                 if (!currentUser) {
 
                     alert(
-                        "Your session has expired. Please log in again."
+                        "Your login session is no longer available. Please sign in again."
                     );
 
                     window.location.href =
@@ -1663,26 +1385,7 @@
                 }
 
 
-                /* ---------------------------------------------
-                   Validate browser form
-                   --------------------------------------------- */
-
-                if (
-                    !inquiryForm.checkValidity()
-                ) {
-
-                    inquiryForm.reportValidity();
-
-                    return;
-                }
-
-
-                /* ---------------------------------------------
-                   Disable submit
-                   --------------------------------------------- */
-
-                submitBtn.disabled =
-                    true;
+                submitBtn.disabled = true;
 
                 submitBtn.innerText =
                     "Processing Inquiry...";
@@ -1750,19 +1453,8 @@
                         );
 
 
-                    if (
-                        cards.length === 0 ||
-                        dbSamples.length === 0
-                    ) {
-
-                        throw new Error(
-                            "There are no valid samples in this inquiry."
-                        );
-                    }
-
-
                     /* -----------------------------------------
-                       INSERT EACH REQUEST
+                       Save every selected product
                        ----------------------------------------- */
 
                     for (
@@ -1773,7 +1465,6 @@
 
                         const card =
                             cards[i];
-
 
                         const dbSample =
                             dbSamples[i];
@@ -1792,30 +1483,6 @@
                                 .value;
 
 
-                        const fabric =
-                            card
-                                .querySelector(
-                                    ".f-fabric"
-                                )
-                                .value;
-
-
-                        const color =
-                            card
-                                .querySelector(
-                                    ".f-color"
-                                )
-                                .value;
-
-
-                        const size =
-                            card
-                                .querySelector(
-                                    ".f-size"
-                                )
-                                .value;
-
-
                         const quantity =
                             parseInt(
                                 card
@@ -1827,39 +1494,57 @@
                             );
 
 
-                        const custom =
-                            card
-                                .querySelector(
-                                    ".f-custom"
-                                )
-                                .value
-                                .trim();
+                        const spec = {
 
+                            fabric:
+                                card
+                                    .querySelector(
+                                        ".f-fabric"
+                                    )
+                                    .value,
 
-                        const notes =
-                            card
-                                .querySelector(
-                                    ".f-notes"
-                                )
-                                .value
-                                .trim();
+                            color:
+                                card
+                                    .querySelector(
+                                        ".f-color"
+                                    )
+                                    .value,
 
+                            size:
+                                card
+                                    .querySelector(
+                                        ".f-size"
+                                    )
+                                    .value,
 
-                        if (
-                            !Number.isFinite(
-                                quantity
-                            ) ||
-                            quantity < 1
-                        ) {
+                            qty:
+                                Number.isFinite(
+                                    quantity
+                                ) &&
+                                quantity > 0
+                                    ? quantity
+                                    : 1,
 
-                            throw new Error(
-                                `Please enter a valid quantity for ${dbSample.sample_name}.`
-                            );
-                        }
+                            custom:
+                                card
+                                    .querySelector(
+                                        ".f-custom"
+                                    )
+                                    .value
+                                    .trim(),
+
+                            notes:
+                                card
+                                    .querySelector(
+                                        ".f-notes"
+                                    )
+                                    .value
+                                    .trim()
+                        };
 
 
                         /* -------------------------------------
-                           Database insert
+                           Insert into manufacturing_requests
                            ------------------------------------- */
 
                         const {
@@ -1872,6 +1557,7 @@
                                 .insert([
 
                                     {
+
                                         ...biz,
 
                                         garment_category:
@@ -1884,22 +1570,22 @@
                                             type,
 
                                         fabric_preference:
-                                            fabric,
+                                            spec.fabric,
 
                                         sample_color:
-                                            color,
+                                            spec.color,
 
                                         sample_size:
-                                            size,
+                                            spec.size,
 
                                         target_quantity:
-                                            quantity,
+                                            spec.qty,
 
                                         customization_requirements:
-                                            custom,
+                                            spec.custom,
 
                                         additional_notes:
-                                            notes,
+                                            spec.notes,
 
                                         status:
                                             "New",
@@ -1918,96 +1604,99 @@
                                 error
                             );
 
-
                             throw new Error(
-                                "Your inquiry could not be saved. Please try again."
+                                error.message ||
+                                "Your inquiry could not be saved."
                             );
                         }
 
 
-                        /* -------------------------------------
-                           Email summary
-                           ------------------------------------- */
-
                         emailLog +=
-                            `${dbSample.sample_name} (${type}): ${quantity}pcs in ${fabric}, ${color}, size ${size}.\n`;
+                            `${dbSample.sample_name} (${type}): ${spec.qty}pcs in ${spec.fabric}, ${spec.color}, size ${spec.size}.\n`;
                     }
 
 
                     /* -----------------------------------------
-                       SEND ADMIN EMAIL
+                       Send notification email
                        ----------------------------------------- */
 
-                    const {
-                        error: funcError
-                    } =
-                        await _supabase.functions.invoke(
-                            "send-inquiry-email",
-                            {
-                                body: {
+                    try {
 
-                                    customer_name:
-                                        biz.contact_person,
+                        const {
+                            error: funcError
+                        } =
+                            await _supabase.functions.invoke(
+                                "send-inquiry-email",
+                                {
 
-                                    company_name:
-                                        biz.company_name,
+                                    body: {
 
-                                    customer_email:
-                                        biz.email,
+                                        customer_name:
+                                            biz.contact_person,
 
-                                    admin_email:
-                                        "admin@eamagarments.com",
+                                        company_name:
+                                            biz.company_name,
 
-                                    message:
-                                        `New unified request received for:\n${emailLog}`
+                                        customer_email:
+                                            biz.email,
+
+                                        admin_email:
+                                            "admin@eamagarments.com",
+
+                                        message:
+                                            `New unified request received for:\n${emailLog}`
+                                    }
                                 }
-                            }
-                        );
+                            );
 
 
-                    /* -----------------------------------------
-                       IMPORTANT:
-                       Database request is already saved.
+                        if (funcError) {
 
-                       If email fails, don't tell customer
-                       their inquiry failed.
-                       ----------------------------------------- */
+                            console.error(
+                                "Email notification error:",
+                                funcError
+                            );
 
-                    if (funcError) {
+                            /*
+                             * The database request has already
+                             * been successfully saved.
+                             *
+                             * Therefore we do NOT fail the inquiry
+                             * just because email failed.
+                             */
+
+                            console.warn(
+                                "Inquiry saved successfully, but email notification failed."
+                            );
+                        }
+
+                    } catch (emailError) {
 
                         console.error(
-                            "Email function error:",
-                            funcError
+                            "Email function exception:",
+                            emailError
                         );
 
-                        console.warn(
-                            "Inquiry saved successfully, but email notification failed."
-                        );
-
+                        /*
+                         * Continue because the inquiry itself
+                         * was already saved.
+                         */
                     }
 
 
                     /* -----------------------------------------
-                       SUCCESS
+                       Success
                        ----------------------------------------- */
-
-                    localStorage.removeItem(
-                        storageKey
-                    );
-
 
                     formContainer.style.display =
                         "none";
 
-
                     successState.style.display =
                         "block";
 
-
-                    window.scrollTo({
-                        top: 0,
-                        behavior: "smooth"
-                    });
+                    localStorage.removeItem(
+                        storageKey
+                    );
 
 
                 } catch (error) {
@@ -2021,15 +1710,13 @@
                     alert(
                         "Error: " +
                         (
-                            error?.message ||
+                            error.message ||
                             "Unable to submit inquiry."
                         )
                     );
 
 
-                    submitBtn.disabled =
-                        false;
-
+                    submitBtn.disabled = false;
 
                     submitBtn.innerText =
                         "Submit Formal Inquiry";
@@ -2039,9 +1726,25 @@
         );
 
 
-        /* =====================================================
-           START PAGE
-           ===================================================== */
+        /* =========================================================
+           DASHBOARD
+           ========================================================= */
+
+        function goToDashboard() {
+
+            /*
+             * Change this only if your dashboard is located
+             * somewhere else.
+             */
+
+            window.location.href =
+                "dashboard/app.html";
+        }
+
+
+        /* =========================================================
+           START APPLICATION
+           ========================================================= */
 
         initPage();
 
