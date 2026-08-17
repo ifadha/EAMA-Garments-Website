@@ -9,9 +9,10 @@ const corsHeaders = {
 };
 
 serve(async (req) => {
-  // ---------------------------------------------------------
+
+  // =========================================================
   // CORS
-  // ---------------------------------------------------------
+  // =========================================================
 
   if (req.method === "OPTIONS") {
     return new Response("ok", {
@@ -20,6 +21,7 @@ serve(async (req) => {
   }
 
   try {
+
     if (req.method !== "POST") {
       throw new Error("Method not allowed.");
     }
@@ -46,20 +48,21 @@ serve(async (req) => {
       message,
     } = body;
 
-    // ---------------------------------------------------------
+
+    // =========================================================
     // BASIC VALIDATION
-    // ---------------------------------------------------------
+    // =========================================================
 
     if (!email || typeof email !== "string") {
       throw new Error("Email is required.");
     }
 
-    const normalizedEmail =
-      email.trim().toLowerCase();
+    const normalizedEmail = email.trim().toLowerCase();
 
-    // ---------------------------------------------------------
+
+    // =========================================================
     // SUPABASE CONFIGURATION
-    // ---------------------------------------------------------
+    // =========================================================
 
     const SUPABASE_URL =
       Deno.env.get("SUPABASE_URL");
@@ -67,16 +70,35 @@ serve(async (req) => {
     const SUPABASE_SERVICE_ROLE_KEY =
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
 
-    // ---------------------------------------------------------
+
+    // =========================================================
     // BREVO CONFIGURATION
-    // ---------------------------------------------------------
+    // =========================================================
 
     const BREVO_API_KEY =
       Deno.env.get("BREVO_API_KEY");
 
+    const BREVO_SENDER_EMAIL =
+      Deno.env.get("BREVO_SENDER_EMAIL") ||
+      "info@eamagarments.com";
+
+    const BREVO_SENDER_NAME =
+      Deno.env.get("BREVO_SENDER_NAME") ||
+      "EAMA Garments";
+
+
+    // =========================================================
+    // WEBSITE URL
+    // =========================================================
+
     const SITE_ORIGIN =
       Deno.env.get("SITE_ORIGIN") ||
       "https://ifadha.github.io/EAMA-Garments-Website";
+
+
+    // =========================================================
+    // CONFIGURATION VALIDATION
+    // =========================================================
 
     if (!SUPABASE_URL) {
       throw new Error(
@@ -96,6 +118,7 @@ serve(async (req) => {
       );
     }
 
+
     const normalizedOrigin =
       SITE_ORIGIN
         .trim()
@@ -104,9 +127,10 @@ serve(async (req) => {
     const originBase =
       `${normalizedOrigin}/`;
 
-    // ---------------------------------------------------------
+
+    // =========================================================
     // SUPABASE ADMIN CLIENT
-    // ---------------------------------------------------------
+    // =========================================================
 
     const supabaseAdmin =
       createClient(
@@ -114,98 +138,224 @@ serve(async (req) => {
         SUPABASE_SERVICE_ROLE_KEY
       );
 
+
     // =========================================================
     // 1. GENERAL INQUIRY
     // =========================================================
 
     if (type === "general_inquiry") {
+
       if (!name || !String(name).trim()) {
         throw new Error("Name is required.");
       }
+
       if (!message || !String(message).trim()) {
         throw new Error("Message is required.");
       }
 
-      const inquiryName = String(name).trim();
-      const inquiryCompany = company ? String(company).trim() : "";
-      const inquiryCountry = country ? String(country).trim() : "";
-      const inquiryMessage = String(message).trim();
 
-      // SAVE TO DATABASE
-      const { data: inquiry, error: inquiryError } = await supabaseAdmin
-        .from("inquiries")
-        .insert([{
-          name: inquiryName,
-          company_name: inquiryCompany || null,
-          email: normalizedEmail,
-          country: inquiryCountry || null,
-          message: inquiryMessage,
-          status: "New",
-        }])
-        .select()
-        .single();
+      const inquiryName =
+        String(name).trim();
+
+      const inquiryCompany =
+        company
+          ? String(company).trim()
+          : "";
+
+      const inquiryCountry =
+        country
+          ? String(country).trim()
+          : "";
+
+      const inquiryMessage =
+        String(message).trim();
+
+
+      // -------------------------------------------------------
+      // SAVE INQUIRY
+      // -------------------------------------------------------
+
+      const {
+        data: inquiry,
+        error: inquiryError,
+      } =
+        await supabaseAdmin
+          .from("inquiries")
+          .insert([
+            {
+              name: inquiryName,
+
+              company_name:
+                inquiryCompany || null,
+
+              email:
+                normalizedEmail,
+
+              country:
+                inquiryCountry || null,
+
+              message:
+                inquiryMessage,
+
+              status:
+                "New",
+            },
+          ])
+          .select()
+          .single();
+
 
       if (inquiryError || !inquiry) {
-        console.error("Inquiry database error:", inquiryError);
-        throw new Error(inquiryError?.message || "Unable to save your inquiry.");
+
+        console.error(
+          "Inquiry database error:",
+          inquiryError
+        );
+
+        throw new Error(
+          inquiryError?.message ||
+          "Unable to save your inquiry."
+        );
       }
 
-      // SEND EMAIL VIA BREVO
+
+      // -------------------------------------------------------
+      // SEND CLIENT CONFIRMATION
+      // -------------------------------------------------------
+
       const GENERAL_INQUIRY_TEMPLATE_ID = 7;
+
       let emailSent = false;
 
+
       try {
-        const brevoResponse = await fetch("https://api.brevo.com/v3/smtp/email", {
-          method: "POST",
-          headers: {
-            "accept": "application/json",
-            "api-key": BREVO_API_KEY,
-            "content-type": "application/json",
-          },
-          body: JSON.stringify({
-            sender: {
-              email: Deno.env.get("BREVO_SENDER_EMAIL") || "info@eamagarments.com",
-              name: Deno.env.get("BREVO_SENDER_NAME") || "EAMA Garments",
-            },
-            to: [{ email: normalizedEmail, name: inquiryName }],
-            templateId: GENERAL_INQUIRY_TEMPLATE_ID,
-            params: {
-              customer_name: inquiryName,
-              status: inquiry.status || "New",
-              admin_message: inquiryMessage,
-              company_name: inquiryCompany,
-              country: inquiryCountry,
-              inquiry_id: inquiry.id,
-              created_at: inquiry.created_at || "",
-            },
-          }),
-        });
+
+        const brevoResponse =
+          await fetch(
+            "https://api.brevo.com/v3/smtp/email",
+            {
+              method: "POST",
+
+              headers: {
+                "accept":
+                  "application/json",
+
+                "api-key":
+                  BREVO_API_KEY,
+
+                "content-type":
+                  "application/json",
+              },
+
+              body: JSON.stringify({
+
+                sender: {
+                  email:
+                    BREVO_SENDER_EMAIL,
+
+                  name:
+                    BREVO_SENDER_NAME,
+                },
+
+                to: [
+                  {
+                    email:
+                      normalizedEmail,
+
+                    name:
+                      inquiryName,
+                  },
+                ],
+
+                templateId:
+                  GENERAL_INQUIRY_TEMPLATE_ID,
+
+                params: {
+                  customer_name:
+                    inquiryName,
+
+                  status:
+                    inquiry.status || "New",
+
+                  admin_message:
+                    inquiryMessage,
+
+                  company_name:
+                    inquiryCompany,
+
+                  country:
+                    inquiryCountry,
+
+                  inquiry_id:
+                    inquiry.id,
+
+                  created_at:
+                    inquiry.created_at || "",
+                },
+              }),
+            }
+          );
+
 
         if (brevoResponse.ok) {
+
           emailSent = true;
-          console.log("General inquiry email sent successfully.");
+
+          console.log(
+            "General inquiry email sent successfully."
+          );
+
         } else {
-          const errorText = await brevoResponse.text();
-          console.error("Brevo API error:", errorText);
+
+          const errorText =
+            await brevoResponse.text();
+
+          console.error(
+            "Brevo API error:",
+            errorText
+          );
         }
+
       } catch (brevoErr) {
-        console.error("Brevo fetch error:", brevoErr);
+
+        console.error(
+          "Brevo fetch error:",
+          brevoErr
+        );
       }
+
 
       return new Response(
         JSON.stringify({
           success: true,
-          sent: emailSent, 
-          type: "general_inquiry",
-          inquiry_id: inquiry.id,
-          error: emailSent ? null : "Inquiry saved, but confirmation email failed."
+
+          sent:
+            emailSent,
+
+          type:
+            "general_inquiry",
+
+          inquiry_id:
+            inquiry.id,
+
+          error:
+            emailSent
+              ? null
+              : "Inquiry saved, but confirmation email failed.",
         }),
+
         {
           status: 200,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
+
+          headers: {
+            ...corsHeaders,
+            "Content-Type":
+              "application/json",
+          },
         }
       );
     }
+
 
     // =========================================================
     // 2. MANUFACTURING REQUEST
@@ -219,16 +369,23 @@ serve(async (req) => {
         );
       }
 
+
+      // -------------------------------------------------------
+      // GET REQUEST
+      // -------------------------------------------------------
+
       const {
         data: request,
         error: requestError,
-      } = await supabaseAdmin
-        .from("manufacturing_requests")
-        .select(
-          "id, email, company_name, contact_person, status"
-        )
-        .eq("id", request_id)
-        .single();
+      } =
+        await supabaseAdmin
+          .from("manufacturing_requests")
+          .select(
+            "id, email, company_name, contact_person, status"
+          )
+          .eq("id", request_id)
+          .single();
+
 
       if (requestError || !request) {
 
@@ -242,15 +399,26 @@ serve(async (req) => {
         );
       }
 
+
+      // -------------------------------------------------------
+      // SECURITY CHECK
+      // -------------------------------------------------------
+
       if (
         request.email &&
         request.email.toLowerCase() !==
           normalizedEmail
       ) {
+
         throw new Error(
           "The email address does not match the manufacturing request."
         );
       }
+
+
+      // -------------------------------------------------------
+      // CLIENT PORTAL LINK
+      // -------------------------------------------------------
 
       const portalLink =
         new URL(
@@ -263,6 +431,11 @@ serve(async (req) => {
         request_id
       );
 
+
+      // -------------------------------------------------------
+      // BREVO TEMPLATE
+      // -------------------------------------------------------
+
       const configuredTemplateId =
         Number(
           Deno.env.get(
@@ -270,16 +443,23 @@ serve(async (req) => {
           ) || "4"
         );
 
+
       if (
         !Number.isInteger(
           configuredTemplateId
         ) ||
         configuredTemplateId <= 0
       ) {
+
         throw new Error(
           "BREVO_MANUFACTURING_REQUEST_TEMPLATE_ID must be a positive integer."
         );
       }
+
+
+      // -------------------------------------------------------
+      // SEND EMAIL TO CLIENT
+      // -------------------------------------------------------
 
       const brevoResponse =
         await fetch(
@@ -299,6 +479,17 @@ serve(async (req) => {
             },
 
             body: JSON.stringify({
+
+              sender: {
+                email:
+                  BREVO_SENDER_EMAIL,
+
+                name:
+                  BREVO_SENDER_NAME,
+              },
+
+
+              // CLIENT RECEIVES THE EMAIL
               to: [
                 {
                   email:
@@ -307,14 +498,17 @@ serve(async (req) => {
                   name:
                     contact_person ||
                     request.contact_person ||
-                    undefined,
+                    "",
                 },
               ],
+
 
               templateId:
                 configuredTemplateId,
 
+
               params: {
+
                 request_id:
                   request.id,
 
@@ -335,39 +529,63 @@ serve(async (req) => {
           }
         );
 
+
       const brevoText =
         await brevoResponse.text();
 
+
       console.log(
-        "Manufacturing request Brevo status:",
+        "Manufacturing request client email status:",
         brevoResponse.status
       );
 
+
       if (!brevoResponse.ok) {
+
+        console.error(
+          "Brevo manufacturing request error:",
+          brevoText
+        );
+
         throw new Error(
           `Brevo returned ${brevoResponse.status}: ${brevoText}`
         );
       }
 
+
+      console.log(
+        "Manufacturing request confirmation email sent to client:",
+        normalizedEmail
+      );
+
+
       return new Response(
         JSON.stringify({
+
           success: true,
+
           sent: true,
+
           type:
             "manufacturing_request",
-          request_id,
+
+          request_id:
+            request_id,
         }),
+
         {
           status: 200,
 
           headers: {
             ...corsHeaders,
+
             "Content-Type":
               "application/json",
           },
         }
       );
     }
+
 
     // =========================================================
     // 3. FACTORY VISIT
@@ -393,7 +611,9 @@ serve(async (req) => {
         );
       }
 
+
       const FACTORY_VISIT_TEMPLATE_ID = 6;
+
 
       const brevoResponse =
         await fetch(
@@ -413,6 +633,15 @@ serve(async (req) => {
             },
 
             body: JSON.stringify({
+
+              sender: {
+                email:
+                  BREVO_SENDER_EMAIL,
+
+                name:
+                  BREVO_SENDER_NAME,
+              },
+
               to: [
                 {
                   email:
@@ -427,6 +656,7 @@ serve(async (req) => {
                 FACTORY_VISIT_TEMPLATE_ID,
 
               params: {
+
                 name:
                   String(name).trim(),
 
@@ -445,38 +675,49 @@ serve(async (req) => {
           }
         );
 
+
       const brevoText =
         await brevoResponse.text();
+
 
       console.log(
         "Factory visit Brevo status:",
         brevoResponse.status
       );
 
+
       if (!brevoResponse.ok) {
+
         throw new Error(
           `Brevo returned ${brevoResponse.status}: ${brevoText}`
         );
       }
 
+
       return new Response(
         JSON.stringify({
+
           success: true,
+
           sent: true,
+
           type:
             "factory_visit",
         }),
+
         {
           status: 200,
 
           headers: {
             ...corsHeaders,
+
             "Content-Type":
               "application/json",
           },
         }
       );
     }
+
 
     // =========================================================
     // 4. VERIFICATION / PASSWORD RESET
@@ -485,22 +726,26 @@ serve(async (req) => {
     const isVerification =
       type === "verify";
 
+
     const redirectTo =
       isVerification
         ? new URL(
             "client-portal-sign-in.html",
             originBase
           ).toString()
+
         : new URL(
             "create-new-password.html",
             originBase
           ).toString();
+
 
     const {
       data,
       error,
     } =
       await supabaseAdmin.auth.admin.generateLink({
+
         type:
           isVerification
             ? "signup"
@@ -514,6 +759,7 @@ serve(async (req) => {
         },
       });
 
+
     if (error) {
 
       console.error(
@@ -526,17 +772,24 @@ serve(async (req) => {
       );
     }
 
+
     const secureLink =
       data?.properties?.action_link;
 
+
     if (!secureLink) {
+
       throw new Error(
         "Supabase did not return an action link."
       );
     }
 
+
     const templateId =
-      isVerification ? 2 : 3;
+      isVerification
+        ? 2
+        : 3;
+
 
     const brevoResponse =
       await fetch(
@@ -556,6 +809,15 @@ serve(async (req) => {
           },
 
           body: JSON.stringify({
+
+            sender: {
+              email:
+                BREVO_SENDER_EMAIL,
+
+              name:
+                BREVO_SENDER_NAME,
+            },
+
             to: [
               {
                 email:
@@ -566,6 +828,7 @@ serve(async (req) => {
             templateId,
 
             params: {
+
               VERIFICATION_LINK:
                 secureLink,
 
@@ -579,35 +842,45 @@ serve(async (req) => {
         }
       );
 
+
     const brevoText =
       await brevoResponse.text();
+
 
     console.log(
       "Auth Brevo status:",
       brevoResponse.status
     );
 
+
     if (!brevoResponse.ok) {
+
       throw new Error(
         `Brevo returned ${brevoResponse.status}: ${brevoText}`
       );
     }
 
+
     return new Response(
       JSON.stringify({
+
         success: true,
+
         sent: true,
       }),
+
       {
         status: 200,
 
         headers: {
           ...corsHeaders,
+
           "Content-Type":
             "application/json",
         },
       }
     );
+
 
   } catch (error) {
 
@@ -616,19 +889,24 @@ serve(async (req) => {
       error
     );
 
+
     return new Response(
       JSON.stringify({
+
         success: false,
+
         error:
           error instanceof Error
             ? error.message
             : String(error),
       }),
+
       {
         status: 400,
 
         headers: {
           ...corsHeaders,
+
           "Content-Type":
             "application/json",
         },
