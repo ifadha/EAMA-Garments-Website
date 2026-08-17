@@ -256,21 +256,16 @@
             #production {
                 position: relative !important;
 
-                min-height: 520px !important;
+                min-height: 600px !important;
 
-                padding-top: 90px !important;
-                padding-bottom: 90px !important;
+                padding-top: 100px !important;
+                padding-bottom: 100px !important;
 
                 margin-top: 0 !important;
                 margin-bottom: 0 !important;
 
                 overflow: hidden !important;
 
-                /*
-                 * Explicitly load the image again on mobile.
-                 * This prevents the mobile browser from failing
-                 * to display the desktop inline background.
-                 */
                 background-image: url('Gemini_Generated_Image_a32cmma32cmma32c.jpg') !important;
 
                 background-color: #0A0A0A !important;
@@ -278,25 +273,26 @@
                 background-position: center center !important;
                 background-repeat: no-repeat !important;
 
-                border-top: 0 !important;
-                border-bottom: 0 !important;
-
+                border: none !important;
                 isolation: isolate;
             }
 
-            /*
-             * DO NOT use a ::before background layer here.
-             * The actual section background handles the image.
-             */
-
             #production::before {
-                content: none !important;
-                display: none !important;
+                content: "";
+                position: absolute;
+                inset: 0;
+
+                background:
+                    linear-gradient(to bottom,
+                        #0A0A0A 0%,
+                        rgba(10, 10, 10, 0.25) 12%,
+                        rgba(10, 10, 10, 0.25) 88%,
+                        #0A0A0A 100%);
+
+                z-index: 1;
+                pointer-events: none;
             }
 
-            /*
-             * Dark overlay
-             */
             #production>.absolute.inset-0 {
                 position: absolute !important;
                 inset: 0 !important;
@@ -304,20 +300,17 @@
                 width: 100% !important;
                 height: 100% !important;
 
-                background: rgba(0, 0, 0, 0.60) !important;
+                background: rgba(0, 0, 0, 0.58) !important;
 
-                z-index: 1 !important;
+                z-index: 2 !important;
 
                 pointer-events: none;
             }
 
-            /*
-             * Production content
-             */
             #production>.relative.z-10 {
                 position: relative !important;
 
-                z-index: 2 !important;
+                z-index: 3 !important;
 
                 width: 100%;
                 max-width: 100%;
@@ -804,13 +797,13 @@
     ========================================================= -->
 
     <section id="production"
-        class="relative py-32 bg-cover bg-center bg-no-repeat px-margin-mobile md:px-margin-desktop border-y border-white/5"
-        style="
-            background-image: url('Gemini_Generated_Image_a32cmma32cmma32c.jpg');
-            background-size: cover;
-            background-position: center center;
-            background-repeat: no-repeat;
-        ">
+    class="relative py-32 bg-cover bg-center bg-no-repeat px-margin-mobile md:px-margin-desktop overflow-hidden"
+    style="
+        background-image: url('Gemini_Generated_Image_a32cmma32cmma32c.jpg');
+        background-size: cover;
+        background-position: center center;
+        background-repeat: no-repeat;
+    ">
 
         <!-- Dark overlay -->
         <div class="absolute inset-0 bg-black/60"></div>
