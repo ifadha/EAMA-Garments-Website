@@ -440,7 +440,7 @@ serve(async (req) => {
         Number(
           Deno.env.get(
             "BREVO_MANUFACTURING_REQUEST_TEMPLATE_ID"
-          ) || "4"
+          ) || "5"
         );
 
 
