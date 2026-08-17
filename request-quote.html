@@ -31,7 +31,6 @@
             color: #e3e2e2;
             font-family: 'Inter', sans-serif;
             padding: 40px 20px;
-            min-height: 100vh;
         }
 
         .container {
@@ -53,8 +52,18 @@
             margin-bottom: 40px;
         }
 
-        /* Product Cards */
+        /* Logged-in status */
+        .account-status {
+            margin-top: 15px;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
 
+        .account-status strong {
+            color: #fff;
+        }
+
+        /* Product Cards */
         .product-card {
             background: var(--surface);
             border: 1px solid var(--outline);
@@ -71,7 +80,7 @@
             height: 200px;
             object-fit: cover;
             border: 1px solid var(--outline);
-            background: #0f0f0f;
+            background: #0d0d0d;
         }
 
         .form-group {
@@ -117,6 +126,12 @@
 
         textarea {
             resize: vertical;
+            min-height: 60px;
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: #666;
         }
 
         .field-block {
@@ -136,6 +151,14 @@
             display: none !important;
         }
 
+        /* Loading */
+        #loading-overlay {
+            text-align: center;
+            padding: 40px;
+            color: var(--primary);
+        }
+
+        /* Submit */
         .btn-submit {
             background: var(--primary);
             color: #fff;
@@ -150,7 +173,7 @@
             transition: 0.4s;
         }
 
-        .btn-submit:hover:not(:disabled) {
+        .btn-submit:hover {
             background: #fff;
             color: #000;
         }
@@ -160,18 +183,32 @@
             cursor: not-allowed;
         }
 
+        /* Success */
         #success-state {
             display: none;
             text-align: center;
             padding: 80px 20px;
         }
 
-        .error-box {
-            max-width: 520px;
-            margin: 0 auto;
+        #success-state p {
+            margin-top: 15px;
+            color: var(--text-muted);
             line-height: 1.7;
         }
 
+        .dashboard-btn {
+            margin-top: 30px;
+            background: var(--primary);
+            color: #fff;
+            padding: 15px 30px;
+            border: none;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        /* Error */
         .error-title {
             font-size: 14px;
             color: var(--primary);
@@ -185,7 +222,7 @@
             margin-bottom: 18px;
         }
 
-        .retry-button {
+        .retry-btn {
             background: var(--primary);
             color: #fff;
             border: none;
@@ -197,20 +234,7 @@
             letter-spacing: 1.5px;
         }
 
-        .retry-button:hover {
-            background: #fff;
-            color: #000;
-        }
-
-        .image-fallback {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-muted);
-            font-size: 11px;
-            text-align: center;
-        }
-
+        /* Mobile */
         @media (max-width: 768px) {
 
             body {
@@ -219,23 +243,30 @@
 
             .product-card {
                 grid-template-columns: 1fr;
+                gap: 20px;
+                padding: 18px;
             }
 
             .product-image {
-                height: 300px;
-                max-width: 100%;
+                width: 100%;
+                height: 280px;
             }
 
             .grid-2 {
                 grid-template-columns: 1fr;
+                gap: 5px;
             }
 
-            .full-width {
+            .target-country {
                 grid-column: span 1 !important;
             }
 
-            #success-state {
-                padding: 60px 20px;
+            h1 {
+                font-size: 2rem !important;
+            }
+
+            #success-state h1 {
+                font-size: 2.3rem !important;
             }
         }
     </style>
@@ -245,11 +276,12 @@
 
     <!-- =========================================================
          FORM CONTAINER
-         ========================================================= -->
+    ========================================================== -->
 
     <div class="container" id="form-container">
 
         <header>
+
             <span
                 style="
                     color: var(--primary);
@@ -261,46 +293,31 @@
                 EAMA Manufacturing
             </span>
 
-            <h1
-                style="
-                    font-size: 2.5rem;
-                    margin-top: 5px;
-                "
-            >
+            <h1 style="font-size: 2.5rem; margin-top: 5px;">
                 Configure Inquiry
             </h1>
+
+            <div id="account-status" class="account-status"></div>
+
         </header>
 
 
         <!-- Loading -->
-
-        <div
-            id="loading-overlay"
-            style="
-                text-align: center;
-                padding: 40px;
-                color: var(--primary);
-            "
-        >
+        <div id="loading-overlay">
             Synchronizing with Sample Inventory...
         </div>
 
 
         <!-- =====================================================
              INQUIRY FORM
-             ===================================================== -->
+        ====================================================== -->
 
-        <form
-            id="eama-inquiry-form"
-            class="is-hidden"
-        >
+        <form id="eama-inquiry-form" class="is-hidden">
 
             <div id="productList"></div>
 
 
-            <!-- =================================================
-                 CLIENT INFORMATION
-                 ================================================= -->
+            <!-- CLIENT INFORMATION -->
 
             <section
                 style="
@@ -322,7 +339,9 @@
 
                 <div class="grid-2">
 
+                    <!-- Company -->
                     <div class="form-group">
+
                         <label for="biz_company">
                             Company Name
                         </label>
@@ -330,12 +349,16 @@
                         <input
                             type="text"
                             id="biz_company"
+                            autocomplete="organization"
                             required
                         >
+
                     </div>
 
 
+                    <!-- Contact Person -->
                     <div class="form-group">
+
                         <label for="biz_name">
                             Contact Person
                         </label>
@@ -343,12 +366,16 @@
                         <input
                             type="text"
                             id="biz_name"
+                            autocomplete="name"
                             required
                         >
+
                     </div>
 
 
+                    <!-- Email -->
                     <div class="form-group">
+
                         <label for="biz_email">
                             Email Address
                         </label>
@@ -356,13 +383,16 @@
                         <input
                             type="email"
                             id="biz_email"
+                            autocomplete="email"
                             required
-                            readonly
                         >
+
                     </div>
 
 
+                    <!-- Phone -->
                     <div class="form-group">
+
                         <label for="biz_phone">
                             WhatsApp / Phone
                         </label>
@@ -370,15 +400,19 @@
                         <input
                             type="tel"
                             id="biz_phone"
+                            autocomplete="tel"
                             required
                         >
+
                     </div>
 
 
+                    <!-- Country -->
                     <div
-                        class="form-group"
+                        class="form-group target-country"
                         style="grid-column: span 2;"
                     >
+
                         <label for="biz_country">
                             Target Country
                         </label>
@@ -386,8 +420,10 @@
                         <input
                             type="text"
                             id="biz_country"
+                            autocomplete="country-name"
                             required
                         >
+
                     </div>
 
                 </div>
@@ -395,7 +431,7 @@
             </section>
 
 
-            <!-- Submit -->
+            <!-- SUBMIT -->
 
             <button
                 type="submit"
@@ -412,12 +448,9 @@
 
     <!-- =========================================================
          SUCCESS STATE
-         ========================================================= -->
+    ========================================================== -->
 
-    <div
-        id="success-state"
-        class="container"
-    >
+    <div id="success-state" class="container">
 
         <h1
             style="
@@ -428,25 +461,14 @@
             Inquiry Logged.
         </h1>
 
-        <p style="margin-top: 15px;">
-            Your request is now visible in your Client Dashboard
-            and our production queue.
+        <p>
+            Your request has been received successfully.
+            Our team will review your requirements and get back to you.
         </p>
 
         <button
-            type="button"
-            onclick="goToDashboard()"
-            style="
-                margin-top: 30px;
-                background: var(--primary);
-                color: #fff;
-                padding: 15px 30px;
-                border: none;
-                cursor: pointer;
-                text-transform: uppercase;
-                font-size: 11px;
-                font-weight: 700;
-            "
+            class="dashboard-btn"
+            id="dashboardBtn"
         >
             View Dashboard
         </button>
@@ -456,7 +478,7 @@
 
     <!-- =========================================================
          SUPABASE
-         ========================================================= -->
+    ========================================================== -->
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -465,46 +487,44 @@
 
         /* =========================================================
            EAMA GARMENTS
-           REQUEST QUOTE / INQUIRY PAGE
-           ========================================================= */
+           REQUEST QUOTE / INQUIRY
+
+           Works for:
+           1. Logged-in clients
+           2. Guest clients
+
+           Logged-in users:
+           client_id = Supabase Auth user ID
+
+           Guests:
+           client_id = NULL
+        ========================================================== */
 
 
         /* =========================================================
-           SUPABASE CONFIGURATION
-           ========================================================= */
+           SUPABASE CONFIG
+        ========================================================== */
 
         const SUPABASE_URL =
             "https://mxbzlscxsonbwiqjmnzx.supabase.co";
-
-        /*
-         * IMPORTANT:
-         * Put your existing Supabase PUBLISHABLE KEY here.
-         *
-         * Do NOT use the service_role key.
-         */
 
         const SUPABASE_KEY =
             "sb_publishable_H3k7_8EsXTns6v0YVOdGww_9xd6iBYE";
 
 
-        const _supabase =
-            supabase.createClient(
-                SUPABASE_URL,
-                SUPABASE_KEY
-            );
+        const _supabase = supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_KEY
+        );
 
 
         /* =========================================================
-           STORAGE
-           ========================================================= */
+           SETTINGS
+        ========================================================== */
 
         const storageKey =
             "eamaRequestShortlist";
 
-
-        /* =========================================================
-           GLOBAL STATE
-           ========================================================= */
 
         let dbSamples = [];
 
@@ -512,57 +532,50 @@
 
 
         /* =========================================================
-           DOM ELEMENTS
-           ========================================================= */
+           ELEMENTS
+        ========================================================== */
 
         const loadingOverlay =
-            document.getElementById(
-                "loading-overlay"
-            );
+            document.getElementById("loading-overlay");
 
         const inquiryForm =
-            document.getElementById(
-                "eama-inquiry-form"
-            );
+            document.getElementById("eama-inquiry-form");
 
         const productList =
-            document.getElementById(
-                "productList"
-            );
+            document.getElementById("productList");
 
         const submitBtn =
-            document.getElementById(
-                "submitBtn"
-            );
+            document.getElementById("submitBtn");
 
         const formContainer =
-            document.getElementById(
-                "form-container"
-            );
+            document.getElementById("form-container");
 
         const successState =
-            document.getElementById(
-                "success-state"
-            );
+            document.getElementById("success-state");
+
+        const accountStatus =
+            document.getElementById("account-status");
+
+        const dashboardBtn =
+            document.getElementById("dashboardBtn");
 
 
         /* =========================================================
-           LOADING MESSAGE
-           ========================================================= */
+           LOADING
+        ========================================================== */
 
         function showLoading(message) {
 
-            loadingOverlay.classList.remove(
-                "is-hidden"
-            );
+            loadingOverlay.classList.remove("is-hidden");
 
-            loadingOverlay.innerHTML = message;
+            loadingOverlay.innerText =
+                message;
         }
 
 
         /* =========================================================
-           ERROR MESSAGE
-           ========================================================= */
+           ERROR
+        ========================================================== */
 
         function showError(message) {
 
@@ -572,19 +585,25 @@
 
             loadingOverlay.innerHTML = `
 
-                <div class="error-box">
+                <div
+                    style="
+                        max-width:520px;
+                        margin:0 auto;
+                        line-height:1.7;
+                    "
+                >
 
                     <div class="error-title">
                         Unable to load inquiry
                     </div>
 
                     <div class="error-message">
-                        ${escapeHTML(message)}
+                        ${message}
                     </div>
 
                     <button
                         type="button"
-                        class="retry-button"
+                        class="retry-btn"
                         onclick="window.location.reload()"
                     >
                         Try Again
@@ -601,164 +620,99 @@
 
 
         /* =========================================================
-           HTML ESCAPE
-           Prevents database values from being interpreted
-           as HTML.
-           ========================================================= */
-
-        function escapeHTML(value) {
-
-            return String(value ?? "")
-                .replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;")
-                .replace(/"/g, "&quot;")
-                .replace(/'/g, "&#039;");
-        }
-
-
-        /* =========================================================
-           IMAGE ERROR
-           ========================================================= */
-
-        function handleImageError(image) {
-
-            const fallback =
-                document.createElement("div");
-
-            fallback.className =
-                "product-image image-fallback";
-
-            fallback.innerText =
-                "Sample image unavailable";
-
-            image.replaceWith(fallback);
-        }
-
-
-        /* =========================================================
            INITIALIZE PAGE
-           ========================================================= */
+        ========================================================== */
 
         async function initPage() {
 
             try {
 
-                /* ---------------------------------------------
-                   Step 1
-                   Check Supabase client
-                   --------------------------------------------- */
-
-                if (
-                    typeof supabase === "undefined"
-                ) {
-
-                    throw new Error(
-                        "Supabase could not be loaded. Please refresh the page."
-                    );
-                }
-
-
-                /* ---------------------------------------------
-                   Step 2
-                   Check logged-in user
-                   --------------------------------------------- */
-
                 showLoading(
-                    "Checking your client session..."
+                    "Loading inquiry..."
                 );
 
 
-                const {
-                    data,
-                    error: authError
-                } =
-                    await _supabase.auth.getUser();
+                /* -------------------------------------------------
+                   CHECK SESSION
 
+                   IMPORTANT:
+                   We DO NOT require a session.
 
-                /*
-                 * If Supabase returns an authentication error,
-                 * show the actual reason in the console.
-                 */
+                   If a user is logged in:
+                       currentUser = user
 
-                if (authError) {
+                   If not:
+                       currentUser = null
 
-                    console.error(
-                        "Supabase authentication error:",
+                   Guest users can continue.
+                ------------------------------------------------- */
+
+                let user = null;
+
+                try {
+
+                    const {
+                        data,
+                        error
+                    } = await _supabase.auth.getUser();
+
+                    if (!error && data) {
+                        user = data.user || null;
+                    }
+
+                } catch (authError) {
+
+                    console.warn(
+                        "No active Supabase session:",
                         authError
                     );
 
-                    /*
-                     * A stale/expired session is not necessarily
-                     * a broken application.
-                     */
-
-                    if (
-                        authError.message &&
-                        authError.message.toLowerCase().includes(
-                            "jwt"
-                        )
-                    ) {
-
-                        await _supabase.auth.signOut();
-
-                        alert(
-                            "Your login session has expired. Please sign in again."
-                        );
-
-                        window.location.href =
-                            "client-portal-sign-in.html";
-
-                        return;
-                    }
-
-
-                    throw new Error(
-                        authError.message ||
-                        "We could not verify your client session."
-                    );
+                    user = null;
                 }
 
-
-                const user = data?.user || null;
-
-
-                /* ---------------------------------------------
-                   Step 3
-                   User not logged in
-                   --------------------------------------------- */
-
-                if (!user) {
-
-                    alert(
-                        "Please log in to submit an inquiry."
-                    );
-
-                    window.location.href =
-                        "client-portal-sign-in.html";
-
-                    return;
-                }
-
-
-                /* ---------------------------------------------
-                   Step 4
-                   Store current user
-                   --------------------------------------------- */
 
                 currentUser = user;
 
 
-                document.getElementById(
-                    "biz_email"
-                ).value =
-                    user.email || "";
+                /* -------------------------------------------------
+                   LOGGED-IN USER
+                ------------------------------------------------- */
+
+                if (currentUser) {
+
+                    accountStatus.innerHTML = `
+                        Logged in as
+                        <strong>
+                            ${escapeHtml(currentUser.email || "")}
+                        </strong>
+                    `;
+
+                    const emailInput =
+                        document.getElementById("biz_email");
+
+                    emailInput.value =
+                        currentUser.email || "";
+
+                }
 
 
-                /* ---------------------------------------------
-                   Step 5
-                   Load shortlist
-                   --------------------------------------------- */
+                /* -------------------------------------------------
+                   GUEST USER
+                ------------------------------------------------- */
+
+                else {
+
+                    accountStatus.innerHTML = `
+                        You can submit an inquiry without creating an account.
+                        Just provide your contact details below.
+                    `;
+
+                }
+
+
+                /* -------------------------------------------------
+                   LOAD SHORTLIST
+                ------------------------------------------------- */
 
                 showLoading(
                     "Synchronizing with Sample Inventory..."
@@ -775,13 +729,10 @@
                             storageKey
                         );
 
-
-                    if (saved) {
-
-                        shortlist =
-                            JSON.parse(saved);
-
-                    }
+                    shortlist =
+                        saved
+                            ? JSON.parse(saved)
+                            : [];
 
                 } catch (storageError) {
 
@@ -791,28 +742,20 @@
                     );
 
                     shortlist = [];
+
                 }
 
 
-                /* ---------------------------------------------
-                   Make sure shortlist is an array
-                   --------------------------------------------- */
-
-                if (
-                    !Array.isArray(shortlist)
-                ) {
-
+                if (!Array.isArray(shortlist)) {
                     shortlist = [];
                 }
 
 
-                /* ---------------------------------------------
-                   No samples
-                   --------------------------------------------- */
+                /* -------------------------------------------------
+                   NO SELECTED PRODUCTS
+                ------------------------------------------------- */
 
-                if (
-                    shortlist.length === 0
-                ) {
+                if (shortlist.length === 0) {
 
                     showError(
                         "No samples have been selected from the gallery. Please return to the Sample Catalog and add at least one garment to your request."
@@ -822,27 +765,23 @@
                 }
 
 
-                /* ---------------------------------------------
-                   Extract sample IDs
-                   --------------------------------------------- */
+                /* -------------------------------------------------
+                   EXTRACT SAMPLE IDS
+                ------------------------------------------------- */
 
                 const ids =
                     shortlist
-                        .map(
-                            item =>
-                                item?.id
+                        .map(item =>
+                            item && item.id
                         )
-                        .filter(
-                            id =>
-                                id !== null &&
-                                id !== undefined &&
-                                String(id).trim() !== ""
+                        .filter(id =>
+                            id !== null &&
+                            id !== undefined &&
+                            String(id).trim() !== ""
                         );
 
 
-                if (
-                    ids.length === 0
-                ) {
+                if (ids.length === 0) {
 
                     localStorage.removeItem(
                         storageKey
@@ -856,59 +795,45 @@
                 }
 
 
-                console.log(
-                    "Loading sample IDs:",
-                    ids
-                );
-
-
-                /* ---------------------------------------------
-                   Step 6
-                   Load samples
-                   --------------------------------------------- */
+                /* -------------------------------------------------
+                   LOAD SAMPLES
+                ------------------------------------------------- */
 
                 const {
-                    data: samples,
-                    error: sampleError
-                } =
-                    await _supabase
-                        .from("samples")
-                        .select("*")
-                        .in(
-                            "id",
-                            ids
-                        );
+                    data,
+                    error
+                } = await _supabase
+                    .from("samples")
+                    .select("*")
+                    .in("id", ids);
 
 
-                if (sampleError) {
+                if (error) {
 
                     console.error(
                         "Sample inventory error:",
-                        sampleError
+                        error
                     );
 
                     throw new Error(
-                        sampleError.message ||
-                        "The sample inventory could not be loaded."
+                        "The sample inventory could not be loaded. Please try again."
                     );
                 }
 
 
                 dbSamples =
-                    samples || [];
+                    data || [];
 
 
-                /* ---------------------------------------------
-                   Remove samples that no longer exist
-                   --------------------------------------------- */
+                /* -------------------------------------------------
+                   REMOVE DELETED PRODUCTS
+                ------------------------------------------------- */
 
                 const currentIds =
                     new Set(
                         dbSamples.map(
                             sample =>
-                                String(
-                                    sample.id
-                                )
+                                String(sample.id)
                         )
                     );
 
@@ -917,9 +842,7 @@
                     shortlist.filter(
                         item =>
                             currentIds.has(
-                                String(
-                                    item.id
-                                )
+                                String(item.id)
                             )
                     );
 
@@ -935,16 +858,15 @@
                             validShortlist
                         )
                     );
+
                 }
 
 
-                /* ---------------------------------------------
-                   All samples deleted
-                   --------------------------------------------- */
+                /* -------------------------------------------------
+                   ALL PRODUCTS DELETED
+                ------------------------------------------------- */
 
-                if (
-                    dbSamples.length === 0
-                ) {
+                if (dbSamples.length === 0) {
 
                     localStorage.removeItem(
                         storageKey
@@ -958,18 +880,16 @@
                 }
 
 
-                /* ---------------------------------------------
-                   Step 7
-                   Render inquiry
-                   --------------------------------------------- */
+                /* -------------------------------------------------
+                   RENDER
+                ------------------------------------------------- */
 
                 renderForm();
 
 
-                /* ---------------------------------------------
-                   Step 8
-                   Show form
-                   --------------------------------------------- */
+                /* -------------------------------------------------
+                   SHOW FORM
+                ------------------------------------------------- */
 
                 loadingOverlay.classList.add(
                     "is-hidden"
@@ -987,18 +907,19 @@
                     error
                 );
 
-
                 showError(
                     error.message ||
                     "Something went wrong while loading the inquiry form."
                 );
+
             }
+
         }
 
 
         /* =========================================================
            RENDER PRODUCT FORM
-           ========================================================= */
+        ========================================================== */
 
         function renderForm() {
 
@@ -1006,47 +927,44 @@
 
 
             dbSamples.forEach(
-                (sample, index) => {
+                (sample, idx) => {
 
-                    /* -----------------------------------------
-                       Fabrics
-                       ----------------------------------------- */
+
+                    /* ---------------------------------------------
+                       FABRICS
+                    --------------------------------------------- */
 
                     const fabrics =
                         sample.fabric
-                            ? String(
-                                sample.fabric
-                            )
+                            ? sample.fabric
                                 .split(",")
                                 .map(
-                                    item =>
-                                        item.trim()
+                                    s =>
+                                        s.trim()
                                 )
                                 .filter(Boolean)
                             : ["Standard"];
 
 
-                    /* -----------------------------------------
-                       Colors
-                       ----------------------------------------- */
+                    /* ---------------------------------------------
+                       COLORS
+                    --------------------------------------------- */
 
                     const colors =
                         sample.color
-                            ? String(
-                                sample.color
-                            )
+                            ? sample.color
                                 .split(",")
                                 .map(
-                                    item =>
-                                        item.trim()
+                                    s =>
+                                        s.trim()
                                 )
                                 .filter(Boolean)
                             : ["As per Sample"];
 
 
-                    /* -----------------------------------------
-                       Sizes
-                       ----------------------------------------- */
+                    /* ---------------------------------------------
+                       SIZES
+                    --------------------------------------------- */
 
                     const sizes = [
                         "XS",
@@ -1058,9 +976,9 @@
                     ];
 
 
-                    /* -----------------------------------------
-                       Create card
-                       ----------------------------------------- */
+                    /* ---------------------------------------------
+                       CARD
+                    --------------------------------------------- */
 
                     const card =
                         document.createElement(
@@ -1074,15 +992,14 @@
                     card.innerHTML = `
 
                         <img
-                            src="${escapeHTML(
+                            src="${escapeAttribute(
                                 sample.image_url || ""
                             )}"
                             class="product-image"
-                            alt="${escapeHTML(
+                            alt="${escapeAttribute(
                                 sample.sample_name || "Sample"
                             )}"
                             loading="lazy"
-                            onerror="handleImageError(this)"
                         >
 
 
@@ -1093,7 +1010,7 @@
                                     margin-bottom:5px;
                                 "
                             >
-                                ${escapeHTML(
+                                ${escapeHtml(
                                     sample.sample_name ||
                                     "Sample"
                                 )}
@@ -1108,7 +1025,7 @@
                                 "
                             >
                                 Category:
-                                ${escapeHTML(
+                                ${escapeHtml(
                                     sample.category || "-"
                                 )}
                             </p>
@@ -1165,21 +1082,15 @@
                                             class="f-fabric"
                                         >
 
-                                            ${fabrics
-                                                .map(
-                                                    fabric => `
-                                                        <option
-                                                            value="${escapeHTML(
-                                                                fabric
-                                                            )}"
-                                                        >
-                                                            ${escapeHTML(
-                                                                fabric
-                                                            )}
-                                                        </option>
-                                                    `
-                                                )
-                                                .join("")}
+                                            ${fabrics.map(
+                                                fabric => `
+                                                    <option
+                                                        value="${escapeAttribute(fabric)}"
+                                                    >
+                                                        ${escapeHtml(fabric)}
+                                                    </option>
+                                                `
+                                            ).join("")}
 
                                         </select>
 
@@ -1198,21 +1109,15 @@
                                             class="f-color"
                                         >
 
-                                            ${colors
-                                                .map(
-                                                    color => `
-                                                        <option
-                                                            value="${escapeHTML(
-                                                                color
-                                                            )}"
-                                                        >
-                                                            ${escapeHTML(
-                                                                color
-                                                            )}
-                                                        </option>
-                                                    `
-                                                )
-                                                .join("")}
+                                            ${colors.map(
+                                                color => `
+                                                    <option
+                                                        value="${escapeAttribute(color)}"
+                                                    >
+                                                        ${escapeHtml(color)}
+                                                    </option>
+                                                `
+                                            ).join("")}
 
                                         </select>
 
@@ -1231,22 +1136,18 @@
                                             class="f-size"
                                         >
 
-                                            ${sizes
-                                                .map(
-                                                    size => `
-                                                        <option
-                                                            value="${size}"
-                                                            ${
-                                                                size === "M"
-                                                                    ? "selected"
-                                                                    : ""
-                                                            }
-                                                        >
-                                                            ${size}
-                                                        </option>
-                                                    `
-                                                )
-                                                .join("")}
+                                            ${sizes.map(
+                                                size => `
+                                                    <option
+                                                        value="${size}"
+                                                        ${size === "M"
+                                                            ? "selected"
+                                                            : ""}
+                                                    >
+                                                        ${size}
+                                                    </option>
+                                                `
+                                            ).join("")}
 
                                         </select>
 
@@ -1275,7 +1176,7 @@
                                     <!-- CUSTOMIZATION -->
 
                                     <div
-                                        class="form-group f-custom-wrap full-width"
+                                        class="form-group f-custom-wrap"
                                         style="
                                             grid-column:span 2;
                                         "
@@ -1293,6 +1194,7 @@
 
                                     </div>
 
+
                                 </div>
 
 
@@ -1300,9 +1202,7 @@
 
                                 <div
                                     class="form-group"
-                                    style="
-                                        margin-top:10px;
-                                    "
+                                    style="margin-top:10px;"
                                 >
 
                                     <label>
@@ -1320,6 +1220,7 @@
                             </div>
 
                         </div>
+
                     `;
 
 
@@ -1328,9 +1229,9 @@
                     );
 
 
-                    /* -----------------------------------------
-                       Request type listener
-                       ----------------------------------------- */
+                    /* ---------------------------------------------
+                       REQUEST TYPE CHANGE
+                    --------------------------------------------- */
 
                     const typeSelect =
                         card.querySelector(
@@ -1358,28 +1259,32 @@
 
                 }
             );
+
         }
 
 
         /* =========================================================
-           FORM SUBMISSION
-           ========================================================= */
+           SUBMIT INQUIRY
+        ========================================================== */
 
         inquiryForm.addEventListener(
             "submit",
-            async function (event) {
+            async function (e) {
 
-                event.preventDefault();
+                e.preventDefault();
 
 
-                if (!currentUser) {
+                if (
+                    !currentUser &&
+                    !document
+                        .getElementById("biz_email")
+                        .value
+                        .trim()
+                ) {
 
                     alert(
-                        "Your login session is no longer available. Please sign in again."
+                        "Please enter your email address."
                     );
-
-                    window.location.href =
-                        "client-portal-sign-in.html";
 
                     return;
                 }
@@ -1391,14 +1296,19 @@
                     "Processing Inquiry...";
 
 
-                /* ---------------------------------------------
-                   Client information
-                   --------------------------------------------- */
+                /* -------------------------------------------------
+                   CLIENT INFORMATION
+
+                   IMPORTANT:
+                   client_id is NULL for guests.
+                ------------------------------------------------- */
 
                 const biz = {
 
                     client_id:
-                        currentUser.id,
+                        currentUser
+                            ? currentUser.id
+                            : null,
 
                     company_name:
                         document
@@ -1453,9 +1363,9 @@
                         );
 
 
-                    /* -----------------------------------------
-                       Save every selected product
-                       ----------------------------------------- */
+                    /* ------------------------------------------------
+                       SAVE EACH PRODUCT REQUEST
+                    ------------------------------------------------ */
 
                     for (
                         let i = 0;
@@ -1483,17 +1393,6 @@
                                 .value;
 
 
-                        const quantity =
-                            parseInt(
-                                card
-                                    .querySelector(
-                                        ".f-qty"
-                                    )
-                                    .value,
-                                10
-                            );
-
-
                         const spec = {
 
                             fabric:
@@ -1518,12 +1417,14 @@
                                     .value,
 
                             qty:
-                                Number.isFinite(
-                                    quantity
-                                ) &&
-                                quantity > 0
-                                    ? quantity
-                                    : 1,
+                                parseInt(
+                                    card
+                                        .querySelector(
+                                            ".f-qty"
+                                        )
+                                        .value,
+                                    10
+                                ) || 1,
 
                             custom:
                                 card
@@ -1543,9 +1444,9 @@
                         };
 
 
-                        /* -------------------------------------
-                           Insert into manufacturing_requests
-                           ------------------------------------- */
+                        /* ------------------------------------------------
+                           INSERT INTO MANUFACTURING REQUESTS
+                        ------------------------------------------------ */
 
                         const {
                             error
@@ -1605,94 +1506,100 @@
                             );
 
                             throw new Error(
-                                error.message ||
-                                "Your inquiry could not be saved."
+                                "Your inquiry could not be saved. Please try again."
                             );
+
                         }
 
 
                         emailLog +=
                             `${dbSample.sample_name} (${type}): ${spec.qty}pcs in ${spec.fabric}, ${spec.color}, size ${spec.size}.\n`;
+
                     }
 
 
-                    /* -----------------------------------------
-                       Send notification email
-                       ----------------------------------------- */
+                    /* ------------------------------------------------
+                       SEND EMAIL THROUGH EDGE FUNCTION
+                    ------------------------------------------------ */
 
-                    try {
+                    const {
+                        error: funcError
+                    } =
+                        await _supabase.functions.invoke(
+                            "send-inquiry-email",
+                            {
 
-                        const {
-                            error: funcError
-                        } =
-                            await _supabase.functions.invoke(
-                                "send-inquiry-email",
-                                {
+                                body: {
 
-                                    body: {
+                                    customer_name:
+                                        biz.contact_person,
 
-                                        customer_name:
-                                            biz.contact_person,
+                                    company_name:
+                                        biz.company_name,
 
-                                        company_name:
-                                            biz.company_name,
+                                    customer_email:
+                                        biz.email,
 
-                                        customer_email:
-                                            biz.email,
+                                    admin_email:
+                                        "admin@eamagarments.com",
 
-                                        admin_email:
-                                            "admin@eamagarments.com",
+                                    message:
+                                        `New inquiry received.
 
-                                        message:
-                                            `New unified request received for:\n${emailLog}`
-                                    }
+Company:
+${biz.company_name}
+
+Contact Person:
+${biz.contact_person}
+
+Email:
+${biz.email}
+
+Phone:
+${biz.phone}
+
+Target Country:
+${biz.country}
+
+Requested Products:
+${emailLog}`
                                 }
-                            );
 
-
-                        if (funcError) {
-
-                            console.error(
-                                "Email notification error:",
-                                funcError
-                            );
-
-                            /*
-                             * The database request has already
-                             * been successfully saved.
-                             *
-                             * Therefore we do NOT fail the inquiry
-                             * just because email failed.
-                             */
-
-                            console.warn(
-                                "Inquiry saved successfully, but email notification failed."
-                            );
-                        }
-
-                    } catch (emailError) {
-
-                        console.error(
-                            "Email function exception:",
-                            emailError
+                            }
                         );
 
-                        /*
-                         * Continue because the inquiry itself
-                         * was already saved.
-                         */
+
+                    /* ------------------------------------------------
+                       EMAIL FAILURE
+
+                       Database request is already saved.
+                       Do NOT tell customer the inquiry failed.
+                    ------------------------------------------------ */
+
+                    if (funcError) {
+
+                        console.error(
+                            "Email notification failed:",
+                            funcError
+                        );
+
+                        console.warn(
+                            "Inquiry was saved successfully, but email notification failed."
+                        );
+
                     }
 
 
-                    /* -----------------------------------------
-                       Success
-                       ----------------------------------------- */
+                    /* ------------------------------------------------
+                       SUCCESS
+                    ------------------------------------------------ */
 
                     formContainer.style.display =
                         "none";
 
                     successState.style.display =
                         "block";
+
 
                     localStorage.removeItem(
                         storageKey
@@ -1716,10 +1623,12 @@
                     );
 
 
-                    submitBtn.disabled = false;
+                    submitBtn.disabled =
+                        false;
 
                     submitBtn.innerText =
                         "Submit Formal Inquiry";
+
                 }
 
             }
@@ -1727,24 +1636,55 @@
 
 
         /* =========================================================
-           DASHBOARD
-           ========================================================= */
+           DASHBOARD BUTTON
+        ========================================================== */
 
-        function goToDashboard() {
+        dashboardBtn.addEventListener(
+            "click",
+            async function () {
 
-            /*
-             * Change this only if your dashboard is located
-             * somewhere else.
-             */
+                if (currentUser) {
 
-            window.location.href =
-                "dashboard/app.html";
+                    window.location.href =
+                        "dashboard/app.html";
+
+                } else {
+
+                    window.location.href =
+                        "client-portal-sign-in.html";
+
+                }
+
+            }
+        );
+
+
+        /* =========================================================
+           SECURITY / HTML HELPERS
+        ========================================================== */
+
+        function escapeHtml(value) {
+
+            return String(value)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+
+        }
+
+
+        function escapeAttribute(value) {
+
+            return escapeHtml(value);
+
         }
 
 
         /* =========================================================
-           START APPLICATION
-           ========================================================= */
+           START PAGE
+        ========================================================== */
 
         initPage();
 
