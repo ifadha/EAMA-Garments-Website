@@ -1230,364 +1230,125 @@
 
                 e.preventDefault();
 
+                const emailValue =
+                    document.getElementById("biz_email").value.trim();
 
-                if (
-                    !currentUser &&
-                    !document
-                        .getElementById("biz_email")
-                        .value
-                        .trim()
-                ) {
-
-                    alert(
-                        "Please enter your email address."
-                    );
-
+                if (!currentUser && !emailValue) {
+                    alert("Please enter your email address.");
                     return;
                 }
 
-
                 submitBtn.disabled = true;
-
-                submitBtn.innerText =
-                    "Processing Inquiry...";
-
-
-                /* -------------------------------------------------
-                   CLIENT INFORMATION
-
-                   IMPORTANT:
-                   client_id is NULL for guests.
-                ------------------------------------------------- */
+                submitBtn.innerText = "Processing Inquiry...";
 
                 const biz = {
-
-                    client_id:
-                        currentUser
-                            ? currentUser.id
-                            : null,
-
-                    company_name:
-                        document
-                            .getElementById(
-                                "biz_company"
-                            )
-                            .value
-                            .trim(),
-
-                    contact_person:
-                        document
-                            .getElementById(
-                                "biz_name"
-                            )
-                            .value
-                            .trim(),
-
-                    email:
-                        document
-                            .getElementById(
-                                "biz_email"
-                            )
-                            .value
-                            .trim(),
-
-                    phone:
-                        document
-                            .getElementById(
-                                "biz_phone"
-                            )
-                            .value
-                            .trim(),
-
-                    country:
-                        document
-                            .getElementById(
-                                "biz_country"
-                            )
-                            .value
-                            .trim()
+                    client_id: currentUser ? currentUser.id : null,
+                    company_name: document.getElementById("biz_company").value.trim(),
+                    contact_person: document.getElementById("biz_name").value.trim(),
+                    email: emailValue,
+                    phone: document.getElementById("biz_phone").value.trim(),
+                    country: document.getElementById("biz_country").value.trim()
                 };
 
-
                 try {
-
-                    let emailLog = "";
-
-
-                    const cards =
-                        document.querySelectorAll(
-                            ".product-card"
-                        );
-
+                    const cards = document.querySelectorAll(".product-card");
+                    let firstInsertedId = null;
 
                     /* ------------------------------------------------
-                       SAVE EACH PRODUCT REQUEST
+                       1. SAVE PRODUCTS TO SUPABASE
                     ------------------------------------------------ */
+                    for (let i = 0; i < cards.length; i++) {
+                        const card = cards[i];
+                        const dbSample = dbSamples[i];
 
-                    for (
-                        let i = 0;
-                        i < cards.length;
-                        i++
-                    ) {
+                        if (!dbSample) continue;
 
-                        const card =
-                            cards[i];
-
-                        const dbSample =
-                            dbSamples[i];
-
-
-                        if (!dbSample) {
-                            continue;
-                        }
-
-
-                        const type =
-                            card
-                                .querySelector(
-                                    ".field-type"
-                                )
-                                .value;
-
-
+                        const type = card.querySelector(".field-type").value;
                         const spec = {
-
-                            fabric:
-                                card
-                                    .querySelector(
-                                        ".f-fabric"
-                                    )
-                                    .value,
-
-                            color:
-                                card
-                                    .querySelector(
-                                        ".f-color"
-                                    )
-                                    .value,
-
-                            size:
-                                card
-                                    .querySelector(
-                                        ".f-size"
-                                    )
-                                    .value,
-
-                            qty:
-                                parseInt(
-                                    card
-                                        .querySelector(
-                                            ".f-qty"
-                                        )
-                                        .value,
-                                    10
-                                ) || 1,
-
-                            custom:
-                                card
-                                    .querySelector(
-                                        ".f-custom"
-                                    )
-                                    .value
-                                    .trim(),
-
-                            notes:
-                                card
-                                    .querySelector(
-                                        ".f-notes"
-                                    )
-                                    .value
-                                    .trim()
+                            fabric: card.querySelector(".f-fabric").value,
+                            color: card.querySelector(".f-color").value,
+                            size: card.querySelector(".f-size").value,
+                            qty: parseInt(card.querySelector(".f-qty").value, 10) || 1,
+                            custom: card.querySelector(".f-custom").value.trim(),
+                            notes: card.querySelector(".f-notes").value.trim()
                         };
 
+                        const { data: insertedRequest, error: insertError } =
+                            await _supabase
+                                .from("manufacturing_requests")
+                                .insert([
+                                    {
+                                        ...biz,
+                                        garment_category: dbSample.category,
+                                        product_type: dbSample.sample_name,
+                                        request_type: type,
+                                        fabric_preference: spec.fabric,
+                                        sample_color: spec.color,
+                                        sample_size: spec.size,
+                                        target_quantity: spec.qty,
+                                        customization_requirements: spec.custom,
+                                        additional_notes: spec.notes,
+                                        status: "New",
+                                        priority: "Medium"
+                                    }
+                                ])
+                                .select("id")
+                                .single();
 
-                        /* ------------------------------------------------
-                           INSERT INTO MANUFACTURING REQUESTS
-                        ------------------------------------------------ */
+                        if (insertError || !insertedRequest) {
+                            console.error("Manufacturing request DB error:", insertError);
+                            throw new Error("Unable to save your request. Please try again.");
+                        }
 
-                        const {
-                            data: insertedRequest,
-                            error
-                        } = await _supabase
-                            .from("manufacturing_requests")
-                            .insert([
+                        // Store the first request ID to pass to the edge function
+                        if (!firstInsertedId) {
+                            firstInsertedId = insertedRequest.id;
+                        }
+                    }
+
+                    /* ------------------------------------------------
+                       2. SEND EMAIL VIA EDGE FUNCTION
+                    ------------------------------------------------ */
+                    if (firstInsertedId) {
+                        const { data: funcData, error: funcError } =
+                            await _supabase.functions.invoke(
+                                "send-auth-email",
                                 {
-                                    ...biz,
-
-                                    garment_category:
-                                        dbSample.category,
-
-                                    product_type:
-                                        dbSample.sample_name,
-
-                                    request_type:
-                                        type,
-
-                                    fabric_preference:
-                                        spec.fabric,
-
-                                    sample_color:
-                                        spec.color,
-
-                                    sample_size:
-                                        spec.size,
-
-                                    target_quantity:
-                                        spec.qty,
-
-                                    customization_requirements:
-                                        spec.custom,
-
-                                    additional_notes:
-                                        spec.notes,
-
-                                    status:
-                                        "New",
-
-                                    priority:
-                                        "Medium"
+                                    body: {
+                                        type: "manufacturing_request",
+                                        email: biz.email,
+                                        request_id: firstInsertedId,
+                                        company_name: biz.company_name,
+                                        contact_person: biz.contact_person
+                                    }
                                 }
-                            ])
-                            .select("id")
-                            .single();
-
-                        if (error || !insertedRequest) {
-
-                            console.error(
-                                "Manufacturing request error:",
-                                error
                             );
 
-                            throw new Error(
-                                "Your inquiry could not be saved. Please try again."
-                            );
+                        if (funcError) {
+                            console.error("Edge function returned error:", funcError);
+                        } else {
+                            console.log("Edge function success response:", funcData);
                         }
-
-                        if (error) {
-
-                            console.error(
-                                "Manufacturing request error:",
-                                error
-                            );
-
-                            throw new Error(
-                                "Your inquiry could not be saved. Please try again."
-                            );
-
-                        }
-
-
-                        emailLog +=
-                            `${dbSample.sample_name} (${type}): ${spec.qty}pcs in ${spec.fabric}, ${spec.color}, size ${spec.size}.\n`;
-
                     }
 
-
                     /* ------------------------------------------------
-                       SEND EMAIL THROUGH EDGE FUNCTION
+                       3. SUCCESS STATE
                     ------------------------------------------------ */
-
-                    const {
-                        error: funcError
-                    } = await _supabase.functions.invoke(
-                        "send-auth-email",
-                        {
-                            body: {
-                                type: "manufacturing_request",
-
-                                email:
-                                    biz.email,
-
-                                request_id:
-                                    insertedRequest.id,
-
-                                company_name:
-                                    biz.company_name,
-
-                                contact_person:
-                                    biz.contact_person
-                            }
-                        }
-                    );
-
-                    if (funcError) {
-
-                        console.error(
-                            "Client confirmation email failed:",
-                            funcError
-                        );
-
-                        console.warn(
-                            "The manufacturing request was saved successfully, but the client confirmation email could not be sent."
-                        );
-                    }
-
-
-                    /* ------------------------------------------------
-                       EMAIL FAILURE
-
-                       Database request is already saved.
-                       Do NOT tell customer the inquiry failed.
-                    ------------------------------------------------ */
-
-                    if (funcError) {
-
-                        console.error(
-                            "Email notification failed:",
-                            funcError
-                        );
-
-                        console.warn(
-                            "Inquiry was saved successfully, but email notification failed."
-                        );
-
-                    }
-
-
-                    /* ------------------------------------------------
-                       SUCCESS
-                    ------------------------------------------------ */
-
-                    formContainer.style.display =
-                        "none";
-
-                    successState.style.display =
-                        "block";
-
-
-                    localStorage.removeItem(
-                        storageKey
-                    );
-
+                    formContainer.style.display = "none";
+                    successState.style.display = "block";
+                    localStorage.removeItem(storageKey);
 
                 } catch (error) {
-
-                    console.error(
-                        "Inquiry submission error:",
-                        error
-                    );
-
-
-                    alert(
-                        "Error: " +
-                        (
-                            error.message ||
-                            "Unable to submit inquiry."
-                        )
-                    );
-
-
-                    submitBtn.disabled =
-                        false;
-
-                    submitBtn.innerText =
-                        "Submit Formal Inquiry";
-
+                    console.error("Inquiry submission error:", error);
+                    alert("Error: " + (error.message || "Unable to submit inquiry."));
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = "Submit Formal Inquiry";
                 }
-
             }
         );
 
+
+               
 
         /* =========================================================
            DASHBOARD BUTTON
