@@ -258,57 +258,37 @@
    SHOW FULL BACKGROUND IMAGE
 ===================================================== */
 
+            /* =====================================================
+   TECH PACK / PRODUCTION SECTION
+   ===================================================== */
+
             #production {
                 position: relative !important;
 
-                min-height: 600px !important;
+                min-height: 520px !important;
 
-                padding-top: 100px !important;
-                padding-bottom: 100px !important;
+                padding-top: 80px !important;
+                padding-bottom: 80px !important;
 
-                margin-top: 0 !important;
-                margin-bottom: 0 !important;
+                margin: 0 !important;
 
                 overflow: hidden !important;
 
                 background-image: url('Gemini_Generated_Image_a32cmma32cmma32c.jpg') !important;
-
                 background-color: #0A0A0A !important;
 
-                /*
-     * IMPORTANT:
-     * Do NOT use background-size: cover on mobile.
-     * It crops the sides of the image.
-     */
-                background-size: 100% auto !important;
+                background-size: cover !important;
                 background-position: center center !important;
                 background-repeat: no-repeat !important;
 
                 border: none !important;
-
                 isolation: isolate;
             }
 
 
-            /* Soft dark blending around the image */
-            #production::before {
-                content: "";
-                position: absolute;
-                inset: 0;
-
-                background:
-                    linear-gradient(to bottom,
-                        #0A0A0A 0%,
-                        rgba(10, 10, 10, 0.15) 15%,
-                        rgba(10, 10, 10, 0.15) 80%,
-                        #0A0A0A 100%);
-
-                z-index: 1;
-                pointer-events: none;
-            }
-
-
-            /* Main dark overlay */
+            /*
+ * Dark overlay over the complete image
+ */
             #production>.absolute.inset-0 {
                 position: absolute !important;
                 inset: 0 !important;
@@ -316,80 +296,157 @@
                 width: 100% !important;
                 height: 100% !important;
 
-                background: rgba(0, 0, 0, 0.55) !important;
+                background: rgba(0, 0, 0, 0.48) !important;
 
-                z-index: 2 !important;
+                z-index: 1 !important;
 
                 pointer-events: none;
             }
 
 
-            /* Content stays above image and overlays */
+            /*
+ * Production content stays centered over the image
+ */
             #production>.relative.z-10 {
                 position: relative !important;
 
-                z-index: 3 !important;
+                z-index: 2 !important;
 
-                width: 100%;
-                max-width: 100%;
+                width: 100% !important;
+                max-width: 100% !important;
+
+                margin: 0 auto !important;
+
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                justify-content: center !important;
+
+                text-align: center !important;
             }
 
 
-            /* Heading */
             #production h2 {
+                font-size: 2.35rem !important;
+                line-height: 1.12 !important;
+
+                margin-bottom: 20px !important;
+
+                max-width: 330px !important;
+
+                text-align: center !important;
+            }
+
+
+            #production p {
+                font-size: 14px !important;
+                line-height: 1.65 !important;
+
+                max-width: 340px !important;
+
+                margin-left: auto !important;
+                margin-right: auto !important;
+                margin-bottom: 28px !important;
+
+                text-align: center !important;
+            }
+
+
+            #production a {
+                display: inline-flex !important;
+
+                align-items: center !important;
+                justify-content: center !important;
+
+                width: auto !important;
+                max-width: 300px !important;
+
+                padding: 15px 22px !important;
+
+                font-size: 10px !important;
+                line-height: 1.4 !important;
+
+                text-align: center !important;
+            }
+
+
+            /* =====================================================
+   MANUFACTURING WORKFLOW
+   ===================================================== */
+
+            #quality {
+                padding-top: 70px !important;
+                padding-bottom: 70px !important;
+            }
+
+
+            #quality>div:first-child {
+                margin-bottom: 50px !important;
+            }
+
+
+            #quality h2 {
                 font-size: 2.2rem !important;
                 line-height: 1.15 !important;
-                margin-bottom: 24px !important;
             }
 
 
-            /* Description */
-            #production p {
+            #quality>div:first-child p {
                 font-size: 15px !important;
-                line-height: 1.7 !important;
-                margin-bottom: 32px !important;
+                line-height: 1.6 !important;
             }
 
 
-            /* Button */
-            #production a {
-                display: inline-block;
-
-                width: 100%;
-                max-width: 320px;
-
-                padding: 16px 20px !important;
-
-                line-height: 1.4;
+            #quality .grid.grid-cols-1.md\:grid-cols-2.lg\:grid-cols-6 {
+                grid-template-columns: 1fr !important;
+                gap: 40px !important;
             }
 
 
-            /* -----------------------------------------------------
-               QUALITY ASSURANCE
-            ----------------------------------------------------- */
+            #quality .w-20 {
+                width: 60px !important;
+                height: 60px !important;
+
+                margin-bottom: 20px !important;
+            }
+
+
+            #quality .w-20 .material-symbols-outlined {
+                font-size: 30px !important;
+            }
+
+
+            /* =====================================================
+   QUALITY ASSURANCE SECTION
+   ===================================================== */
 
             .aspect-video.lg\:aspect-square {
                 aspect-ratio: 16 / 10 !important;
             }
+
 
             #quality+section {
                 padding-top: 70px !important;
                 padding-bottom: 70px !important;
             }
 
+
             #quality+section .grid {
                 gap: 45px !important;
             }
+
 
             #quality+section h2 {
                 font-size: 2.2rem !important;
                 line-height: 1.15 !important;
             }
 
+
             #quality+section p {
                 font-size: 15px !important;
                 line-height: 1.7 !important;
             }
+
 
             #quality+section .grid.grid-cols-1.md\:grid-cols-2 {
                 grid-template-columns: 1fr !important;
