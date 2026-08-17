@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EAMA Garments | 3D Sample Gallery</title>
-    
+
     <!-- Premium Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600&display=swap"
+        rel="stylesheet">
 
     <style>
         /* CSS stays exactly as you had it */
@@ -18,7 +21,11 @@
             --transition-speed: 0.7s;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
         body {
             background-color: var(--bg-black);
@@ -32,68 +39,368 @@
             padding-bottom: 50px;
         }
 
-        .header { text-align: center; padding: 60px 20px 20px; }
-        .brand-tag { font-size: 10px; letter-spacing: 5px; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; display: block; }
-        .title { font-family: 'Playfair Display', serif; font-size: 3rem; font-weight: 400; margin-bottom: 30px; }
-
-        .filter-nav { display: flex; gap: 25px; justify-content: center; margin-bottom: 40px; }
-        .filter-btn {
-            background: none; border: none; color: #666; text-transform: uppercase;
-            font-size: 11px; letter-spacing: 2px; cursor: pointer; padding-bottom: 5px;
-            border-bottom: 1px solid transparent; transition: 0.3s;
+        .header {
+            text-align: center;
+            padding: 60px 20px 20px;
         }
-        .filter-btn.active { color: #fff; border-bottom: 1px solid var(--gold); }
 
-        .stage { position: relative; width: 100%; height: 520px; perspective: 1200px; display: flex; align-items: center; justify-content: center; }
-        .track { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; display: flex; align-items: center; justify-content: center; }
+        .brand-tag {
+            font-size: 10px;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .title {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            font-weight: 400;
+            margin-bottom: 30px;
+        }
+
+        .filter-nav {
+            display: flex;
+            gap: 25px;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+
+        .filter-btn {
+            background: none;
+            border: none;
+            color: #666;
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 2px;
+            cursor: pointer;
+            padding-bottom: 5px;
+            border-bottom: 1px solid transparent;
+            transition: 0.3s;
+        }
+
+        .filter-btn.active {
+            color: #fff;
+            border-bottom: 1px solid var(--gold);
+        }
+
+        .stage {
+            position: relative;
+            width: 100%;
+            height: 520px;
+            perspective: 1200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .track {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
         .card {
-            position: absolute; width: var(--card-width); height: var(--card-height);
-            border-radius: 15px; overflow: hidden; background: #111; cursor: pointer;
+            position: absolute;
+            width: var(--card-width);
+            height: var(--card-height);
+            border-radius: 15px;
+            overflow: hidden;
+            background: #111;
+            cursor: pointer;
             transition: transform var(--transition-speed) cubic-bezier(0.25, 1, 0.5, 1), filter var(--transition-speed), opacity var(--transition-speed);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.05);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .card img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
-        .card::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.9) 100%); pointer-events: none; }
+        .card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            pointer-events: none;
+        }
 
-        .card-content { position: absolute; left: 0; right: 0; bottom: 0; padding: 24px 20px 20px; z-index: 2; }
-        .card-title { font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 6px; }
-        .card-meta { color: #d6c49a; font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; }
-        .card-action-btn { width: 100%; padding: 12px 16px; border: none; border-radius: 999px; background: rgba(255,255,255,0.95); color: #121212; font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; transition: 0.3s; }
-        .card-action-btn:hover { background: var(--gold); color: #fff; }
-        .card.selected { border-color: rgba(197, 160, 89, 0.9); box-shadow: 0 0 0 1px rgba(197, 160, 89, 0.35), 0 20px 40px rgba(0,0,0,0.7); }
-        .card.selected .card-action-btn { background: var(--gold); color: #fff; }
+        .card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.9) 100%);
+            pointer-events: none;
+        }
 
-        .details-panel { text-align: center; max-width: 620px; margin-top: 40px; padding: 0 20px; }
-        .details-panel h2 { font-family: 'Playfair Display', serif; font-size: 2.2rem; margin-bottom: 10px; }
-        .details-panel p { color: #999; font-size: 14px; line-height: 1.6; margin-bottom: 25px; }
-        .meta-info { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--gold); margin-bottom: 30px; }
+        .card-content {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            padding: 24px 20px 20px;
+            z-index: 2;
+        }
 
-        .controls { position: absolute; width: 100%; max-width: 900px; display: flex; justify-content: space-between; z-index: 100; }
-        .arrow { width: 50px; height: 50px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.03); color: #fff; font-size: 20px; cursor: pointer; transition: 0.3s; }
-        .arrow:hover { background: #fff; color: #000; }
+        .card-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            margin-bottom: 6px;
+        }
 
-        .fab { position: fixed; top: 24px; right: 24px; z-index: 300; padding: 14px 18px; border: none; border-radius: 999px; background: rgba(197, 160, 89, 0.95); color: #fff; font-size: 12px; font-weight: 600; letter-spacing: 1.4px; text-transform: uppercase; cursor: pointer; box-shadow: 0 16px 35px rgba(0,0,0,0.35); }
-        .request-modal { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.75); display: none; align-items: center; justify-content: center; padding: 20px; z-index: 400; }
-        .request-modal.open { display: flex; }
-        .request-panel { width: min(560px, 100%); max-height: 80vh; overflow: auto; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; background: #111; padding: 24px; box-shadow: 0 24px 60px rgba(0,0,0,0.45); }
-        .request-panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
-        .request-panel-header h3 { font-family: 'Playfair Display', serif; font-size: 1.3rem; }
-        .close-btn { border: none; background: transparent; color: #fff; font-size: 24px; cursor: pointer; }
-        .request-list { display: flex; flex-direction: column; gap: 12px; }
-        .request-item { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px; border-radius: 12px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); }
-        .request-item img { width: 64px; height: 64px; border-radius: 10px; object-fit: cover; flex-shrink: 0; }
-        .request-item strong { display: block; margin-bottom: 4px; }
-        .request-item span { color: #b8b8b8; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
-        .request-item button { border: none; background: transparent; color: var(--gold); cursor: pointer; text-transform: uppercase; font-size: 10px; letter-spacing: 1.2px; }
-        .empty-state { padding: 24px 0 8px; color: #aaa; text-align: center; line-height: 1.6; }
-        .btn { padding: 14px 28px; text-transform: uppercase; font-size: 11px; font-weight: 600; letter-spacing: 1px; cursor: pointer; transition: 0.3s; }
-        .btn-primary { background: #fff; color: #000; border: none; }
-        .btn-primary:disabled { opacity: 0.55; cursor: not-allowed; }
-        .btn:hover:not(:disabled) { background: var(--gold); color: #fff; border-color: var(--gold); }
-        .request-actions { margin-top: 18px; display: flex; justify-content: flex-end; }
-        .confidential-note { margin-top: 60px; font-size: 10px; color: #444; text-transform: uppercase; letter-spacing: 1px; max-width: 450px; text-align: center; line-height: 1.5; }
+        .card-meta {
+            color: #d6c49a;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 14px;
+        }
+
+        .card-action-btn {
+            width: 100%;
+            padding: 12px 16px;
+            border: none;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.95);
+            color: #121212;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .card-action-btn:hover {
+            background: var(--gold);
+            color: #fff;
+        }
+
+        .card.selected {
+            border-color: rgba(197, 160, 89, 0.9);
+            box-shadow: 0 0 0 1px rgba(197, 160, 89, 0.35), 0 20px 40px rgba(0, 0, 0, 0.7);
+        }
+
+        .card.selected .card-action-btn {
+            background: var(--gold);
+            color: #fff;
+        }
+
+        .details-panel {
+            text-align: center;
+            max-width: 620px;
+            margin-top: 40px;
+            padding: 0 20px;
+        }
+
+        .details-panel h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+
+        .details-panel p {
+            color: #999;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .meta-info {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--gold);
+            margin-bottom: 30px;
+        }
+
+        .controls {
+            position: absolute;
+            width: 100%;
+            max-width: 900px;
+            display: flex;
+            justify-content: space-between;
+            z-index: 100;
+        }
+
+        .arrow {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.03);
+            color: #fff;
+            font-size: 20px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .arrow:hover {
+            background: #fff;
+            color: #000;
+        }
+
+        .fab {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            z-index: 300;
+            padding: 14px 18px;
+            border: none;
+            border-radius: 999px;
+            background: rgba(197, 160, 89, 0.95);
+            color: #fff;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 1.4px;
+            text-transform: uppercase;
+            cursor: pointer;
+            box-shadow: 0 16px 35px rgba(0, 0, 0, 0.35);
+        }
+
+        .request-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.75);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 400;
+        }
+
+        .request-modal.open {
+            display: flex;
+        }
+
+        .request-panel {
+            width: min(560px, 100%);
+            max-height: 80vh;
+            overflow: auto;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            background: #111;
+            padding: 24px;
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+        }
+
+        .request-panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .request-panel-header h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+        }
+
+        .close-btn {
+            border: none;
+            background: transparent;
+            color: #fff;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .request-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .request-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .request-item img {
+            width: 64px;
+            height: 64px;
+            border-radius: 10px;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .request-item strong {
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .request-item span {
+            color: #b8b8b8;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .request-item button {
+            border: none;
+            background: transparent;
+            color: var(--gold);
+            cursor: pointer;
+            text-transform: uppercase;
+            font-size: 10px;
+            letter-spacing: 1.2px;
+        }
+
+        .empty-state {
+            padding: 24px 0 8px;
+            color: #aaa;
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        .btn {
+            padding: 14px 28px;
+            text-transform: uppercase;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-primary {
+            background: #fff;
+            color: #000;
+            border: none;
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+        }
+
+        .btn:hover:not(:disabled) {
+            background: var(--gold);
+            color: #fff;
+            border-color: var(--gold);
+        }
+
+        .request-actions {
+            margin-top: 18px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .confidential-note {
+            margin-top: 60px;
+            font-size: 10px;
+            color: #444;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            max-width: 450px;
+            text-align: center;
+            line-height: 1.5;
+        }
 
 
         /* ==========================================================
@@ -124,8 +431,8 @@
             padding: 12px;
             border-radius: 18px;
             background: #111;
-            border: 1px solid rgba(255,255,255,0.12);
-            box-shadow: 0 25px 80px rgba(0,0,0,0.65);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.65);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -147,7 +454,7 @@
             right: -14px;
             width: 38px;
             height: 38px;
-            border: 1px solid rgba(255,255,255,0.15);
+            border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: 50%;
             background: #111;
             color: #fff;
@@ -238,7 +545,7 @@
                 height: 42px;
                 font-size: 17px;
                 pointer-events: auto;
-                background: rgba(0,0,0,0.35);
+                background: rgba(0, 0, 0, 0.35);
             }
 
             .details-panel {
@@ -376,6 +683,7 @@
         }
     </style>
 </head>
+
 <body>
 
     <header class="header">
@@ -438,12 +746,13 @@
     </div>
 
     <footer class="confidential-note">
-        Only selected non-confidential manufacturing samples are displayed. Client-exclusive designs are protected under confidentiality agreements.
+        Only selected non-confidential manufacturing samples are displayed. Client-exclusive designs are protected under
+        confidentiality agreements.
     </footer>
 
     <!-- Supabase Library Load -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
+
     <script>
         /* --- CONFIGURATION & INIT --- */
         const SUPABASE_URL = "https://mxbzlscxsonbwiqjmnzx.supabase.co";
@@ -480,10 +789,12 @@
             if (error) {
                 console.error("Sample loading error:", error);
                 document.getElementById('active-name').innerText = "Error Loading Gallery";
+                document.getElementById('active-desc').innerText =
+                    "Unable to load samples. Please try again.";
                 return;
             }
 
-            samples = data.map(item => ({
+            samples = (data || []).map(item => ({
                 id: item.id,
                 cat: item.category,
                 name: item.sample_name,
@@ -492,10 +803,31 @@
                 img: item.image_url
             }));
 
-            filteredData = [...samples];
-            activeIndex = Math.max(0, Math.floor(samples.length / 2));
+            /*
+             * IMPORTANT:
+             * Remove any locally saved requests that no longer
+             * exist in the current Supabase samples table.
+             */
+            const currentSampleIds = new Set(
+                samples.map(sample => String(sample.id))
+            );
 
-            init(); // Initialize gallery after data is ready
+            selectedProducts = selectedProducts.filter(item =>
+                currentSampleIds.has(String(item.id))
+            );
+
+            saveSelections();
+
+            filteredData = [...samples];
+
+            activeIndex = samples.length > 0
+                ? Math.min(
+                    Math.floor(samples.length / 2),
+                    samples.length - 1
+                )
+                : 0;
+
+            init();
         }
 
         function loadSelections() {
@@ -506,7 +838,11 @@
         }
 
         function saveSelections() {
-            localStorage.setItem(storageKey, JSON.stringify(selectedProducts));
+            localStorage.setItem(
+                storageKey,
+                JSON.stringify(selectedProducts)
+            );
+
             renderSelectionUI();
         }
 
@@ -526,10 +862,14 @@
         }
 
         function removeSelection(id) {
-            selectedProducts = selectedProducts.filter(selection => selection.id !== id);
+            selectedProducts = selectedProducts.filter(
+                selection => String(selection.id) !== String(id)
+            );
+
             saveSelections();
             renderCards();
             updateGallery();
+            renderRequestList();
         }
 
 
@@ -680,7 +1020,9 @@
 
         function renderRequestList() {
             if (!selectedProducts.length) {
-                requestListContent.innerHTML = '<div class="empty-state">No garments selected.</div>';
+                requestListContent.innerHTML =
+                    '<div class="empty-state">No garments selected.</div>';
+
                 continueRequestBtn.disabled = true;
                 return;
             }
@@ -688,19 +1030,38 @@
             continueRequestBtn.disabled = false;
 
             requestListContent.innerHTML = selectedProducts.map(item => `
-                <div class="request-item">
-                    <div style="display:flex; align-items:center; gap:12px;">
-                        <img src="${item.img}" alt="${item.name}">
-                        <div>
-                            <strong>${item.name}</strong>
-                            <span>${item.cat}</span>
-                        </div>
-                    </div>
-                    <button type="button" onclick="removeSelection(${item.id})">Remove</button>
+        <div class="request-item" data-request-id="${item.id}">
+            <div style="display:flex; align-items:center; gap:12px; min-width:0;">
+                <img src="${item.img}" alt="${item.name}">
+                <div style="min-width:0;">
+                    <strong>${item.name}</strong>
+                    <span>${item.cat}</span>
                 </div>
-            `).join('');
-        }
+            </div>
 
+            <button
+                type="button"
+                class="remove-request-btn"
+                data-id="${item.id}">
+                Remove
+            </button>
+        </div>
+    `).join('');
+
+            /*
+             * Bind Remove buttons safely.
+             * This works with UUID sample IDs.
+             */
+            requestListContent
+                .querySelectorAll('.remove-request-btn')
+                .forEach(button => {
+                    button.addEventListener('click', () => {
+                        const id = button.dataset.id;
+                        removeSelection(id);
+                        renderRequestList();
+                    });
+                });
+        }
 
         function updateGallery() {
             const cards = document.querySelectorAll('.card');
@@ -763,5 +1124,5 @@
         loadSamples();
     </script>
 </body>
-</html>
 
+</html>
