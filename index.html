@@ -289,36 +289,66 @@
             /*
  * Dark overlay over the complete image
  */
+            /* =====================================================
+   TECH PACK / PRODUCTION SECTION - MOBILE
+   CONTENT STAYS INSIDE BACKGROUND IMAGE
+===================================================== */
+
+            #production {
+                position: relative !important;
+
+                min-height: 600px !important;
+
+                margin: 0 !important;
+
+                padding: 80px 20px !important;
+
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+
+                overflow: hidden !important;
+
+                background-image: url('Gemini_Generated_Image_a32cmma32cmma32c.jpg') !important;
+                background-size: cover !important;
+                background-position: center center !important;
+                background-repeat: no-repeat !important;
+
+                isolation: isolate !important;
+            }
+
+
+            /* Dark overlay remains INSIDE the section */
             #production>.absolute.inset-0 {
                 position: absolute !important;
+
                 inset: 0 !important;
 
                 width: 100% !important;
                 height: 100% !important;
 
-                background: rgba(0, 0, 0, 0.48) !important;
+                background: rgba(0, 0, 0, 0.60) !important;
 
-                z-index: 1 !important;
+                z-index: 0 !important;
 
-                pointer-events: none;
+                pointer-events: none !important;
             }
 
 
-            /*
- * Production content stays centered over the image
- */
+            /* Heading + paragraph + button remain ON the image */
             #production>.relative.z-10 {
                 position: relative !important;
 
-                z-index: 2 !important;
+                z-index: 10 !important;
 
                 width: 100% !important;
-                max-width: 100% !important;
+                max-width: 700px !important;
 
                 margin: 0 auto !important;
 
                 display: flex !important;
                 flex-direction: column !important;
+
                 align-items: center !important;
                 justify-content: center !important;
 
@@ -330,9 +360,9 @@
                 font-size: 2.35rem !important;
                 line-height: 1.12 !important;
 
-                margin-bottom: 20px !important;
-
                 max-width: 330px !important;
+
+                margin: 0 auto 20px auto !important;
 
                 text-align: center !important;
             }
@@ -344,9 +374,7 @@
 
                 max-width: 340px !important;
 
-                margin-left: auto !important;
-                margin-right: auto !important;
-                margin-bottom: 28px !important;
+                margin: 0 auto 28px auto !important;
 
                 text-align: center !important;
             }
@@ -842,8 +870,8 @@
     ========================================================= -->
 
     <section id="production"
-    class="relative py-32 bg-cover bg-center bg-no-repeat px-margin-mobile md:px-margin-desktop overflow-hidden"
-    style="
+        class="relative min-h-[600px] flex items-center justify-center px-margin-mobile md:px-margin-desktop overflow-hidden"
+        style="
         background-image: url('Gemini_Generated_Image_a32cmma32cmma32c.jpg');
         background-size: cover;
         background-position: center center;
@@ -851,22 +879,22 @@
     ">
 
         <!-- Dark overlay -->
-        <div class="absolute inset-0 bg-black/60"></div>
+        <div class="absolute inset-0 bg-black/60 z-0"></div>
 
-        <!-- Content -->
-        <div class="relative z-10 max-w-4xl mx-auto text-center">
+        <!-- Content stays INSIDE the image -->
+        <div class="relative z-10 w-full max-w-4xl mx-auto text-center">
 
             <h2 class="font-headline text-4xl md:text-5xl text-white mb-8">
                 Have Your Own Design?
             </h2>
 
-            <p class="text-lg text-on-surface-variant mb-12 leading-relaxed">
+            <p class="text-lg text-on-surface-variant mb-12 leading-relaxed max-w-3xl mx-auto">
                 Share your design, tech pack, or reference sample with us. We’ll turn your requirements into quality
                 garments, produced in bulk to your specifications.
             </p>
 
             <a href="https://ifadha.github.io/EAMA-Garments-Website/techpack.html"
-                class="inline-block bg-primary-container text-white px-12 py-5 rounded-sm text-[12px] font-bold uppercase transition-all hover:brightness-110">
+                class="inline-flex items-center justify-center bg-primary-container text-white px-12 py-5 rounded-sm text-[12px] font-bold uppercase transition-all hover:brightness-110">
                 Upload Tech Pack & Request Quote
             </a>
 
