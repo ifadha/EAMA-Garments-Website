@@ -1242,6 +1242,9 @@
                 submitBtn.innerText = "Processing Inquiry...";
 
                 const biz = {
+                    client_id:
+                        currentUser ? currentUser.id : null,
+
                     company_name:
                         document.getElementById("biz_company").value.trim(),
 
@@ -1263,14 +1266,11 @@
                     const cards =
                         document.querySelectorAll(".product-card");
 
-                    if (!cards.length) {
-                        throw new Error(
-                            "No products were selected."
-                        );
-                    }
+                    let firstInsertedId = null;
 
-                    const products = [];
-
+                    /*
+                     * SAVE EACH SELECTED SAMPLE
+                     */
                     for (let i = 0; i < cards.length; i++) {
 
                         const card = cards[i];
@@ -1307,161 +1307,159 @@
                                 card.querySelector(".f-notes").value.trim()
                         };
 
-                        products.push({
 
-                            sample_id:
-                                dbSample.id,
+                        /*
+                         * INSERT USING THE ACTUAL LIVE SCHEMA
+                         */
+                        const {
+                            data: insertedRequest,
+                            error: insertError
+                        } = await _supabase
+                            .from("manufacturing_requests")
+                            .insert([
+                                {
+                                    ...biz,
 
-                            garment_category:
-                                dbSample.category || "",
+                                    garment_category:
+                                        dbSample.category || "",
 
-                            product_type:
-                                dbSample.sample_name || "",
+                                    product_type:
+                                        dbSample.sample_name || "",
 
-                            request_type:
-                                type,
+                                    request_type:
+                                        type,
 
-                            fabric_preference:
-                                spec.fabric,
+                                    fabric_preference:
+                                        spec.fabric,
 
-                            sample_color:
-                                spec.color,
+                                    sample_color:
+                                        spec.color,
 
-                            sample_size:
-                                spec.size,
+                                    sample_size:
+                                        spec.size,
 
-                            target_quantity:
-                                spec.qty,
+                                    target_quantity:
+                                        spec.qty,
 
-                            customization_requirements:
-                                spec.custom,
+                                    customization_requirements:
+                                        spec.custom,
 
-                            additional_notes:
-                                spec.notes
-                        });
-                    }
+                                    additional_notes:
+                                        spec.notes,
 
-                    if (!products.length) {
-                        throw new Error(
-                            "No valid products were found in your inquiry."
-                        );
-                    }
+                                    status:
+                                        "New",
 
-
-                    /* ------------------------------------------------
-                       1. SAVE ONE MANUFACTURING REQUEST
-                    ------------------------------------------------ */
-
-                    const {
-                        data: insertedRequest,
-                        error: insertError
-                    } = await _supabase
-                        .from("manufacturing_requests")
-                        .insert([
-                            {
-                                ...biz,
-
-                                details: {
-                                    products: products
-                                },
-
-                                status: "New"
-                            }
-                        ])
-                        .select("id")
-                        .single();
+                                    priority:
+                                        "Medium"
+                                }
+                            ])
+                            .select("id")
+                            .single();
 
 
-                    if (insertError || !insertedRequest) {
-
-                        console.error(
-                            "Manufacturing request database error:",
-                            insertError
-                        );
-
-                        throw new Error(
-                            insertError?.message ||
-                            "Unable to save your request. Please try again."
-                        );
-                    }
-
-
-                    console.log(
-                        "Manufacturing request saved:",
-                        insertedRequest.id
-                    );
-
-
-                    /* ------------------------------------------------
-                       2. SEND CLIENT EMAIL
-                    ------------------------------------------------ */
-
-                    const {
-                        data: funcData,
-                        error: funcError
-                    } = await _supabase.functions.invoke(
-                        "send-auth-email",
-                        {
-                            body: {
-
-                                type:
-                                    "manufacturing_request",
-
-                                email:
-                                    biz.email,
-
-                                request_id:
-                                    insertedRequest.id,
-
-                                company_name:
-                                    biz.company_name,
-
-                                contact_person:
-                                    biz.contact_person
-                            }
-                        }
-                    );
-
-
-                    if (funcError) {
-
-                        console.error(
-                            "Email function error:",
-                            funcError
-                        );
-
-                        alert(
-                            "Your inquiry was saved successfully, but the confirmation email could not be sent. Our team still received your request."
-                        );
-
-                    } else {
-
-                        console.log(
-                            "Email function response:",
-                            funcData
-                        );
-
-                        if (
-                            funcData &&
-                            funcData.success === false
-                        ) {
+                        if (insertError || !insertedRequest) {
 
                             console.error(
-                                "Brevo email error:",
-                                funcData.error
+                                "Manufacturing request DB error:",
+                                insertError
+                            );
+
+                            throw new Error(
+                                insertError?.message ||
+                                "Unable to save your request. Please try again."
+                            );
+                        }
+
+
+                        console.log(
+                            "Manufacturing request saved:",
+                            insertedRequest.id
+                        );
+
+
+                        /*
+                         * STORE FIRST REQUEST ID
+                         */
+                        if (!firstInsertedId) {
+                            firstInsertedId =
+                                insertedRequest.id;
+                        }
+                    }
+
+
+                    /*
+                     * SEND EMAIL THROUGH EDGE FUNCTION
+                     */
+                    if (firstInsertedId) {
+
+                        const {
+                            data: funcData,
+                            error: funcError
+                        } =
+                            await _supabase.functions.invoke(
+                                "send-auth-email",
+                                {
+                                    body: {
+
+                                        type:
+                                            "manufacturing_request",
+
+                                        email:
+                                            biz.email,
+
+                                        request_id:
+                                            firstInsertedId,
+
+                                        company_name:
+                                            biz.company_name,
+
+                                        contact_person:
+                                            biz.contact_person
+                                    }
+                                }
+                            );
+
+
+                        if (funcError) {
+
+                            console.error(
+                                "Email function error:",
+                                funcError
                             );
 
                             alert(
                                 "Your inquiry was saved successfully, but the confirmation email could not be sent. Our team still received your request."
                             );
+
+                        } else {
+
+                            console.log(
+                                "Email function response:",
+                                funcData
+                            );
+
+                            if (
+                                funcData &&
+                                funcData.success === false
+                            ) {
+
+                                console.error(
+                                    "Brevo error:",
+                                    funcData.error
+                                );
+
+                                alert(
+                                    "Your inquiry was saved successfully, but the confirmation email could not be sent. Our team still received your request."
+                                );
+                            }
                         }
                     }
 
 
-                    /* ------------------------------------------------
-                       3. SUCCESS STATE
-                    ------------------------------------------------ */
-
+                    /*
+                     * SUCCESS
+                     */
                     formContainer.style.display =
                         "none";
 
@@ -1497,10 +1495,6 @@
 
             }
         );
-
-
-               
-
         /* =========================================================
            DASHBOARD BUTTON
         ========================================================== */
