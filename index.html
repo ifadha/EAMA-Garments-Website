@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html class="dark" lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -9,9 +10,12 @@
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
 
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap"
+        rel="stylesheet">
 
     <script id="tailwind-config">
         tailwind.config = {
@@ -45,6 +49,39 @@
     </script>
 
     <style>
+        /* =========================================================
+   ACCOUNT / PROFILE MENU
+========================================================= */
+
+        #account-area {
+            position: relative;
+        }
+
+        #profile-menu {
+            min-width: 224px;
+        }
+
+        @media (max-width: 767px) {
+
+            #account-area {
+                flex-shrink: 0;
+            }
+
+            #profile-btn {
+                padding: 10px 12px !important;
+                font-size: 10px !important;
+                max-width: 150px;
+            }
+
+            #profile-name {
+                max-width: 90px;
+            }
+
+            #profile-menu {
+                right: 0;
+                min-width: 210px;
+            }
+        }
 
         /* =========================================================
            GLOBAL
@@ -73,11 +110,9 @@
         }
 
         .cinematic-overlay {
-            background: linear-gradient(
-                to bottom,
-                rgba(10, 10, 10, 0.3) 0%,
-                rgba(10, 10, 10, 0.8) 100%
-            );
+            background: linear-gradient(to bottom,
+                    rgba(10, 10, 10, 0.3) 0%,
+                    rgba(10, 10, 10, 0.8) 100%);
         }
 
         .material-symbols-outlined {
@@ -119,7 +154,7 @@
                 padding-right: 20px !important;
             }
 
-            nav > div:first-child {
+            nav>div:first-child {
                 font-size: 17px !important;
                 white-space: nowrap;
             }
@@ -150,7 +185,7 @@
                 align-items: center !important;
             }
 
-            section.relative.h-screen > div.relative.z-20 {
+            section.relative.h-screen>div.relative.z-20 {
                 width: 100%;
                 max-width: 100%;
                 padding-top: 30px;
@@ -190,7 +225,7 @@
                 padding-bottom: 70px !important;
             }
 
-            #collections > div {
+            #collections>div {
                 min-height: 520px !important;
                 padding: 40px 24px !important;
                 border-radius: 1.25rem !important;
@@ -262,7 +297,7 @@
             /*
              * Dark overlay
              */
-            #production > .absolute.inset-0 {
+            #production>.absolute.inset-0 {
                 position: absolute !important;
                 inset: 0 !important;
 
@@ -279,7 +314,7 @@
             /*
              * Production content
              */
-            #production > .relative.z-10 {
+            #production>.relative.z-10 {
                 position: relative !important;
 
                 z-index: 2 !important;
@@ -318,7 +353,7 @@
                 padding-bottom: 70px !important;
             }
 
-            #quality > div:first-child {
+            #quality>div:first-child {
                 margin-bottom: 50px !important;
             }
 
@@ -327,7 +362,7 @@
                 line-height: 1.15 !important;
             }
 
-            #quality > div:first-child p {
+            #quality>div:first-child p {
                 font-size: 15px !important;
                 line-height: 1.6 !important;
             }
@@ -356,26 +391,26 @@
                 aspect-ratio: 16 / 10 !important;
             }
 
-            #quality + section {
+            #quality+section {
                 padding-top: 70px !important;
                 padding-bottom: 70px !important;
             }
 
-            #quality + section .grid {
+            #quality+section .grid {
                 gap: 45px !important;
             }
 
-            #quality + section h2 {
+            #quality+section h2 {
                 font-size: 2.2rem !important;
                 line-height: 1.15 !important;
             }
 
-            #quality + section p {
+            #quality+section p {
                 font-size: 15px !important;
                 line-height: 1.7 !important;
             }
 
-            #quality + section .grid.grid-cols-1.md\:grid-cols-2 {
+            #quality+section .grid.grid-cols-1.md\:grid-cols-2 {
                 grid-template-columns: 1fr !important;
                 gap: 30px !important;
             }
@@ -435,7 +470,7 @@
                 padding-bottom: 70px !important;
             }
 
-            #consultation > div {
+            #consultation>div {
                 border-radius: 14px !important;
             }
 
@@ -464,7 +499,7 @@
                 gap: 32px !important;
             }
 
-            #consultation .space-y-12 > div {
+            #consultation .space-y-12>div {
                 gap: 16px !important;
             }
 
@@ -522,7 +557,7 @@
 
         @media (max-width: 380px) {
 
-            nav > div:first-child {
+            nav>div:first-child {
                 font-size: 15px !important;
             }
 
@@ -538,7 +573,7 @@
             #production h2,
             #collections h2,
             #quality h2,
-            #quality + section h2,
+            #quality+section h2,
             #factory-visit h2 {
                 font-size: 2rem !important;
             }
@@ -547,7 +582,6 @@
                 font-size: 2.2rem !important;
             }
         }
-
     </style>
 
     <!-- Supabase Logic -->
@@ -563,7 +597,8 @@
          1. FIXED TOP NAVIGATION BAR
     ========================================================= -->
 
-    <nav class="fixed top-0 left-0 w-full h-20 px-margin-mobile md:px-margin-desktop bg-black/90 backdrop-blur-md z-50 flex justify-between items-center border-b border-white/10">
+    <nav
+        class="fixed top-0 left-0 w-full h-20 px-margin-mobile md:px-margin-desktop bg-black/90 backdrop-blur-md z-50 flex justify-between items-center border-b border-white/10">
 
         <div class="text-xl font-headline font-bold tracking-tighter">
             EAMA GARMENTS
@@ -595,17 +630,80 @@
 
         <div class="flex items-center gap-6">
 
-            <button
-                onclick="document.getElementById('consultation').scrollIntoView({behavior:'smooth'})"
+            <button onclick="document.getElementById('consultation').scrollIntoView({behavior:'smooth'})"
                 class="hidden lg:block text-on-surface-variant hover:text-white transition-colors text-[12px] uppercase tracking-widest">
                 Consultation
             </button>
 
-            <a
-                href="https://ifadha.github.io/EAMA-Garments-Website/client-portal-sign-in.html"
-                class="bg-primary-container text-white px-8 py-3 rounded-sm text-[12px] font-bold uppercase transition-transform active:scale-95 hover:brightness-110">
-                Login / Sign Up
-            </a>
+            <!-- ACCOUNT / LOGIN AREA -->
+            <div id="account-area" class="relative">
+
+                <!-- Shown when logged out -->
+                <a id="login-signup-btn"
+                    href="https://ifadha.github.io/EAMA-Garments-Website/client-portal-sign-in.html"
+                    class="bg-primary-container text-white px-8 py-3 rounded-sm text-[12px] font-bold uppercase transition-transform active:scale-95 hover:brightness-110">
+                    Login / Sign Up
+                </a>
+
+
+                <!-- Shown when logged in -->
+                <button id="profile-btn" type="button"
+                    class="hidden bg-primary-container text-white px-5 py-3 rounded-sm text-[12px] font-bold uppercase transition-transform active:scale-95 hover:brightness-110 flex items-center gap-2"
+                    aria-expanded="false" aria-haspopup="true">
+
+                    <span id="profile-name" class="max-w-[140px] truncate">
+                        Profile
+                    </span>
+
+                    <span class="material-symbols-outlined text-[18px]">
+                        expand_more
+                    </span>
+
+                </button>
+
+
+                <!-- Profile dropdown -->
+                <div id="profile-menu"
+                    class="hidden absolute right-0 top-full mt-3 w-56 bg-[#121414] border border-white/10 shadow-2xl rounded-sm overflow-hidden z-[100]">
+
+                    <div class="px-5 py-4 border-b border-white/10">
+
+                        <p class="text-[9px] uppercase tracking-[0.15em] text-white/30 mb-1">
+                            Signed in as
+                        </p>
+
+                        <p id="profile-email" class="text-xs text-white truncate">
+                        </p>
+
+                    </div>
+
+
+                    <a href="dashboard/app.html" id="dashboard-link"
+                        class="flex items-center gap-3 px-5 py-4 text-[11px] uppercase tracking-wider text-white hover:bg-white/5 hover:text-primary-container transition-colors">
+
+                        <span class="material-symbols-outlined text-[19px]">
+                            dashboard
+                        </span>
+
+                        Go to Dashboard
+
+                    </a>
+
+
+                    <button type="button" id="logout-btn"
+                        class="w-full flex items-center gap-3 px-5 py-4 text-left text-[11px] uppercase tracking-wider text-white/60 hover:bg-white/5 hover:text-white transition-colors">
+
+                        <span class="material-symbols-outlined text-[19px]">
+                            logout
+                        </span>
+
+                        Sign Out
+
+                    </button>
+
+                </div>
+
+            </div>
 
         </div>
 
@@ -622,16 +720,9 @@
 
             <div class="absolute inset-0 cinematic-overlay z-10"></div>
 
-            <video
-                autoplay
-                muted
-                loop
-                playsinline
-                class="absolute inset-0 h-full w-full object-cover">
+            <video autoplay muted loop playsinline class="absolute inset-0 h-full w-full object-cover">
 
-                <source
-                    src="Black_fabric_ripples_gently_202607291554.mp4"
-                    type="video/mp4">
+                <source src="Black_fabric_ripples_gently_202607291554.mp4" type="video/mp4">
 
             </video>
 
@@ -649,11 +740,11 @@
             </h1>
 
             <p class="text-lg md:text-xl text-on-surface-variant max-w-2xl mb-12 leading-relaxed">
-                We manufacture garments for brands, retailers, and organizations, with experienced workers, careful quality control, and reliable production.
+                We manufacture garments for brands, retailers, and organizations, with experienced workers, careful
+                quality control, and reliable production.
             </p>
 
-            <button
-                onclick="document.getElementById('factory-visit').scrollIntoView({behavior:'smooth'})"
+            <button onclick="document.getElementById('factory-visit').scrollIntoView({behavior:'smooth'})"
                 class="bg-primary-container text-white px-10 py-5 text-[12px] font-bold uppercase hover:brightness-110 transition-all">
                 Book Factory Visit
             </button>
@@ -667,22 +758,14 @@
          3. SAMPLE COLLECTIONS SECTION
     ========================================================= -->
 
-    <section
-        id="collections"
-        class="py-section-gap px-margin-mobile md:px-margin-desktop bg-surface-container-lowest">
+    <section id="collections" class="py-section-gap px-margin-mobile md:px-margin-desktop bg-surface-container-lowest">
 
-        <div class="relative overflow-hidden rounded-[2rem] border border-white/10 min-h-[600px] flex items-center p-8 md:p-20">
+        <div
+            class="relative overflow-hidden rounded-[2rem] border border-white/10 min-h-[600px] flex items-center p-8 md:p-20">
 
-            <video
-                autoplay
-                muted
-                loop
-                playsinline
-                class="absolute inset-0 h-full w-full object-cover opacity-50">
+            <video autoplay muted loop playsinline class="absolute inset-0 h-full w-full object-cover opacity-50">
 
-                <source
-                    src="Runway_walking_movement_seamless…_202607281323.mp4"
-                    type="video/mp4">
+                <source src="Runway_walking_movement_seamless…_202607281323.mp4" type="video/mp4">
 
             </video>
 
@@ -699,11 +782,12 @@
                 </h2>
 
                 <p class="text-lg text-white/80 mb-10 leading-relaxed">
-                    Our sample collection gives you an overview of the garments we manufacture while protecting our clients' confidential designs. Request a sample or quotation for any style that matches your requirements.
+                    Our sample collection gives you an overview of the garments we manufacture while protecting our
+                    clients' confidential designs. Request a sample or quotation for any style that matches your
+                    requirements.
                 </p>
 
-                <a
-                    href="https://ifadha.github.io/EAMA-Garments-Website/gallery.html"
+                <a href="https://ifadha.github.io/EAMA-Garments-Website/gallery.html"
                     class="inline-block bg-white text-black px-12 py-5 rounded-full text-[12px] font-bold uppercase hover:bg-primary-container hover:text-white transition-all">
                     View Collections
                 </a>
@@ -719,8 +803,7 @@
          4. START YOUR PRODUCTION / TECH PACK SECTION
     ========================================================= -->
 
-    <section
-        id="production"
+    <section id="production"
         class="relative py-32 bg-cover bg-center bg-no-repeat px-margin-mobile md:px-margin-desktop border-y border-white/5"
         style="
             background-image: url('Gemini_Generated_Image_a32cmma32cmma32c.jpg');
@@ -740,11 +823,11 @@
             </h2>
 
             <p class="text-lg text-on-surface-variant mb-12 leading-relaxed">
-                Share your design, tech pack, or reference sample with us. We’ll turn your requirements into quality garments, produced in bulk to your specifications.
+                Share your design, tech pack, or reference sample with us. We’ll turn your requirements into quality
+                garments, produced in bulk to your specifications.
             </p>
 
-            <a
-                href="https://ifadha.github.io/EAMA-Garments-Website/techpack.html"
+            <a href="https://ifadha.github.io/EAMA-Garments-Website/techpack.html"
                 class="inline-block bg-primary-container text-white px-12 py-5 rounded-sm text-[12px] font-bold uppercase transition-all hover:brightness-110">
                 Upload Tech Pack & Request Quote
             </a>
@@ -758,9 +841,7 @@
          5. MANUFACTURING WORKFLOW SECTION
     ========================================================= -->
 
-    <section
-        id="quality"
-        class="py-section-gap bg-surface px-margin-mobile md:px-margin-desktop">
+    <section id="quality" class="py-section-gap bg-surface px-margin-mobile md:px-margin-desktop">
 
         <div class="mb-24">
 
@@ -908,16 +989,9 @@
 
             <div class="relative aspect-video lg:aspect-square overflow-hidden rounded-lg border border-white/10">
 
-                <video
-                    autoplay
-                    muted
-                    loop
-                    playsinline
-                    class="w-full h-full object-cover">
+                <video autoplay muted loop playsinline class="w-full h-full object-cover">
 
-                    <source
-                        src="Fabric_moving_smoothly_and_slowly_202608151203.mp4"
-                        type="video/mp4">
+                    <source src="Fabric_moving_smoothly_and_slowly_202608151203.mp4" type="video/mp4">
 
                 </video>
 
@@ -1035,18 +1109,14 @@
          7. FACTORY VISIT SECTION
     ========================================================= -->
 
-    <section
-        id="factory-visit"
+    <section id="factory-visit"
         class="py-section-gap bg-surface px-margin-mobile md:px-margin-desktop border-t border-white/5">
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-24 items-center">
 
             <div class="lg:col-span-5 aspect-[4/5] overflow-hidden rounded-lg border border-white/10 relative">
 
-                <img
-                    src="factory visit.jpg"
-                    alt="EAMA Garments Factory"
-                    class="w-full h-full object-cover">
+                <img src="factory visit.jpg" alt="EAMA Garments Factory" class="w-full h-full object-cover">
 
                 <div class="absolute inset-0 bg-black/15 pointer-events-none"></div>
 
@@ -1064,11 +1134,13 @@
                 </h2>
 
                 <p class="text-lg text-on-surface-variant mb-12">
-                    Visit our factory to connect with us, explore your requirements, and get a closer look at our production.
+                    Visit our factory to connect with us, explore your requirements, and get a closer look at our
+                    production.
                 </p>
 
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-16 text-sm text-white/80 tracking-widest uppercase">
+                <div
+                    class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-16 text-sm text-white/80 tracking-widest uppercase">
 
                     <div class="flex items-center gap-3">
                         <span class="material-symbols-outlined text-primary-container">
@@ -1112,8 +1184,7 @@
                 </div>
 
 
-                <a
-                    href="https://ifadha.github.io/EAMA-Garments-Website/factory-visit.html"
+                <a href="https://ifadha.github.io/EAMA-Garments-Website/factory-visit.html"
                     class="inline-block bg-primary-container text-white px-12 py-5 rounded-sm text-[12px] font-bold uppercase transition-all hover:brightness-110">
                     Request Factory Visit
                 </a>
@@ -1129,11 +1200,10 @@
          8. FINAL CONSULTATION SECTION
     ========================================================= -->
 
-    <section
-        id="consultation"
-        class="py-section-gap bg-surface-container-lowest px-margin-mobile md:px-margin-desktop">
+    <section id="consultation" class="py-section-gap bg-surface-container-lowest px-margin-mobile md:px-margin-desktop">
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-px bg-white/10 border border-white/10 rounded-xl overflow-hidden shadow-2xl">
+        <div
+            class="grid grid-cols-1 lg:grid-cols-2 gap-px bg-white/10 border border-white/10 rounded-xl overflow-hidden shadow-2xl">
 
 
             <!-- LEFT: CONTACT INFORMATION -->
@@ -1250,10 +1320,7 @@
                                 Name *
                             </label>
 
-                            <input
-                                name="name"
-                                required
-                                placeholder="Your Name"
+                            <input name="name" required placeholder="Your Name"
                                 class="w-full bg-transparent border-b border-white/20 py-3 text-white focus:outline-none focus:border-primary-container transition-all">
 
                         </div>
@@ -1265,9 +1332,7 @@
                                 Company
                             </label>
 
-                            <input
-                                name="company"
-                                placeholder="Company Ltd."
+                            <input name="company" placeholder="Company Ltd."
                                 class="w-full bg-transparent border-b border-white/20 py-3 text-white focus:outline-none focus:border-primary-container transition-all">
 
                         </div>
@@ -1283,11 +1348,7 @@
                                 Email *
                             </label>
 
-                            <input
-                                name="email"
-                                required
-                                type="email"
-                                placeholder="email@company.com"
+                            <input name="email" required type="email" placeholder="email@company.com"
                                 class="w-full bg-transparent border-b border-white/20 py-3 text-white focus:outline-none focus:border-primary-container transition-all">
 
                         </div>
@@ -1299,9 +1360,7 @@
                                 Country
                             </label>
 
-                            <input
-                                name="country"
-                                placeholder="Select Country"
+                            <input name="country" placeholder="Select Country"
                                 class="w-full bg-transparent border-b border-white/20 py-3 text-white focus:outline-none focus:border-primary-container transition-all">
 
                         </div>
@@ -1315,18 +1374,13 @@
                             Message *
                         </label>
 
-                        <textarea
-                            name="message"
-                            required
-                            rows="4"
-                            placeholder="How can we help you?"
+                        <textarea name="message" required rows="4" placeholder="How can we help you?"
                             class="w-full bg-transparent border-b border-white/20 py-3 text-white focus:outline-none focus:border-primary-container transition-all resize-none"></textarea>
 
                     </div>
 
 
-                    <button
-                        type="submit"
+                    <button type="submit"
                         class="w-full bg-white text-black py-5 text-[12px] font-bold uppercase tracking-[0.2em] hover:bg-primary-container hover:text-white transition-all active:scale-[0.98]">
                         Send Inquiry
                     </button>
@@ -1581,7 +1635,261 @@
 
         });
 
+        document.addEventListener("DOMContentLoaded", () => {
+
+            const supabase = window.eamaSupabase;
+            const inquiryForm = document.getElementById("general-inquiry-form");
+
+            /* =========================================================
+           ACCOUNT / PROFILE MENU
+        ========================================================= */
+
+            const accountArea =
+                document.getElementById("account-area");
+
+            const loginSignupBtn =
+                document.getElementById("login-signup-btn");
+
+            const profileBtn =
+                document.getElementById("profile-btn");
+
+            const profileMenu =
+                document.getElementById("profile-menu");
+
+            const profileName =
+                document.getElementById("profile-name");
+
+            const profileEmail =
+                document.getElementById("profile-email");
+
+            const logoutBtn =
+                document.getElementById("logout-btn");
+
+
+            async function updateAccountUI() {
+
+                if (!supabase) {
+                    return;
+                }
+
+                try {
+
+                    const {
+                        data: {
+                            user
+                        },
+                        error
+                    } = await supabase.auth.getUser();
+
+
+                    if (error || !user) {
+
+                        /* ---------------------------------------------
+                           LOGGED OUT
+                        --------------------------------------------- */
+
+                        loginSignupBtn.classList.remove("hidden");
+
+                        profileBtn.classList.add("hidden");
+                        profileMenu.classList.add("hidden");
+
+                        return;
+                    }
+
+
+                    /* ---------------------------------------------
+                       LOGGED IN
+                    --------------------------------------------- */
+
+                    loginSignupBtn.classList.add("hidden");
+
+                    profileBtn.classList.remove("hidden");
+
+
+                    const email =
+                        user.email || "Account";
+
+
+                    profileEmail.textContent =
+                        email;
+
+
+                    /*
+                     * Display a short profile label.
+                     * Email remains visible inside the dropdown.
+                     */
+
+                    let displayName =
+                        email.split("@")[0];
+
+
+                    if (displayName.length > 18) {
+                        displayName =
+                            displayName.substring(0, 18) + "...";
+                    }
+
+
+                    profileName.textContent =
+                        displayName;
+
+                } catch (error) {
+
+                    console.error(
+                        "Account status check failed:",
+                        error
+                    );
+
+                }
+
+            }
+
+
+            /* ---------------------------------------------------------
+               PROFILE BUTTON
+            --------------------------------------------------------- */
+
+            if (profileBtn) {
+
+                profileBtn.addEventListener(
+                    "click",
+                    function (event) {
+
+                        event.stopPropagation();
+
+                        const isOpen =
+                            !profileMenu.classList.contains("hidden");
+
+
+                        profileMenu.classList.toggle(
+                            "hidden"
+                        );
+
+
+                        profileBtn.setAttribute(
+                            "aria-expanded",
+                            String(!isOpen)
+                        );
+
+                    }
+                );
+
+            }
+
+
+            /* ---------------------------------------------------------
+               CLOSE MENU WHEN CLICKING OUTSIDE
+            --------------------------------------------------------- */
+
+            document.addEventListener(
+                "click",
+                function (event) {
+
+                    if (
+                        accountArea &&
+                        !accountArea.contains(event.target)
+                    ) {
+
+                        profileMenu.classList.add(
+                            "hidden"
+                        );
+
+                        profileBtn?.setAttribute(
+                            "aria-expanded",
+                            "false"
+                        );
+
+                    }
+
+                }
+            );
+
+
+            /* ---------------------------------------------------------
+               LOG OUT
+            --------------------------------------------------------- */
+
+            if (logoutBtn) {
+
+                logoutBtn.addEventListener(
+                    "click",
+                    async function () {
+
+                        logoutBtn.disabled = true;
+                        logoutBtn.textContent = "Signing Out...";
+
+
+                        try {
+
+                            const {
+                                error
+                            } = await supabase.auth.signOut();
+
+
+                            if (error) {
+                                throw error;
+                            }
+
+
+                            /*
+                             * Return the navigation to its normal
+                             * logged-out state.
+                             */
+
+                            updateAccountUI();
+
+
+                        } catch (error) {
+
+                            console.error(
+                                "Sign out failed:",
+                                error
+                            );
+
+                            alert(
+                                "Unable to sign out. Please try again."
+                            );
+
+
+                        } finally {
+
+                            logoutBtn.disabled = false;
+
+                            logoutBtn.innerHTML = `
+                    <span class="material-symbols-outlined text-[19px]">
+                        logout
+                    </span>
+                    Sign Out
+                `;
+
+                        }
+
+                    }
+                );
+
+            }
+
+
+            /* ---------------------------------------------------------
+               INITIAL ACCOUNT CHECK
+            --------------------------------------------------------- */
+
+            updateAccountUI();
+
+
+            /* ---------------------------------------------------------
+               KEEP UI SYNCHRONIZED WITH SUPABASE AUTH
+            --------------------------------------------------------- */
+
+            supabase.auth.onAuthStateChange(
+                function () {
+
+                    updateAccountUI();
+
+                }
+            );
+        });
     </script>
 
 </body>
+
 </html>
