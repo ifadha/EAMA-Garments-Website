@@ -500,6 +500,139 @@ serve(async (req) => {
     }
 
     // ============================================================
+    // 2B. TECHPACK MANUFACTURING REQUEST
+    // ============================================================
+
+    if (type === "techpack_manufacturing_request") {
+      if (!request_id) {
+        throw new Error(
+          "request_id is required."
+        );
+      }
+
+      // ----------------------------------------------------------
+      // GET REQUEST
+      // ----------------------------------------------------------
+
+      const {
+        data: request,
+        error: requestError,
+      } = await supabaseAdmin
+        .from("manufacturing_requests")
+        .select(
+          "id, email, company_name, contact_person, status"
+        )
+        .eq("id", request_id)
+        .single();
+
+      if (requestError || !request) {
+        console.error(
+          "Techpack manufacturing request lookup error:",
+          requestError
+        );
+
+        throw new Error(
+          "The manufacturing request could not be found."
+        );
+      }
+
+      // ----------------------------------------------------------
+      // SECURITY CHECK
+      // ----------------------------------------------------------
+
+      if (
+        request.email &&
+        request.email.trim().toLowerCase() !==
+          normalizedEmail
+      ) {
+        throw new Error(
+          "The email address does not match the manufacturing request."
+        );
+      }
+
+      // ----------------------------------------------------------
+      // CLIENT PORTAL LINK
+      // ----------------------------------------------------------
+
+      const portalLink =
+        new URL(
+          "client-dashboard.html",
+          originBase
+        );
+
+      portalLink.searchParams.set(
+        "request_id",
+        String(request.id)
+      );
+
+      // ----------------------------------------------------------
+      // SEND CLIENT EMAIL + ADMIN BCC
+      // ----------------------------------------------------------
+
+      const TECHPACK_MANUFACTURING_TEMPLATE_ID = 4;
+
+      await sendBrevoEmail(
+        TECHPACK_MANUFACTURING_TEMPLATE_ID,
+
+        normalizedEmail,
+
+        String(
+          contact_person ||
+            request.contact_person ||
+            ""
+        ),
+
+        {
+          request_id:
+            request.id,
+
+          company_name:
+            company_name ||
+            request.company_name ||
+            "",
+
+          contact_person:
+            contact_person ||
+            request.contact_person ||
+            "",
+
+          portal_link:
+            portalLink.toString(),
+        },
+
+        ADMIN_EMAIL
+      );
+
+      console.log(
+        "Techpack manufacturing request confirmation sent:",
+        normalizedEmail
+      );
+
+      return new Response(
+        JSON.stringify({
+          success: true,
+
+          sent: true,
+
+          type:
+            "techpack_manufacturing_request",
+
+          request_id:
+            request.id,
+        }),
+        {
+          status: 200,
+
+          headers: {
+            ...corsHeaders,
+            "Content-Type":
+              "application/json",
+          },
+        }
+      );
+    }
+
+    // ============================================================
     // 3. FACTORY VISIT
     // ============================================================
 
