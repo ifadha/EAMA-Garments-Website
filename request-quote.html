@@ -1321,91 +1321,76 @@
                     // SAVE EACH PRODUCT REQUEST
                     // --------------------------------------------------
 
+                    // --------------------------------------------------
+                    // SAVE EACH PRODUCT REQUEST
+                    // --------------------------------------------------
+
                     for (
                         let i = 0;
                         i < cards.length;
                         i++
                     ) {
 
-                        const card =
-                            cards[i];
+                        const card = cards[i];
 
-
-                        const dbSample =
-                            dbSamples[i];
-
+                        const dbSample = dbSamples[i];
 
                         if (!dbSample) {
                             continue;
                         }
 
-
                         const requestType =
                             card
-                                .querySelector(
-                                    ".field-type"
-                                )
+                                .querySelector(".field-type")
                                 .value;
-
 
                         const fabric =
                             card
-                                .querySelector(
-                                    ".f-fabric"
-                                )
+                                .querySelector(".f-fabric")
                                 .value;
-
 
                         const color =
                             card
-                                .querySelector(
-                                    ".f-color"
-                                )
+                                .querySelector(".f-color")
                                 .value;
-
 
                         const size =
                             card
-                                .querySelector(
-                                    ".f-size"
-                                )
+                                .querySelector(".f-size")
                                 .value;
-
 
                         const quantity =
                             parseInt(
                                 card
-                                    .querySelector(
-                                        ".f-qty"
-                                    )
+                                    .querySelector(".f-qty")
                                     .value,
                                 10
                             ) || 1;
 
-
                         const customization =
                             card
-                                .querySelector(
-                                    ".f-custom"
-                                )
+                                .querySelector(".f-custom")
                                 .value
                                 .trim();
-
 
                         const notes =
                             card
-                                .querySelector(
-                                    ".f-notes"
-                                )
+                                .querySelector(".f-notes")
                                 .value
                                 .trim();
+
+
+                        // ------------------------------------------------
+                        // GENERATE REQUEST ID BEFORE INSERT
+                        // ------------------------------------------------
+
+                        const requestId =
+                            crypto.randomUUID();
 
 
                         // ------------------------------------------------
                         // INSERT
                         // ------------------------------------------------
-
-                        const requestId = crypto.randomUUID();
 
                         const { error: insertError } =
                             await _supabase
@@ -1470,35 +1455,36 @@
                                 });
 
 
+                        // ------------------------------------------------
+                        // CHECK INSERT
+                        // ------------------------------------------------
 
-
-                        if (
-                            insertError ||
-                            !insertedRequest
-                        ) {
+                        if (insertError) {
 
                             console.error(
                                 "Manufacturing request DB error:",
                                 insertError
                             );
 
-
                             throw new Error(
-                                insertError?.message ||
+                                insertError.message ||
                                 "Unable to save your request."
                             );
                         }
 
 
+                        // ------------------------------------------------
+                        // KEEP FIRST REQUEST ID FOR EMAIL
+                        // ------------------------------------------------
+
                         if (!firstInsertedId) {
 
                             firstInsertedId =
-                                insertedRequest.id;
+                                requestId;
 
                         }
 
                     }
-
 
                     // --------------------------------------------------
                     // SEND BREVO EMAIL
