@@ -1405,17 +1405,15 @@
                         // INSERT
                         // ------------------------------------------------
 
-                        const {
-                            data: insertedRequest,
-                            error: insertError
-                        } =
+                        const requestId = crypto.randomUUID();
+
+                        const { error: insertError } =
                             await _supabase
-
-                                .from(
-                                    "manufacturing_requests"
-                                )
-
+                                .from("manufacturing_requests")
                                 .insert({
+
+                                    id:
+                                        requestId,
 
                                     company_name:
                                         biz.company_name,
@@ -1469,11 +1467,9 @@
                                     priority:
                                         "Medium"
 
-                                })
+                                });
 
-                                .select("id")
 
-                                .single();
 
 
                         if (
