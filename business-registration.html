@@ -1,33 +1,37 @@
 <!DOCTYPE html>
 <html class="dark" lang="en">
+
 <head>
-    <meta charset="utf-8"/>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>Client Registration | EAMA Garments</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-client.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1" rel="stylesheet"/>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1"
+        rel="stylesheet" />
     <style>
         body {
             background-color: #0A0A0A;
             color: #e3e2e2;
             font-family: 'Inter', sans-serif;
         }
-    
+
         .glass-input {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.1);
             transition: all 0.3s ease;
         }
-    
+
         .glass-input:focus {
             background: rgba(255, 255, 255, 0.07);
             border-color: #ffb4a3;
             outline: none;
         }
-    
+
         #country-list {
             position: absolute;
             width: 100%;
@@ -38,39 +42,40 @@
             z-index: 50;
             display: none;
         }
-    
+
         .country-option {
             padding: 10px 15px;
             cursor: pointer;
             font-size: 14px;
         }
-    
+
         .country-option:hover {
             background: #343535;
             color: #ffb4a3;
         }
-    
+
         @keyframes registerGlow {
             from {
                 transform: translate3d(0, 0, 0) scale(1);
             }
-    
+
             to {
                 transform: translate3d(80px, 50px, 0) scale(1.12);
             }
         }
-    
+
         @keyframes registerGlowReverse {
             from {
                 transform: translate3d(0, 0, 0) scale(1);
             }
-    
+
             to {
                 transform: translate3d(-60px, -40px, 0) scale(1.1);
             }
         }
     </style>
 </head>
+
 <body class="overflow-x-hidden">
     <main class="min-h-screen flex flex-col md:flex-row">
         <!-- Visual Section -->
@@ -106,393 +111,439 @@
                 </h1>
 
                 <p class="text-gray-400 max-w-sm">
-                    Create your account to submit requests, upload tech packs, track your production inquiries, and stay connected with our team from one secure portal.
+                    Create your account to submit requests, upload tech packs, track your production inquiries, and stay
+                    connected with our team from one secure portal.
                 </p>
             </div>
 
-            
+
 
         </section>
 
-    <!-- Form Section -->
-    <section class="flex-1 bg-[#121414] flex items-center justify-center p-8 md:p-20">
-        <div class="max-w-xl w-full" id="signup-container">
-            <div class="mb-10">
-                <h2 class="text-3xl font-serif mb-2">Client Registration</h2>
-                <p class="text-gray-500">Create your corporate profile to begin manufacturing.</p>
+        <!-- Form Section -->
+        <section class="flex-1 bg-[#121414] flex items-center justify-center p-8 md:p-20">
+            <div class="max-w-xl w-full" id="signup-container">
+                <div class="mb-10">
+                    <h2 class="text-3xl font-serif mb-2">Client Registration</h2>
+                    <p class="text-gray-500">Create your corporate profile to begin manufacturing.</p>
+                </div>
+
+                <form id="registration-form" class="space-y-5">
+                    <div id="global-error"
+                        class="hidden bg-red-900/20 border border-red-500/50 p-4 text-red-200 text-sm mb-6"></div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div>
+                            <label class="text-[10px] uppercase tracking-widest text-gray-500 mb-1 block">Company
+                                Name</label>
+                            <input id="company_name" type="text" class="w-full glass-input p-4 text-sm"
+                                placeholder="Enter Business Name" required>
+                        </div>
+                        <div>
+                            <label class="text-[10px] uppercase tracking-widest text-gray-500 mb-1 block">Contact
+                                Person</label>
+                            <input id="contact_person" type="text" class="w-full glass-input p-4 text-sm"
+                                placeholder="Full Name" required>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div>
+                            <label class="text-[10px] uppercase tracking-widest text-gray-500 mb-1 block">Business
+                                Email</label>
+                            <input id="email" type="email" class="w-full glass-input p-4 text-sm"
+                                placeholder="name@company.com" required>
+                        </div>
+                        <div>
+                            <label class="text-[10px] uppercase tracking-widest text-gray-500 mb-1 block">Phone
+                                Number</label>
+                            <input id="phone" type="tel" class="w-full glass-input p-4 text-sm"
+                                placeholder="+1 (000) 000-0000">
+                        </div>
+                    </div>
+
+                    <div class="relative">
+                        <label class="text-[10px] uppercase tracking-widest text-gray-500 mb-1 block">Country</label>
+                        <input id="country-search" type="text" class="w-full glass-input p-4 text-sm"
+                            placeholder="Search countries..." autocomplete="off" required>
+                        <div id="country-list"></div>
+                        <input type="hidden" id="selected-country">
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div>
+                            <label
+                                class="text-[10px] uppercase tracking-widest text-gray-500 mb-1 block">Password</label>
+                            <input id="password" type="password" class="w-full glass-input p-4 text-sm"
+                                placeholder="••••••••" required>
+                        </div>
+                        <div>
+                            <label class="text-[10px] uppercase tracking-widest text-gray-500 mb-1 block">Confirm
+                                Password</label>
+                            <input id="confirm_password" type="password" class="w-full glass-input p-4 text-sm"
+                                placeholder="••••••••" required>
+                        </div>
+                    </div>
+
+                    <div class="pt-4">
+                        <button type="submit" id="submit-btn"
+                            class="w-full bg-[#ffb4a3] text-[#3d0600] font-bold py-5 tracking-widest uppercase hover:bg-white transition-all disabled:opacity-50">
+                            Create Account
+                        </button>
+                    </div>
+
+                    <p class="text-center text-xs text-gray-500 mt-6">
+                        Already have an account? <a href="client-portal-sign-in.html"
+                            class="text-[#ffb4a3] hover:underline">Sign In</a>
+                    </p>
+                </form>
             </div>
-
-            <form id="registration-form" class="space-y-5">
-                <div id="global-error" class="hidden bg-red-900/20 border border-red-500/50 p-4 text-red-200 text-sm mb-6"></div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    <div>
-                        <label class="text-[10px] uppercase tracking-widest text-gray-500 mb-1 block">Company Name</label>
-                        <input id="company_name" type="text" class="w-full glass-input p-4 text-sm" placeholder="Enter Business Name" required>
-                    </div>
-                    <div>
-                        <label class="text-[10px] uppercase tracking-widest text-gray-500 mb-1 block">Contact Person</label>
-                        <input id="contact_person" type="text" class="w-full glass-input p-4 text-sm" placeholder="Full Name" required>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    <div>
-                        <label class="text-[10px] uppercase tracking-widest text-gray-500 mb-1 block">Business Email</label>
-                        <input id="email" type="email" class="w-full glass-input p-4 text-sm" placeholder="name@company.com" required>
-                    </div>
-                    <div>
-                        <label class="text-[10px] uppercase tracking-widest text-gray-500 mb-1 block">Phone Number</label>
-                        <input id="phone" type="tel" class="w-full glass-input p-4 text-sm" placeholder="+1 (000) 000-0000">
-                    </div>
-                </div>
-
-                <div class="relative">
-                    <label class="text-[10px] uppercase tracking-widest text-gray-500 mb-1 block">Country</label>
-                    <input id="country-search" type="text" class="w-full glass-input p-4 text-sm" placeholder="Search countries..." autocomplete="off" required>
-                    <div id="country-list"></div>
-                    <input type="hidden" id="selected-country">
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    <div>
-                        <label class="text-[10px] uppercase tracking-widest text-gray-500 mb-1 block">Password</label>
-                        <input id="password" type="password" class="w-full glass-input p-4 text-sm" placeholder="••••••••" required>
-                    </div>
-                    <div>
-                        <label class="text-[10px] uppercase tracking-widest text-gray-500 mb-1 block">Confirm Password</label>
-                        <input id="confirm_password" type="password" class="w-full glass-input p-4 text-sm" placeholder="••••••••" required>
-                    </div>
-                </div>
-
-                <div class="pt-4">
-                    <button type="submit" id="submit-btn" class="w-full bg-[#ffb4a3] text-[#3d0600] font-bold py-5 tracking-widest uppercase hover:bg-white transition-all disabled:opacity-50">
-                        Create Account
-                    </button>
-                </div>
-
-                <p class="text-center text-xs text-gray-500 mt-6">
-                    Already have an account? <a href="client-portal-sign-in.html" class="text-[#ffb4a3] hover:underline">Sign In</a>
-                </p>
-            </form>
-        </div>
-    </section>
-</main>
+        </section>
+    </main>
 
 
-<script>
-    // ==============================
-    // Country Logic
-    // ==============================
+    <script>
+        // ==============================
+        // Country Logic
+        // ==============================
 
-    const countrySearch = document.getElementById('country-search');
-    const countryList = document.getElementById('country-list');
+        const countrySearch = document.getElementById('country-search');
+        const countryList = document.getElementById('country-list');
 
-    const countries = [
-        "Afghanistan",
-        "Albania",
-        "Algeria",
-        "Argentina",
-        "Australia",
-        "Bangladesh",
-        "Belgium",
-        "Brazil",
-        "Canada",
-        "China",
-        "Egypt",
-        "France",
-        "Germany",
-        "India",
-        "Italy",
-        "Japan",
-        "Mexico",
-        "Netherlands",
-        "Pakistan",
-        "Singapore",
-        "South Africa",
-        "Spain",
-        "Sri Lanka",
-        "Turkey",
-        "UAE",
-        "United Kingdom",
-        "United States"
-    ];
+        const countries = [
+            "Afghanistan",
+            "Albania",
+            "Algeria",
+            "Argentina",
+            "Australia",
+            "Bangladesh",
+            "Belgium",
+            "Brazil",
+            "Canada",
+            "China",
+            "Egypt",
+            "France",
+            "Germany",
+            "India",
+            "Italy",
+            "Japan",
+            "Mexico",
+            "Netherlands",
+            "Pakistan",
+            "Singapore",
+            "South Africa",
+            "Spain",
+            "Sri Lanka",
+            "Turkey",
+            "UAE",
+            "United Kingdom",
+            "United States"
+        ];
 
-    countrySearch.addEventListener('input', (e) => {
-        const value = e.target.value.toLowerCase().trim();
+        countrySearch.addEventListener('input', (e) => {
+            const value = e.target.value.toLowerCase().trim();
 
-        const filtered = countries.filter(country =>
-            country.toLowerCase().includes(value)
-        );
+            const filtered = countries.filter(country =>
+                country.toLowerCase().includes(value)
+            );
 
-        countryList.innerHTML = filtered
-            .map(country => `
+            countryList.innerHTML = filtered
+                .map(country => `
                 <div class="country-option">
                     ${country}
                 </div>
             `)
-            .join('');
+                .join('');
 
-        countryList.style.display =
-            filtered.length > 0 ? 'block' : 'none';
+            countryList.style.display =
+                filtered.length > 0 ? 'block' : 'none';
 
-        document.querySelectorAll('.country-option').forEach(option => {
-            option.addEventListener('click', () => {
-                countrySearch.value = option.innerText.trim();
-                countryList.style.display = 'none';
+            document.querySelectorAll('.country-option').forEach(option => {
+                option.addEventListener('click', () => {
+                    countrySearch.value = option.innerText.trim();
+                    countryList.style.display = 'none';
+                });
             });
         });
-    });
 
-    document.addEventListener('click', (e) => {
-        if (
-            !countrySearch.contains(e.target) &&
-            !countryList.contains(e.target)
-        ) {
-            countryList.style.display = 'none';
-        }
-    });
-
-
-    // ==============================
-    // Client Registration
-    // ==============================
-
-    document
-        .getElementById('registration-form')
-        .addEventListener('submit', async (e) => {
-
-            e.preventDefault();
-
-            const btn = document.getElementById('submit-btn');
-            const errEl = document.getElementById('global-error');
-
-            // Clear previous errors
-            errEl.innerText = '';
-            errEl.classList.add('hidden');
-
-            // Get form values
-            const companyName =
-                document.getElementById('company_name').value.trim();
-
-            const contactPerson =
-                document.getElementById('contact_person').value.trim();
-
-            const email =
-                document.getElementById('email').value.trim();
-
-            const phone =
-                document.getElementById('phone').value.trim();
-
-            const country =
-                countrySearch.value.trim();
-
-            const password =
-                document.getElementById('password').value;
-
-            const confirmPassword =
-                document.getElementById('confirm_password').value;
-
-
-            // ==============================
-            // Validation
-            // ==============================
-
-            if (!companyName || !contactPerson || !email || !country) {
-                errEl.innerText =
-                    "Please complete all required fields.";
-
-                errEl.classList.remove('hidden');
-                return;
+        document.addEventListener('click', (e) => {
+            if (
+                !countrySearch.contains(e.target) &&
+                !countryList.contains(e.target)
+            ) {
+                countryList.style.display = 'none';
             }
-
-            if (password.length < 6) {
-                errEl.innerText =
-                    "Password must be at least 6 characters long.";
-
-                errEl.classList.remove('hidden');
-                return;
-            }
-
-            if (password !== confirmPassword) {
-                errEl.innerText =
-                    "Passwords do not match.";
-
-                errEl.classList.remove('hidden');
-                return;
-            }
-
-
-            btn.disabled = true;
-            btn.innerText = "Creating Account...";
-
-
-            try {
-
-                // ==========================================
-                // 1. CREATE SUPABASE AUTH ACCOUNT
-                // ==========================================
-
-                const redirectUrl = new URL(
-                    'client-portal-sign-in.html',
-                    window.location.href
-                ).href;
-
-                const {
-                    data: authData,
-                    error: authError
-                } = await eamaSupabase.auth.signUp({
-                    email: email,
-                    password: password,
-
-                    options: {
-                        emailRedirectTo: redirectUrl
-                    }
-                });
-
-                if (authError) {
-                    throw authError;
-                }
-
-                if (!authData || !authData.user) {
-                    throw new Error(
-                        "The account could not be created."
-                    );
-                }
-
-                const userId = authData.user.id;
-
-
-                // ==========================================
-                // 2. SEND VERIFICATION EMAIL THROUGH BREVO
-                // ==========================================
-
-                console.log(
-                    "Calling send-auth-email for verification..."
-                );
-
-                const {
-                    data: emailData,
-                    error: emailError
-                } =
-                    await eamaSupabase.functions.invoke(
-                        'send-auth-email',
-                        {
-                            body: {
-                                email: email,
-                                type: 'verify'
-                            }
-                        }
-                    );
-
-
-                console.log(
-                    "send-auth-email response:",
-                    emailData
-                );
-
-
-                if (emailError) {
-
-                    console.error(
-                        "send-auth-email error:",
-                        emailError
-                    );
-
-                    throw new Error(
-                        emailError.message ||
-                        "The verification email could not be sent."
-                    );
-                }
-
-
-                // ==========================================
-                // 3. SAVE CLIENT INFORMATION
-                // ==========================================
-
-                const {
-                    error: dbError
-                } = await eamaSupabase
-                    .from('clients')
-                    .insert([{
-                        id: userId,
-                        company_name: companyName,
-                        contact_person: contactPerson,
-                        email: email,
-                        phone: phone,
-                        country: country,
-                        client_status: 'Lead'
-                    }]);
-
-
-                if (dbError) {
-
-                    console.error(
-                        "Client database error:",
-                        dbError
-                    );
-
-                    throw dbError;
-                }
-
-
-                // ==========================================
-                // 4. SHOW VERIFICATION MESSAGE
-                // ==========================================
-
-                document.getElementById(
-                    'signup-container'
-                ).innerHTML = `
-
-                    <div class="text-center py-10">
-
-                        <span
-                            class="material-symbols-outlined text-6xl text-[#ffb4a3] mb-4">
-                            mail
-                        </span>
-
-                        <h2 class="text-3xl font-serif mb-4">
-                            Check Your Inbox
-                        </h2>
-
-                        <p class="text-gray-400 mb-8">
-                            We have sent a verification email to
-                            <b>${email}</b>.
-                            Please verify your email address before signing in.
-                        </p>
-
-                        <a
-                            href="client-portal-sign-in.html"
-                            class="inline-block bg-[#ffb4a3] text-[#3d0600] px-8 py-4 font-bold uppercase tracking-widest hover:bg-white transition-all">
-
-                            Go to Login
-
-                        </a>
-
-                    </div>
-                `;
-
-
-            } catch (err) {
-
-                console.error(
-                    "Registration error:",
-                    err
-                );
-
-                errEl.innerText =
-                    err?.message ||
-                    "Something went wrong while creating your account.";
-
-                errEl.classList.remove('hidden');
-
-                btn.disabled = false;
-                btn.innerText = "Create Account";
-            }
-
         });
-</script>
+
+
+        // ==============================
+        // Client Registration
+        // ==============================
+
+        // ==============================
+        // Client Registration
+        // ==============================
+
+        document
+            .getElementById("registration-form")
+            .addEventListener("submit", async (e) => {
+                e.preventDefault();
+
+                const btn =
+                    document.getElementById("submit-btn");
+
+                const errEl =
+                    document.getElementById("global-error");
+
+                // ----------------------------------------------------------
+                // CLEAR PREVIOUS ERRORS
+                // ----------------------------------------------------------
+
+                errEl.innerText = "";
+                errEl.classList.add("hidden");
+
+                // ----------------------------------------------------------
+                // GET FORM VALUES
+                // ----------------------------------------------------------
+
+                const companyName =
+                    document
+                        .getElementById("company_name")
+                        .value
+                        .trim();
+
+                const contactPerson =
+                    document
+                        .getElementById("contact_person")
+                        .value
+                        .trim();
+
+                const email =
+                    document
+                        .getElementById("email")
+                        .value
+                        .trim()
+                        .toLowerCase();
+
+                const phone =
+                    document
+                        .getElementById("phone")
+                        .value
+                        .trim();
+
+                const country =
+                    countrySearch.value.trim();
+
+                const password =
+                    document.getElementById("password").value;
+
+                const confirmPassword =
+                    document
+                        .getElementById("confirm_password")
+                        .value;
+
+                // ----------------------------------------------------------
+                // VALIDATION
+                // ----------------------------------------------------------
+
+                if (
+                    !companyName ||
+                    !contactPerson ||
+                    !email ||
+                    !country
+                ) {
+                    errEl.innerText =
+                        "Please complete all required fields.";
+
+                    errEl.classList.remove("hidden");
+
+                    return;
+                }
+
+                if (password.length < 6) {
+                    errEl.innerText =
+                        "Password must be at least 6 characters long.";
+
+                    errEl.classList.remove("hidden");
+
+                    return;
+                }
+
+                if (password !== confirmPassword) {
+                    errEl.innerText =
+                        "Passwords do not match.";
+
+                    errEl.classList.remove("hidden");
+
+                    return;
+                }
+
+                // ----------------------------------------------------------
+                // DISABLE BUTTON
+                // ----------------------------------------------------------
+
+                btn.disabled = true;
+                btn.innerText =
+                    "Creating Account...";
+
+                try {
+                    // ========================================================
+                    // 1. CREATE SUPABASE AUTH USER
+                    //    AND SEND ONLY BREVO VERIFICATION EMAIL
+                    // ========================================================
+
+                    console.log(
+                        "Creating account through send-auth-email..."
+                    );
+
+                    const {
+                        data: emailData,
+                        error: emailError,
+                    } =
+                        await eamaSupabase.functions.invoke(
+                            "send-auth-email",
+                            {
+                                body: {
+                                    email:
+                                        email,
+
+                                    password:
+                                        password,
+
+                                    type:
+                                        "verify",
+                                },
+                            }
+                        );
+
+                    console.log(
+                        "send-auth-email response:",
+                        emailData
+                    );
+
+                    if (emailError) {
+                        console.error(
+                            "send-auth-email error:",
+                            emailError
+                        );
+
+                        throw new Error(
+                            emailError.message ||
+                            "The verification email could not be sent."
+                        );
+                    }
+
+                    if (
+                        !emailData ||
+                        !emailData.user_id
+                    ) {
+                        throw new Error(
+                            emailData?.error ||
+                            "The account could not be created."
+                        );
+                    }
+
+                    const userId =
+                        emailData.user_id;
+
+                    // ========================================================
+                    // 2. SAVE CLIENT INFORMATION
+                    // ========================================================
+
+                    const {
+                        error: dbError,
+                    } =
+                        await eamaSupabase
+                            .from("clients")
+                            .insert([
+                                {
+                                    id:
+                                        userId,
+
+                                    company_name:
+                                        companyName,
+
+                                    contact_person:
+                                        contactPerson,
+
+                                    email:
+                                        email,
+
+                                    phone:
+                                        phone,
+
+                                    country:
+                                        country,
+
+                                    client_status:
+                                        "Lead",
+                                },
+                            ]);
+
+                    if (dbError) {
+                        console.error(
+                            "Client database error:",
+                            dbError
+                        );
+
+                        throw dbError;
+                    }
+
+                    // ========================================================
+                    // 3. SHOW VERIFICATION MESSAGE
+                    // ========================================================
+
+                    document.getElementById(
+                        "signup-container"
+                    ).innerHTML = `
+        <div class="text-center py-10">
+
+          <span
+            class="material-symbols-outlined text-6xl text-[#ffb4a3] mb-4">
+            mail
+          </span>
+
+          <h2 class="text-3xl font-serif mb-4">
+            Check Your Inbox
+          </h2>
+
+          <p class="text-gray-400 mb-8">
+            We have sent a verification email to
+            <b>${email}</b>.
+            Please verify your email address before signing in.
+          </p>
+
+          <a
+            href="client-portal-sign-in.html"
+            class="inline-block bg-[#ffb4a3] text-[#3d0600] px-8 py-4 font-bold uppercase tracking-widest hover:bg-white transition-all">
+
+            Go to Login
+
+          </a>
+
+        </div>
+      `;
+                } catch (err) {
+                    console.error(
+                        "Registration error:",
+                        err
+                    );
+
+                    errEl.innerText =
+                        err?.message ||
+                        "Something went wrong while creating your account.";
+
+                    errEl.classList.remove("hidden");
+
+                    btn.disabled = false;
+
+                    btn.innerText =
+                        "Create Account";
+                }
+            });
+    </script>
 
 
 </body>
+
 </html>
