@@ -696,7 +696,7 @@ serve(async (req) => {
 
       normalizedEmail,
 
-      "",
+      String(name || "EAMA Client").trim(),
 
       {
         VERIFICATION_LINK:
