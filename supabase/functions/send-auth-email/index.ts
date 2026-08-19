@@ -91,8 +91,11 @@ serve(async (req) => {
       BREVO_SENDER_EMAIL;
 
     const SITE_ORIGIN =
-      Deno.env.get("SITE_ORIGIN") ||
-      "https://ifadha.github.io/EAMA-Garments-Website";
+      Deno.env.get("SITE_ORIGIN");
+
+    if (!SITE_ORIGIN) {
+      throw new Error("SITE_ORIGIN is missing.");
+    }
 
     // ============================================================
     // CONFIG VALIDATION
